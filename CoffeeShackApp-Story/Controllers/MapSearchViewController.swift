@@ -1,52 +1,50 @@
 //
-//  MenusViewController.swift
+//  MapSearchViewController.swift
 //  CoffeeShackApp-Story
 //
-//  Created by Elias Hall on 10/12/21.
+//  Created by Elias Hall on 11/21/21.
 //
 
-import UIKit
 import Foundation
+import UIKit
 
-class MenusViewController: UIViewController, UINavigationControllerDelegate {
+class MapSearchViewController: UIViewController {
     
-    @IBOutlet weak var navBar: UINavigationBar!
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var popUpView: UIView!
-    @IBOutlet weak var bottomPopUpConstraint: NSLayoutConstraint!
-    @IBOutlet weak var popUpLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var popUpHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var popUpTrailingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var mapTableButton: UIButton!
-    @IBOutlet weak var myLocationButton: UIButton!
-    @IBOutlet weak var searchAreaButton: UIButton!
-    var isPopupOpen: Bool = true
-    var origHeight: CGFloat = 0.0
-    var likeButtonSelected: Bool = false
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.portrait, .landscape]
-    }
+    @IBOutlet weak var popUpView: UIView!
+    
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var mapTableToggleButton: UIButton!
+    @IBOutlet weak var myLocationButton: UIButton!
+    
+    @IBOutlet weak var searchAreaButton: UIButton!
+    @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var popUpLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var popUpTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchButtonBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var myLocationButtonBottomConstraint: NSLayoutConstraint!
+    
+    var origHeight: CGFloat = 0.0
+    
+    var viewOpen: Bool = true
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-
-//    let searchController = UISearchController(searchResultsController: nil)
-    override func viewDidLoad() { // *******
+    
+    override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        searchBar.delegate = self
         tableView.rowHeight = 147
         
-        tableView.isHidden = true
-
-        navBar.bounds = navBar.frame.insetBy(dx: 10.0, dy: 10.0)
         
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
 
+            textfield.textColor = UIColor.white
             textfield.attributedPlaceholder = NSAttributedString(string: textfield.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
 
             if let leftView = textfield.leftView as? UIImageView {
@@ -54,59 +52,34 @@ class MenusViewController: UIViewController, UINavigationControllerDelegate {
                 leftView.tintColor = UIColor.white
             }
         }
-        
         popUpConfig()
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.barTintColor = UIColor(red: 52/255, green: 42/255, blue: 35/255, alpha: 1)
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
         origHeight = popUpView.frame.height
+
     }
-   
+    
     override func viewDidLayoutSubviews() {
         
         if UIDevice.current.orientation.isLandscape {
             popUpView.translatesAutoresizingMaskIntoConstraints = false
             popUpView.widthAnchor.constraint(equalToConstant: 80).isActive = true
             popUpLeadingConstraint.constant = 400
-//            popUpTrailingConstraint.constant = 30
+            //popUpTrailingConstraint.constant = 100
             popUpTrailingConstraint.constant = view.window?.safeAreaInsets.right ?? .zero
+            searchButtonBottomConstraint.constant = 5
+            myLocationButtonBottomConstraint.constant = 5
 
            // view.layoutSubviews()
 
         }
         else {
-//            popUpLeadingConstraint.isActive = true
-//            popUpLeadingConstraint.constant = 0
-//            popUpTrailingConstraint.constant = 0
+            popUpLeadingConstraint.constant = 0
+            popUpTrailingConstraint.constant = 0
+            searchButtonBottomConstraint.constant = 50
+            myLocationButtonBottomConstraint.constant = 20
         }
-    }
-    
-    func navConfig() {
-        
-        self.title = "Test"
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(red: 52/255, green: 42/255, blue: 35/255, alpha: 1)
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.standardAppearance = appearance
-        navigationItem.scrollEdgeAppearance = appearance
-        navigationItem.compactAppearance = appearance
-        
-        let buttonAppearance = UIBarButtonItemAppearance()
-        buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.standardAppearance?.buttonAppearance = buttonAppearance
-        
-        let doneButtonAppearance = UIBarButtonItemAppearance()
-        doneButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.standardAppearance?.doneButtonAppearance = doneButtonAppearance
-        navigationItem.compactAppearance?.doneButtonAppearance = doneButtonAppearance
-            
     }
     
     func popUpConfig() {
@@ -125,60 +98,59 @@ class MenusViewController: UIViewController, UINavigationControllerDelegate {
             popUpView.addGestureRecognizer(swipeDownGesture)
 
     }
-
-    @objc func openPopup() {
-        
-        popUpHeightConstraint.constant = origHeight
-        
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
-            self.view.layoutSubviews()
-        }, completion: nil)
-    }
-    @objc func closePopup() {
-        popUpHeightConstraint.constant = 0.0
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
-            self.view.layoutSubviews()
-        }, completion: nil)
-    }
-    
-    
-    //***
-    @IBAction func searchButtonDidTouch(_ sender: UIButton) {
-        togglePopUp()
-    }
-    
-    @IBAction func menuButtonDidTouch(_ sender: Any) {
-    }
     
     @objc func togglePopUp() {
-        isPopupOpen ? closePopup() : openPopup()
-        isPopupOpen.toggle()
+        viewOpen ? closeView() : openView()
+        viewOpen.toggle()
     }
     
-    @IBAction func directionsButtonDidTouch(_ sender: UIButton) {
+    func openView() {
+        
+        
+        popUpHeightConstraint.constant = origHeight
+                
+        UIView.animate(withDuration: 0.75, delay: 0, options: .curveEaseIn, animations: { [unowned self] in
+            view.layoutIfNeeded()
+           // view.layoutSubviews()
+        }, completion: nil)
+        
     }
-    @IBAction func mapTableButtonDidTouch(_ sender: Any) {
-        if tableView.isHidden {
+    
+    func tableMapToggle() {
+        if tableView.isHidden { // if map view is on screen
             tableView.isHidden = false
             myLocationButton.isHidden = true
             searchAreaButton.isHidden = true
-            mapTableButton.setImage(UIImage(systemName: "map"), for: .normal)
+            mapTableToggleButton.setImage(UIImage(systemName: "map"), for: .normal)
             togglePopUp()
           //  popUpView.isHidden = true
         }
-        else {
+        else { // if table view is on screen
             tableView.isHidden = true
             myLocationButton.isHidden = false
             searchAreaButton.isHidden = false
-            mapTableButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
+            mapTableToggleButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
             //togglePopUp()
            // popUpView.isHidden = false
         }
+        
     }
     
-    @IBAction func myLocationButtonDidTouch(_ sender: Any) {
+    func closeView() {
+        
+        popUpHeightConstraint.constant = 0
+
+        
+        UIView.animate(withDuration: 0.75, delay: 0, options: .curveEaseIn, animations: {
+            [unowned self] in
+            view.layoutIfNeeded()
+               // view.layoutSubviews()
+        }, completion: nil)
     }
     
+    @IBAction func toggleButtonDidTouch(_ sender: UIButton) {
+        togglePopUp()
+    }
     
     @IBAction func likeButtonDidTouch(_ sender: UIButton) {
         if likeButton.tag == 0 {
@@ -189,11 +161,20 @@ class MenusViewController: UIViewController, UINavigationControllerDelegate {
             likeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
                 likeButton.tag = 0
             }
-        }
         
     }
+    
+    
+    @IBAction func mapTableToggleButtonDidTouch(_ sender: UIButton) {
+        
+        tableMapToggle()
+    }
+    
+    
+}
 
-extension MenusViewController: UITableViewDelegate, UITableViewDataSource {
+extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -201,11 +182,18 @@ extension MenusViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mapCell", for: indexPath)
         cell.selectionStyle = .none
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return nil
+    }
+}
+
+extension MapSearchViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
     }
 }

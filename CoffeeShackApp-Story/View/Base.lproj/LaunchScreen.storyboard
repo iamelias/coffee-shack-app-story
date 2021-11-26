@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,15 +12,92 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Title -1" translatesAutoresizingMaskIntoConstraints="NO" id="IaI-5y-ZPN">
+                                <rect key="frame" x="32" y="59" width="268" height="71"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="IaI-5y-ZPN" secondAttribute="height" multiplier="268:71" id="p1N-Mb-02w"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Coffee Icon" translatesAutoresizingMaskIntoConstraints="NO" id="HLM-dX-0ZY">
+                                <rect key="frame" x="112" y="234" width="265" height="185"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="HLM-dX-0ZY" secondAttribute="height" multiplier="53:37" id="VxQ-CF-6TA"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Top Bricks" translatesAutoresizingMaskIntoConstraints="NO" id="jgy-00-WMB">
+                                <rect key="frame" x="32" y="463" width="340" height="46"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="jgy-00-WMB" secondAttribute="height" multiplier="170:23" id="ofK-lN-Tdt"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Middle Bricks" translatesAutoresizingMaskIntoConstraints="NO" id="MGr-0W-AWG">
+                                <rect key="frame" x="202" y="550" width="170" height="46"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="MGr-0W-AWG" secondAttribute="height" multiplier="85:23" id="JXy-NP-VwT"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Bottom Bricks" translatesAutoresizingMaskIntoConstraints="NO" id="0Pi-HY-RLn">
+                                <rect key="frame" x="287" y="637" width="85" height="46"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="0Pi-HY-RLn" secondAttribute="height" multiplier="85:46" id="Ohs-3M-D9Q"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="palm-tree-image" translatesAutoresizingMaskIntoConstraints="NO" id="ant-1h-YaR">
+                                <rect key="frame" x="31" y="537" width="122" height="135"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ant-1h-YaR" secondAttribute="height" multiplier="122:135" id="mjE-sh-27L"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CoffeeBean Apps" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3yB-LO-doF">
+                                <rect key="frame" x="119" y="806" width="151" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="3yB-LO-doF" secondAttribute="height" multiplier="151:21" id="e6e-22-75t"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" red="0.76078431372549016" green="0.61176470588235299" blue="0.50980392156862742" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="jgy-00-WMB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="18g-kF-nP5"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IaI-5y-ZPN" secondAttribute="trailing" constant="90" id="2oF-cv-BrP"/>
+                            <constraint firstAttribute="bottom" secondItem="3yB-LO-doF" secondAttribute="bottom" constant="17" id="5Qd-oK-Vcm"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HLM-dX-0ZY" secondAttribute="trailing" constant="13" id="BPg-yC-sU1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jgy-00-WMB" secondAttribute="trailing" constant="18" id="DMh-v6-qqA"/>
+                            <constraint firstItem="IaI-5y-ZPN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="Fby-zL-2uE"/>
+                            <constraint firstItem="3yB-LO-doF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="119" id="PIP-yn-Xlc"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="3yB-LO-doF" secondAttribute="trailing" constant="120" id="PLR-fi-M2t"/>
+                            <constraint firstItem="MGr-0W-AWG" firstAttribute="leading" secondItem="ant-1h-YaR" secondAttribute="trailing" constant="49" id="Utz-QN-DQi"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="0Pi-HY-RLn" secondAttribute="trailing" constant="18" id="W3K-rJ-ZiO"/>
+                            <constraint firstItem="HLM-dX-0ZY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="112" id="XJM-5o-5Tm"/>
+                            <constraint firstItem="HLM-dX-0ZY" firstAttribute="top" secondItem="IaI-5y-ZPN" secondAttribute="bottom" constant="104" id="YaF-ef-v1T"/>
+                            <constraint firstItem="0Pi-HY-RLn" firstAttribute="leading" secondItem="ant-1h-YaR" secondAttribute="trailing" constant="134" id="YrZ-jO-eq8"/>
+                            <constraint firstItem="IaI-5y-ZPN" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="15" id="ZB1-zJ-Mad"/>
+                            <constraint firstItem="0Pi-HY-RLn" firstAttribute="top" secondItem="MGr-0W-AWG" secondAttribute="bottom" constant="41" id="ZTa-kF-tUw"/>
+                            <constraint firstItem="MGr-0W-AWG" firstAttribute="top" secondItem="jgy-00-WMB" secondAttribute="bottom" constant="41" id="cIx-9V-UYg"/>
+                            <constraint firstItem="jgy-00-WMB" firstAttribute="top" secondItem="HLM-dX-0ZY" secondAttribute="bottom" constant="44" id="hAn-xd-3bz"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MGr-0W-AWG" secondAttribute="trailing" constant="18" id="try-H8-fSt"/>
+                            <constraint firstItem="ant-1h-YaR" firstAttribute="top" secondItem="jgy-00-WMB" secondAttribute="bottom" constant="28" id="u61-ub-cPO"/>
+                            <constraint firstItem="ant-1h-YaR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="31" id="ypr-qi-hvq"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52.173913043478265" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Bottom Bricks" width="85" height="46"/>
+        <image name="Coffee Icon" width="269" height="188"/>
+        <image name="Middle Bricks" width="170" height="46"/>
+        <image name="Title -1" width="268" height="75"/>
+        <image name="Top Bricks" width="340" height="46"/>
+        <image name="palm-tree-image" width="122" height="135"/>
+    </resources>
 </document>
