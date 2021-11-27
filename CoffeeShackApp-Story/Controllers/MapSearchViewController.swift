@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import MapKit
 
 class MapSearchViewController: UIViewController {
     
@@ -14,7 +15,9 @@ class MapSearchViewController: UIViewController {
     
     @IBOutlet weak var popUpView: UIView!
     
+    @IBOutlet weak var yellowToggleButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapTableToggleButton: UIButton!
     @IBOutlet weak var myLocationButton: UIButton!
     
@@ -25,6 +28,14 @@ class MapSearchViewController: UIViewController {
     @IBOutlet weak var popUpTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var searchButtonBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var myLocationButtonBottomConstraint: NSLayoutConstraint!
+        
+    enum ViewType {
+        case map
+        case table
+    }
+    
+    var currentView: ViewType = .map
+
     
     var origHeight: CGFloat = 0.0
     
@@ -58,6 +69,9 @@ class MapSearchViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         origHeight = popUpView.frame.height
 
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        viewOpen = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -109,7 +123,7 @@ class MapSearchViewController: UIViewController {
         
         popUpHeightConstraint.constant = origHeight
                 
-        UIView.animate(withDuration: 0.75, delay: 0, options: .curveEaseIn, animations: { [unowned self] in
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: { [unowned self] in
             view.layoutIfNeeded()
            // view.layoutSubviews()
         }, completion: nil)
@@ -141,15 +155,66 @@ class MapSearchViewController: UIViewController {
         popUpHeightConstraint.constant = 0
 
         
-        UIView.animate(withDuration: 0.75, delay: 0, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
             [unowned self] in
             view.layoutIfNeeded()
                // view.layoutSubviews()
         }, completion: nil)
     }
     
+    @objc func transitionView() {
+        switch currentView {
+        case .map:
+            transitionToTableView()
+        case .table:
+            transitionToMapView()
+        }
+    }
+    
+    func transitionToTableView() {
+        
+        UIView.transition(from: mapView, to: tableView, duration: 0.5, options: [.transitionFlipFromLeft, .showHideTransitionViews], completion: { [unowned self]_ in
+            
+            tableView.isHidden = false
+            mapView.isHidden = true
+            
+        })
+        myLocationButton.isHidden = true
+        searchAreaButton.isHidden = true
+        mapTableToggleButton.setImage(UIImage(systemName: "map"), for: .normal)
+        yellowToggleButton.isHidden = true
+        currentView = .table
+        closeView()
+        
+
+    }
+    
+    func transitionToMapView() {
+        
+        UIView.transition(from: tableView, to: mapView, duration: 0.5, options: [ .transitionFlipFromRight,.showHideTransitionViews], completion: { [unowned self]_ in
+            
+            tableView.isHidden = true
+            mapView.isHidden = false
+
+            
+        })
+        myLocationButton.isHidden = false
+        searchAreaButton.isHidden = false
+        mapTableToggleButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
+        yellowToggleButton.isHidden = false
+        currentView = .map
+        openView()
+    }
+    
+    func mapTablTransition() {
+        UIView.transition(from: mapView, to: tableView, duration: 0.5, options: .transitionFlipFromLeft, completion: {_ in
+            
+        })
+    }
+    
     @IBAction func toggleButtonDidTouch(_ sender: UIButton) {
         togglePopUp()
+        //transitionView()
     }
     
     @IBAction func likeButtonDidTouch(_ sender: UIButton) {
@@ -161,13 +226,12 @@ class MapSearchViewController: UIViewController {
             likeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
                 likeButton.tag = 0
             }
-        
     }
     
     
     @IBAction func mapTableToggleButtonDidTouch(_ sender: UIButton) {
-        
-        tableMapToggle()
+//        tableMapToggle()
+        transitionView()
     }
     
     
