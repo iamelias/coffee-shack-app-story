@@ -11,6 +11,7 @@ import MapKit
 
 class MapSearchViewController: UIViewController {
     
+    
     @IBOutlet weak var popUpHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var popUpView: UIView!
@@ -36,6 +37,7 @@ class MapSearchViewController: UIViewController {
     
     var currentView: ViewType = .map
 
+    var locations:[Location] = []
     
     var origHeight: CGFloat = 0.0
     
@@ -185,8 +187,6 @@ class MapSearchViewController: UIViewController {
         yellowToggleButton.isHidden = true
         currentView = .table
         closeView()
-        
-
     }
     
     func transitionToMapView() {
@@ -204,12 +204,6 @@ class MapSearchViewController: UIViewController {
         yellowToggleButton.isHidden = false
         currentView = .map
         openView()
-    }
-    
-    func mapTablTransition() {
-        UIView.transition(from: mapView, to: tableView, duration: 0.5, options: .transitionFlipFromLeft, completion: {_ in
-            
-        })
     }
     
     @IBAction func toggleButtonDidTouch(_ sender: UIButton) {

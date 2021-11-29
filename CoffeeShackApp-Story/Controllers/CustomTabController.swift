@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 
 class CustomTabController: UITabBarController {
 
@@ -26,3 +27,4 @@ class CustomTabController: UITabBarController {
     }
 
 }
+

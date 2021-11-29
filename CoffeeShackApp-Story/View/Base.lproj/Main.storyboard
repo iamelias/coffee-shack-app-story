@@ -91,7 +91,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pG4-XE-Fyl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3272" y="704"/>
+            <point key="canvasLocation" x="2658" y="122"/>
         </scene>
         <!--Map Search View Controller-->
         <scene sceneID="5aX-JN-4fb">
@@ -103,7 +103,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ctr-Nr-lng">
                                 <rect key="frame" x="0.0" y="97" width="390" height="664"/>
-                                <color key="backgroundColor" red="0.76078431369999999" green="0.61176470589999998" blue="0.50980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.66519880479144067" green="0.55312576346705677" blue="0.47607815208849624" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color key="sectionIndexBackgroundColor" red="0.76078431369999999" green="0.61176470589999998" blue="0.50980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="mapCell" rowHeight="147" id="UCC-L1-XIX" customClass="MapTableViewCell" customModule="CoffeeShackApp_Story" customModuleProvider="target">
@@ -402,7 +402,7 @@ Corpus Christi, TX 78412
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oQf-Yn-fFd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3683.0769230769229" y="1481.5165876777251"/>
+            <point key="canvasLocation" x="3645" y="889"/>
         </scene>
         <!--Locations-->
         <scene sceneID="cVv-AW-u0m">
@@ -424,7 +424,7 @@ Corpus Christi, TX 78412
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G1G-36-Df4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1975" y="704"/>
+            <point key="canvasLocation" x="1008" y="122"/>
         </scene>
         <!--Menus-->
         <scene sceneID="gIU-9F-7Qy">
@@ -443,7 +443,7 @@ Corpus Christi, TX 78412
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IY2-by-SlC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2754" y="2281"/>
+            <point key="canvasLocation" x="2600" y="1689"/>
         </scene>
         <!--Map-->
         <scene sceneID="yWA-T3-toU">
@@ -462,7 +462,7 @@ Corpus Christi, TX 78412
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sfD-gC-Qs0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2753.8461538461538" y="1488.6255924170616"/>
+            <point key="canvasLocation" x="2600" y="889"/>
         </scene>
         <!--Custom Tab Controller-->
         <scene sceneID="mLA-aQ-1te">
@@ -482,7 +482,7 @@ Corpus Christi, TX 78412
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cjE-Yz-KbX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1824.6153846153845" y="1488.6255924170616"/>
+            <point key="canvasLocation" x="1008" y="889"/>
         </scene>
         <!--Favorites View Controller-->
         <scene sceneID="0F0-Oo-SgB">
@@ -515,9 +515,9 @@ Corpus Christi, TX 78412
                                 <rect key="frame" x="0.0" y="97" width="390" height="664"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dLp-cS-4ca">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="664"/>
-                                        <color key="backgroundColor" red="0.76078431369999999" green="0.61176470589999998" blue="0.50980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="sectionIndexBackgroundColor" red="0.76078431369999999" green="0.61176470589999998" blue="0.50980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <rect key="frame" x="0.0" y="42" width="390" height="622"/>
+                                        <color key="backgroundColor" red="0.82979562786436567" green="0.70500055591341793" blue="0.59836524474396413" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="sectionIndexBackgroundColor" red="0.96078431372549022" green="0.77647058823529413" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="147" id="u36-c8-p6q" customClass="MapTableViewCell" customModule="CoffeeShackApp_Story" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="44.666666030883789" width="390" height="147"/>
@@ -587,15 +587,35 @@ Corpus Christi, TX 78412
                                                         <constraint firstItem="Aac-Xa-ppn" firstAttribute="centerY" secondItem="8by-xJ-rAY" secondAttribute="centerY" id="txa-fn-q5l"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
-                                                <color key="backgroundColor" red="0.76078431369999999" green="0.61176470589999998" blue="0.50980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" red="0.96078431372549022" green="0.77647058823529413" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ts9-Qk-kdt">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="42"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Favorites" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yCx-Sq-oWb">
+                                                <rect key="frame" x="8" y="8" width="382" height="26"/>
+                                                <fontDescription key="fontDescription" name="SnellRoundhand-Bold" family="Snell Roundhand" pointSize="24"/>
+                                                <color key="textColor" red="0.20392156862745098" green="0.16470588235294117" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.96078431372549022" green="0.77647058823529413" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="yCx-Sq-oWb" firstAttribute="leading" secondItem="ts9-Qk-kdt" secondAttribute="leading" constant="8" id="5hZ-iD-zNL"/>
+                                            <constraint firstAttribute="height" constant="42" id="RJg-zD-cfi"/>
+                                            <constraint firstAttribute="trailing" secondItem="yCx-Sq-oWb" secondAttribute="trailing" id="YgE-L7-RTU"/>
+                                            <constraint firstItem="yCx-Sq-oWb" firstAttribute="top" secondItem="ts9-Qk-kdt" secondAttribute="top" constant="8" id="fmy-FG-1Vx"/>
+                                            <constraint firstItem="yCx-Sq-oWb" firstAttribute="centerY" secondItem="ts9-Qk-kdt" secondAttribute="centerY" id="jbb-sn-sGk"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.76078431372549016" green="0.61176470588235299" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96078431372549022" green="0.77647058823529413" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="dLp-cS-4ca" firstAttribute="top" secondItem="ts9-Qk-kdt" secondAttribute="bottom" id="61b-0j-dRS"/>
                                     <constraint firstAttribute="bottom" secondItem="dLp-cS-4ca" secondAttribute="bottom" id="6DJ-mg-cPL"/>
-                                    <constraint firstItem="dLp-cS-4ca" firstAttribute="top" secondItem="3v7-vf-rLn" secondAttribute="top" id="R9n-3d-T6M"/>
+                                    <constraint firstItem="ts9-Qk-kdt" firstAttribute="top" secondItem="3v7-vf-rLn" secondAttribute="top" id="7BR-E6-lIk"/>
                                     <constraint firstAttribute="trailing" secondItem="dLp-cS-4ca" secondAttribute="trailing" id="kfM-tC-Vr7"/>
                                     <constraint firstItem="dLp-cS-4ca" firstAttribute="leading" secondItem="3v7-vf-rLn" secondAttribute="leading" id="pq7-Pf-Q6W"/>
                                 </constraints>
@@ -605,6 +625,7 @@ Corpus Christi, TX 78412
                         <color key="backgroundColor" red="0.20392156859999999" green="0.1647058824" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="7Jv-EJ-hHR" firstAttribute="top" secondItem="4Er-iw-7wi" secondAttribute="top" id="0oc-NZ-imo"/>
+                            <constraint firstItem="4Er-iw-7wi" firstAttribute="trailing" secondItem="ts9-Qk-kdt" secondAttribute="trailing" id="1ER-4w-MNg"/>
                             <constraint firstItem="4Er-iw-7wi" firstAttribute="bottom" secondItem="3v7-vf-rLn" secondAttribute="bottom" id="4ye-9R-dee"/>
                             <constraint firstItem="3v7-vf-rLn" firstAttribute="leading" secondItem="Aiu-gX-DwL" secondAttribute="leading" id="6Qs-1m-MEU"/>
                             <constraint firstItem="aAc-m5-ZFn" firstAttribute="top" secondItem="sXn-Xs-dah" secondAttribute="top" id="EVB-yj-g4J"/>
@@ -617,6 +638,7 @@ Corpus Christi, TX 78412
                             <constraint firstItem="7Jv-EJ-hHR" firstAttribute="leading" secondItem="4Er-iw-7wi" secondAttribute="leading" id="e3B-BM-Ran"/>
                             <constraint firstItem="3v7-vf-rLn" firstAttribute="trailing" secondItem="Aiu-gX-DwL" secondAttribute="trailing" id="hIt-Es-Txe"/>
                             <constraint firstItem="sXn-Xs-dah" firstAttribute="leading" secondItem="4Er-iw-7wi" secondAttribute="leading" id="wc3-0a-91F"/>
+                            <constraint firstItem="ts9-Qk-kdt" firstAttribute="leading" secondItem="4Er-iw-7wi" secondAttribute="leading" id="yb4-22-fDo"/>
                             <constraint firstItem="3v7-vf-rLn" firstAttribute="top" secondItem="sXn-Xs-dah" secondAttribute="bottom" id="yhq-GE-oac"/>
                         </constraints>
                     </view>
@@ -627,11 +649,12 @@ Corpus Christi, TX 78412
                         <outlet property="searchBar" destination="sXn-Xs-dah" id="6O6-CI-CAv"/>
                         <outlet property="settingsButton" destination="aAc-m5-ZFn" id="kpt-GF-eUn"/>
                         <outlet property="tableView" destination="dLp-cS-4ca" id="Wrz-Dx-Opi"/>
+                        <outlet property="titleView" destination="ts9-Qk-kdt" id="2RA-O1-FcR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aRU-3h-adn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3753.8461538461538" y="2280.5687203791467"/>
+            <point key="canvasLocation" x="3645" y="1688"/>
         </scene>
     </scenes>
     <resources>

@@ -13,7 +13,13 @@ class FavoritesViewController: UIViewController {
     @IBOutlet weak var navBar: UINavigationBar!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var tableView: UITableView!
+    
+    
+    var favorites: [Favorite] = []
+    
+
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -39,7 +45,18 @@ class FavoritesViewController: UIViewController {
                 leftView.tintColor = UIColor.white
             }
         }
-
+    }
+    
+    override func viewWillLayoutSubviews() {
+        let bottomLayer = CALayer()
+        bottomLayer.borderWidth = 1.0
+        bottomLayer.frame = CGRect(x:0,y:titleView.frame.size.height-1.0, width: self.view.safeAreaLayoutGuide.layoutFrame.width, height: 1.0)
+        bottomLayer.borderColor = UIColor(red: 194/255, green: 156/255, blue: 130/255, alpha: 0.7).cgColor
+        
+        titleView.layer.addSublayer(bottomLayer)
+    }
+    
+    override func viewDidLayoutSubviews() {
     }
 }
 
