@@ -18,7 +18,6 @@ class FavoritesViewController: UIViewController {
     
     
     var favorites: [Favorite] = []
-    
 
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

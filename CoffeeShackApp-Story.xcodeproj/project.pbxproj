@@ -11,6 +11,7 @@
 		392780342750465100B8EC07 /* CustomTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392780332750465100B8EC07 /* CustomTabController.swift */; };
 		39470761275361CD0046C8B4 /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39470760275361CD0046C8B4 /* Favorite.swift */; };
 		39470763275361EB0046C8B4 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39470762275361EB0046C8B4 /* Location.swift */; };
+		396CBCCF27569F6F00409E3F /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396CBCCE27569F6F00409E3F /* Messages.swift */; };
 		3977B7CE274AB73D002C6900 /* MapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3977B7CD274AB73D002C6900 /* MapSearchViewController.swift */; };
 		39CF8654274027BB00774302 /* MapTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CF8653274027BB00774302 /* MapTableViewCell.swift */; };
 		39E58681273DB9EF00906F7F /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E58680273DB9EF00906F7F /* FavoritesViewController.swift */; };
@@ -47,6 +48,7 @@
 		392780332750465100B8EC07 /* CustomTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabController.swift; sourceTree = "<group>"; };
 		39470760275361CD0046C8B4 /* Favorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorite.swift; sourceTree = "<group>"; };
 		39470762275361EB0046C8B4 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		396CBCCE27569F6F00409E3F /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		3977B7CD274AB73D002C6900 /* MapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchViewController.swift; sourceTree = "<group>"; };
 		39CF8653274027BB00774302 /* MapTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTableViewCell.swift; sourceTree = "<group>"; };
 		39E58680273DB9EF00906F7F /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 			children = (
 				39470760275361CD0046C8B4 /* Favorite.swift */,
 				39470762275361EB0046C8B4 /* Location.swift */,
+				396CBCCE27569F6F00409E3F /* Messages.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -333,6 +336,7 @@
 				392780342750465100B8EC07 /* CustomTabController.swift in Sources */,
 				39CF8654274027BB00774302 /* MapTableViewCell.swift in Sources */,
 				39E58681273DB9EF00906F7F /* FavoritesViewController.swift in Sources */,
+				396CBCCF27569F6F00409E3F /* Messages.swift in Sources */,
 				64C4A6AD2716298400A9FE8E /* SceneDelegate.swift in Sources */,
 				39470761275361CD0046C8B4 /* Favorite.swift in Sources */,
 				3977B7CE274AB73D002C6900 /* MapSearchViewController.swift in Sources */,

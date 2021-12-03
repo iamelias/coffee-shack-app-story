@@ -325,6 +325,9 @@ Corpus Christi, TX 78412
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="noBorderLocation1-1"/>
+                                <connections>
+                                    <action selector="myLocationButtonDidTouch:" destination="hoP-IR-T4t" eventType="touchUpInside" id="OKS-Yb-Vba"/>
+                                </connections>
                             </button>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgI-Cw-KBj">
                                 <rect key="frame" x="0.0" y="44" width="390" height="44"/>
