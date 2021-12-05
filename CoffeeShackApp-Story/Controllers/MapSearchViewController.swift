@@ -39,6 +39,11 @@ class MapSearchViewController: UIViewController {
         case table
     }
     
+    enum annotationIcon: String {
+        case selected = "GrayCupIcon"
+        case unselected = "Selected Cup Icon"
+    }
+    
     var currentView: ViewType = .map
 
     //var nearbyLocations:[Location] = []
@@ -52,10 +57,23 @@ class MapSearchViewController: UIViewController {
     
     let locationManager = CLLocationManager()
     
+    lazy var unselectedMapIcon: UIImage? = {
+        let image = UIImage(imageLiteralResourceName: "GrayCupIcon")
+        let resizedImage = resizeImage(image: image, widthX: 0.1, heightX: 0.1)
+        return resizedImage
+    }()
+    
+    lazy var selectedMapIcon: UIImage? = {
+        let image = UIImage(imageLiteralResourceName: "Selected Cup Icon")
+        let resizedImage = resizeImage(image: image, widthX: 0.15, heightX: 0.15)
+        return resizedImage
+    }()
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -64,7 +82,6 @@ class MapSearchViewController: UIViewController {
         mapView.delegate = self
         locationManager.delegate = self
         tableView.rowHeight = 147
-        
         
         searchBarConfig()
         popUpConfig()
@@ -226,30 +243,6 @@ class MapSearchViewController: UIViewController {
     }
     
     
-    func createAnnotation(item: MKPlacemark) { //creating white box annotation for view// not needed but here
-        
-       // let cleanAnnontation = MKAnnotationView()
-        
-        
-//        let stringCoordinates = convertDegreesToString(coordinates: (item.coordinate.latitude, item.coordinate.longitude))
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = item.coordinate
-        annotation.title = "Place 1"
-        
-//        if selectedLocationName == nil {
-//            annotation.title = item.name ?? "Nil"
-//        }
-//        else if selectedLocationName != nil {
-//            annotation.title = selectedLocationName
-//            selectedLocationName = nil
-//        }
-//        annotation.subtitle = "latitude: \(stringCoordinates.0), longitude: \(stringCoordinates.1)"
-//        annotation.coordinate = item.coordinate
-        mapView.addAnnotation(annotation)
-        
-    }
-    
-    
     @IBAction func toggleButtonDidTouch(_ sender: UIButton) {
         togglePopUp()
         //transitionView()
@@ -311,7 +304,19 @@ func searchBarCancelButtonClicked(_ searchBar: UISearchBar) { //clear searchBar 
 }
 }
 
+//MARK: MapView Delegate Methods
+
 extension MapSearchViewController: MKMapViewDelegate { //creating the gylph annotation view
+    
+    func createAnnotation(item: MKPlacemark) { //creating white box annotation for view// not needed but here
+        
+        print("createAnnotation called 1")
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = item.coordinate
+        annotation.title = "Place 1"
+        annotation.subtitle = "Place 2"
+        mapView.addAnnotation(annotation)
+    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
@@ -325,28 +330,28 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             view = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier) //using balloon visual
             
             view?.canShowCallout = true //taping on to point and show white box
-            view?.image = UIImage(imageLiteralResourceName: "Unselected Coffee Icon")
-            //view?.
-//            view?.glyphImage = UIImage(named: "Unselected Coffee Icon")
-//            view?.selectedGlyphImage = UIImage(named: "Selected Coffee Icon")
-            
+           // view?.image = resizedImage
+            view?.image = unselectedMapIcon
         }
         else {
             view?.annotation = annotation
         }
+        view?.isEnabled = true
         
         return view
 
     }
     
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        print("didSelect called")
+        view.image = selectedMapIcon
+    }
+    
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        
+        print("Deselect called")
+        view.image = unselectedMapIcon
     }
-    
-    
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
-    }
     
     func checkStatusLocationServices() { //deterimining if location services is enabled
         if CLLocationManager.locationServicesEnabled() {
@@ -378,10 +383,6 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         region.span.longitudeDelta = span.lon
         
         return region
-    }
-    
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        view.endEditing(true)
     }
 }
 
@@ -460,4 +461,17 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         searchBar.text = ""
     }
     
+}
+
+//MARK: Utility Methods
+extension MapSearchViewController {
+    func resizeImage(image: UIImage, widthX: CGFloat, heightX: CGFloat) -> UIImage? {
+        let scaledImage = CGSize(width: widthX*image.size.width, height: heightX*image.size.height)
+        //runGraphics()
+         UIGraphicsBeginImageContext(scaledImage)
+        image.draw(in: CGRect(origin: .zero, size: scaledImage))
+         let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+         UIGraphicsEndImageContext()
+        return resizedImage
+    }
 }
