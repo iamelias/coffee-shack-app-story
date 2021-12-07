@@ -55,7 +55,7 @@ class MapSearchViewController: UIViewController {
     var nearbyLocations: [MKPlacemark] = []
     var selectedLocationTitle: String? = nil
     
-    let locationManager = CLLocationManager()
+    var locationManager: CLLocationManager!
     
     lazy var unselectedMapIcon: UIImage? = {
         let image = UIImage(imageLiteralResourceName: "GrayCupIcon")
@@ -80,6 +80,9 @@ class MapSearchViewController: UIViewController {
         tableView.dataSource = self
         searchBar.delegate = self
         mapView.delegate = self
+        
+        locationManager = CLLocationManager()
+        //locationManager.desiredAccuracy
         locationManager.delegate = self
         tableView.rowHeight = 147
         
@@ -89,6 +92,9 @@ class MapSearchViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         origHeight = popUpView.frame.height
+        mapView.showsUserLocation = true
+
+ 
 
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -101,7 +107,7 @@ class MapSearchViewController: UIViewController {
             popUpView.translatesAutoresizingMaskIntoConstraints = false
             popUpView.widthAnchor.constraint(equalToConstant: 80).isActive = true
             popUpLeadingConstraint.constant = 400
-            //popUpTrailingConstraint.constant = 100
+//            popUpTrailingConstraint.constant = 100
             popUpTrailingConstraint.constant = view.window?.safeAreaInsets.right ?? .zero
             searchButtonBottomConstraint.constant = 5
             myLocationButtonBottomConstraint.constant = 5
@@ -265,6 +271,7 @@ class MapSearchViewController: UIViewController {
         transitionView()
     }
     @IBAction func myLocationButtonDidTouch(_ sender: UIButton) {
+        print("myLocationButton tapped")
         checkStatusLocationServices() //checking location services
     }
     
@@ -294,7 +301,6 @@ extension MapSearchViewController: UISearchBarDelegate {
         mapView.removeAnnotations(mapView.annotations) //remove all current annotations from map
         nearbyLocations.removeAll() //clear nearbyLocations array
         locationSearch(region: mapView.region.self) //do the search
-        mapView.showsUserLocation = false
         view.endEditing(true) //dismiss keyboard
         
     }
@@ -318,7 +324,12 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         mapView.addAnnotation(annotation)
     }
     
+        
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        if annotation is MKUserLocation {
+            return nil
+        }
         
         let reuseIdentifier = "mapPin" // declaring reuse identifier
         
@@ -355,6 +366,8 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
     
     func checkStatusLocationServices() { //deterimining if location services is enabled
         if CLLocationManager.locationServicesEnabled() {
+            print("locationServices is enabled")
+            //locationManager.startUpdatingLocation()
             checkLocationAuthorization()
         }
     }
@@ -391,7 +404,7 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
 extension MapSearchViewController: CLLocationManagerDelegate { //User Location Management Code
     
     func checkLocationAuthorization() { //determining user's location type authorization
-
+        print("checkLocationAuthorization called")
         switch locationManager.authorizationStatus {
         case .denied:
             print("Authorization denied")
@@ -399,9 +412,11 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
             break
         case .authorizedWhenInUse:
             print("Authorized when in use")
+            mapView.showsUserLocation = true
             showSetUserRegion()
             break
         case .authorizedAlways:
+            mapView.showsUserLocation = true
             print("Always authorized")
             break
         case .notDetermined:
@@ -424,6 +439,7 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         if userLocation == true { //if using user's location, naturalLanguageQuery will search user's location instead... This is for when the centerButton is tapped
             //locationRequest.naturalLanguageQuery = "\(locationManager.location!.description)"
             locationRequest.naturalLanguageQuery = searchBar.text
+            //locationRequest.pointOfInterestFilter = .excludingAll
 
         }
         locationRequest.region = region
@@ -446,17 +462,23 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         }
     }
     
-    func showSetUserRegion() { //showing user's location on map, when centerButton is tapped
+    func showSetUserRegion() {
+        print("ShowSetUserRgion called")
         nearbyLocations.removeAll()
         mapView.removeAnnotations(mapView.annotations)
-        mapView.showsUserLocation = false
         if let userLocation = locationManager.location?.coordinate {
+            print("user region is nil 1")
             let region = makeRegion(span: (lat: 1, lon: 1), coordinate: userLocation)
-            guard let checkedRegion = region else {
+            guard let region = region else {
                 print("user region is nil")
                 return
             }
-            locationSearch(region: checkedRegion, userLocation: true)
+            
+            self.mapView.setRegion(region, animated: true) //zooming into the region on the map
+           // locationSearch(region: checkedRegion, userLocation: true)
+        }
+        else {
+            print("If locationMager.location.coordinate not called")
         }
         searchBar.text = ""
     }
