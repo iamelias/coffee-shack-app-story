@@ -6,11 +6,16 @@
 //
 
 import Foundation
+import MapKit
 
-struct Location {
-        var title: String
-        var menu: URL
-        var address: String
-        var distance: Double
-        var openTime: String
+class Location {
+        var title: String?
+        var menu: URL?
+        var address: String?
+        var distance: Double?
+        var openTime: String?
+        var liked: Bool?
+  //      var hash: Int?
+   //     weak var annotation: MKAnnotation?
+   //     var uuid: UUID = UUID()
     }
