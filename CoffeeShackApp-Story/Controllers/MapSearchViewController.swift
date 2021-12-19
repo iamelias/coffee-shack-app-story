@@ -13,7 +13,7 @@ import CoreData
 
 class MapSearchViewController: UIViewController {
     
-    
+    //MARK: IBOUTLETS
     @IBOutlet weak var popUpHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var popUpView: UIView!
@@ -40,6 +40,7 @@ class MapSearchViewController: UIViewController {
     @IBOutlet weak var cardDirectionsButton: UIButton!
     @IBOutlet weak var cardLikeButton: UIButton!
         
+    //MARK: ENUMS
     enum ViewType {
         case map
         case table
@@ -50,25 +51,21 @@ class MapSearchViewController: UIViewController {
         case unselected = "Selected Cup Icon"
     }
     
+    // MARK: GLOBAL PROPERTIES
     var currentView: ViewType = .map
     var origHeight: CGFloat = 0
-    var viewOpen: Bool = false
-    var likedLocations: [MKAnnotationView] = [] //when like button is tapped this recieves
-    var selectedLocationTitle: String? = nil
-    var selectedAnnotationView: MKAnnotationView? = nil
-    var nearbyLocations: [MKPlacemark] = [] //storing all the locations from api
-    var locations: [Location] = []
-    var tableItems: [MKAnnotationView] = []
-    var selectedLocation: Location?
-
+    var cardViewOpen: Bool = false
+    var likedLocations: [Location] = [] //when like button is tapped this recieves
+    weak var selectedAnnotationView: MKAnnotationView? = nil
+    var myLocations: [Location] = []
+    //var allMKAnnotationViews: [MKAnnotationView?] = []
+    weak var selectedLocation: Location?
     var locationManager: CLLocationManager!
-    
     lazy var unselectedMapIcon: UIImage? = {
         let image = UIImage(imageLiteralResourceName: "Selected Cup Icon pdf")
 //        let resizedImage = resizeImage(image: image, widthX: 0.1, heightX: 0.1)
         return image
     }()
-    
     lazy var selectedMapIcon: UIImage? = {
         let image = UIImage(imageLiteralResourceName: "unSelected Cup Icon pdf")
         let scaledImage = CGSize(width: 0.5*image.size.width, height: 0.5*image.size.height)
@@ -76,10 +73,11 @@ class MapSearchViewController: UIViewController {
 //        let resizedImage = resizeImage(image: image, widthX: 0.15, heightX: 0.15)
         return image
     }()
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    //MARK: VIEWDID LOAD
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,7 +94,7 @@ class MapSearchViewController: UIViewController {
         searchBarConfig()
         popUpConfig()
         //togglePopUp()
-        checkLocationAuthorization()
+        //checkLocationAuthorization()
         popUpView.isHidden = true
         origHeight = popUpView.frame.height
         
@@ -108,7 +106,7 @@ class MapSearchViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         popUpHeightConstraint.constant = 0
         popUpView.isHidden = false
-        viewOpen = false
+        cardViewOpen = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -127,9 +125,6 @@ class MapSearchViewController: UIViewController {
             popUpTrailingConstraint.constant = view.window?.safeAreaInsets.right ?? .zero
             searchButtonBottomConstraint.constant = 5
             myLocationButtonBottomConstraint.constant = 5
-
-           // view.layoutSubviews()
-
         }
         else { //if changing to portrait
             popUpLeadingConstraint.constant = 0
@@ -180,8 +175,8 @@ class MapSearchViewController: UIViewController {
     }
         
     @objc func togglePopUp() { //animation toggle abstraction
-        viewOpen ? closeView() : openView()
-        viewOpen.toggle()
+        cardViewOpen ? closeView() : openView()
+        cardViewOpen.toggle()
     }
     
     //MARK: ANIMATE METHODS
@@ -190,13 +185,12 @@ class MapSearchViewController: UIViewController {
                 
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: { [unowned self] in
             view.layoutIfNeeded()
-           // view.layoutSubviews()
         }, completion: nil)
     }
     
     func closeView() { //closing the popview
         mapView.selectedAnnotations = []
-        viewOpen = true
+        cardViewOpen = true
         popUpHeightConstraint.constant = 0
 
         
@@ -214,10 +208,7 @@ class MapSearchViewController: UIViewController {
             myLocationButton.isHidden = true
             searchAreaButton.isHidden = true
             mapTableToggleButton.setImage(UIImage(systemName: "map"), for: .normal)
-            //ableView.reloadData()
-          //  mapTableToggleButton.currentBackgroundImage
             togglePopUp()
-          //  popUpView.isHidden = true
         }
         else { // if table view is on screen
             tableView.isHidden = true
@@ -226,7 +217,6 @@ class MapSearchViewController: UIViewController {
             mapTableToggleButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
             
             //togglePopUp()
-           // popUpView.isHidden = false
         }
     }
     
@@ -241,7 +231,6 @@ class MapSearchViewController: UIViewController {
     }
     
     func transitionToTableView() {
-        
         UIView.transition(from: mapView, to: tableView, duration: 0.5, options: [.transitionFlipFromLeft, .showHideTransitionViews], completion: { [unowned self]_ in
             
             tableView.isHidden = false
@@ -250,6 +239,7 @@ class MapSearchViewController: UIViewController {
             
         })
         
+       myLocations = Sort.mergeSort(array: myLocations)
         tableView.reloadData()
 
         myLocationButton.isHidden = true
@@ -269,12 +259,18 @@ class MapSearchViewController: UIViewController {
 
             
         })
+
         myLocationButton.isHidden = false
         searchAreaButton.isHidden = false
         mapTableToggleButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         yellowToggleButton.isHidden = false
         currentView = .map
-        openView()
+        cardViewOpen = false
+        
+        guard let selectedLocation = selectedLocation?.mkAnnotationView?.annotation else {
+            return
+        }
+        mapView.selectAnnotation(selectedLocation, animated: false)
     }
     
     //MARK: IBACTIONS
@@ -284,41 +280,21 @@ class MapSearchViewController: UIViewController {
     }
     
     @IBAction func cardLikeButtonDidTouch(_ sender: UIButton) {
-        
-        guard let selectedAnnotationView = selectedAnnotationView else {
+
+        guard let selectedLocation = selectedLocation else {
             return
         }
-
         
-        if cardLikeButton.imageView?.image == UIImage(systemName: "suit.heart") {
+        if selectedLocation.liked == false {
             cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
-            likedLocations.append(selectedAnnotationView)
-            }
+            selectedLocation.liked = true
+            //likedLocations.append(selectedLocation)
+        }
         else {
             cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
-            likedLocations = likedLocations.filter{$0 != selectedAnnotationView}
-            }
-        
-
-//        if cardLikeButton.tag == 0 {
-//            cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
-//            cardLikeButton.tag = 1
-//            selectedLocation.liked = true
-//
-//            if let selectedAnnotationView = selectedAnnotationView {
-//                likedLocations.append(selectedAnnotationView)
-//                print("\(String(describing: selectedAnnotationView.annotation!.title)) liked")
-//            }
-//            else {
-//                print("selected Annotation is nil")
-//            }
-//        }
-//        else {
-//            cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
-//                cardLikeButton.tag = 0
-//            selectedLocation.liked = false
-//
-//            }
+            selectedLocation.liked = false
+           // likedLocations = likedLocations.filter{$0.liked != selectedLocation.liked}
+        }
     }
     
     
@@ -333,33 +309,32 @@ class MapSearchViewController: UIViewController {
     
     @IBAction func searchThisAreaDidTouch(_ sender: UIButton) {
        // locationSearch(region: mapView.region, userLocation: false)
-        getAreaSearch()
+        print("searchThisAreaDidTouch")
+       // getAreaSearch()
+        searchClient(region: nil, isUsersRegion: true)
         
     }
-    
 }
 
 extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     //MARK: TABLE VIEW METHODS
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locations.count
+        return myLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mapCell", for: indexPath) as! MapTableViewCell
         cell.selectionStyle = .none
-        cell.cellTitle.text = locations[indexPath.row].title ?? "NIL"
-        cell.cellAddressTextView.text = locations[indexPath.row].address ?? "NIL"
-        
-        
-        if locations[indexPath.row].liked ?? false {
+        cell.currentLocation = myLocations[indexPath.row]
+        cell.cellTitle.text = myLocations[indexPath.row].title
+        cell.cellAddressTextView.text = myLocations[indexPath.row].address
+        if myLocations[indexPath.row].liked ?? false {
             cell.cellLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
         }
         else {
             cell.cellLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
         }
-        //cell.cellLikeButton
         return cell
     }
     
@@ -372,8 +347,7 @@ extension MapSearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         mapView.removeAnnotations(mapView.annotations) //remove all current annotations from map
-        nearbyLocations.removeAll() //clear nearbyLocations array
-        locationSearch(region: mapView.region.self) //do the search
+        searchClient(region: mapView.region.self, isUsersRegion: false)
         view.endEditing(true) //dismiss keyboard
         
     }
@@ -388,7 +362,6 @@ func searchBarCancelButtonClicked(_ searchBar: UISearchBar) { //clear searchBar 
 extension MapSearchViewController: MKMapViewDelegate { //creating the gylph annotation view
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
         if annotation is MKUserLocation {
             return nil
         }
@@ -414,6 +387,11 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             view?.annotation = annotation
         }
         view?.isEnabled = true
+        let location = createLocations(annotation: annotation)
+        location.mkAnnotationView = view
+        myLocations.append(location)
+        
+        
         
         return view
     }
@@ -431,14 +409,28 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         
         selectedAnnotationView = view
         
-        if likedLocations.contains(view) {
-            cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+        for i in myLocations {
+            if selectedAnnotationView == i.mkAnnotationView {
+                selectedLocation = i
         }
-        else {
-            cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
         }
-        
+        if let selectedLocation = selectedLocation {
+        if selectedLocation.liked == false {
+                cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
+            }
+            else {
+                cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+            }
+        }
         togglePopUp()
+    }
+    
+    func createLocations(annotation: MKAnnotation?) -> Location {
+        let location = Location()
+        location.title = annotation?.title ?? "NIL"
+        location.address = annotation?.subtitle ?? "NIL"
+        location.liked = false
+        return location
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
@@ -454,23 +446,9 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
     
     func checkStatusLocationServices() { //deterimining if location services is enabled
         if CLLocationManager.locationServicesEnabled() {
-            //locationManager.startUpdatingLocation()
             checkLocationAuthorization()
         }
     }
-    
-    func createAlert(message: (title: String, alertMessage: String, alertActionMessage: String)) {
-        
-        let alert = UIAlertController(title: message.title, message: message.alertMessage, preferredStyle: .alert)
-        
-        let okAction = UIAlertAction(title: message.alertActionMessage, style: .default, handler: nil)
-        
-        alert.addAction(okAction)
-        
-        present(alert, animated: true)
-        
-    }
-    
     
     func makeRegion(span: (lat: CLLocationDegrees, lon: CLLocationDegrees), coordinate: CLLocationCoordinate2D? = nil) -> MKCoordinateRegion? { //This is creating a region using a center coordinate and a span
         var region = MKCoordinateRegion()
@@ -495,12 +473,17 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         switch locationManager.authorizationStatus {
         case .denied:
             print("Authorization denied")
-            createAlert(message: ("Denied", AuthMessages.denied.rawValue, "Ok"))
+            let alert = Constants.createAlert(message: ("Denied", AuthMessages.denied.rawValue, "Ok"))
+            present(alert, animated: true)
             break
         case .authorizedWhenInUse:
             print("Authorized when in use")
             mapView.showsUserLocation = true
-            showSetUserRegion()
+            let region = showSetUserRegion() //getting user location region with zoom
+            if let region = region {
+            self.mapView.setRegion(region, animated: true) //zooming into user's region on the map
+            }
+            searchClient(region: region, isUsersRegion: true) //passing region for search
             break
         case .authorizedAlways:
             mapView.showsUserLocation = true
@@ -509,62 +492,23 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         case .notDetermined:
             print("Authorization not determined")
             locationManager.requestWhenInUseAuthorization()
-           // mapView.reloadInputViews()
-            //checkLocationAuthorization()
             break
         case .restricted:
             print("Authroization restricted")
-            createAlert(message: ("Restricted", AuthMessages.restricted.rawValue, "Ok"))
+            let alert = Constants.createAlert(message: ("Restricted", AuthMessages.restricted.rawValue, "Ok"))
+            present(alert, animated: true)
             break
         @unknown default: break
         }
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        mapView.showsUserLocation = true
-        showSetUserRegion()
-        //getAreaSearch()
+        checkLocationAuthorization()
     }
         
     
     //MARK: LOCATION API METHODS
-    func getAreaSearch(myRegion: MKCoordinateRegion? = nil) {
-        mapView.removeAnnotations(mapView.annotations) //remove all current annotations from map
-        nearbyLocations.removeAll() //clear nearbyLocations array
-        locations.removeAll()
-        let request = MKLocalSearch.Request()
-        if let myRegion = myRegion {
-            request.region = myRegion
-        }
-        else {
-        request.region = mapView.region
-        }
-        request.naturalLanguageQuery = "Coffee"
 
-//        let categories: [MKPointOfInterestCategory] = [.cafe,.bakery]
-//        let filters = MKPointOfInterestFilter(excluding: categories)
-//        request.pointOfInterestFilter = .some(filters)
-        
-        let locationSearch = MKLocalSearch(request: request)
-        locationSearch.start {[unowned self] response, error in
-            guard let response = response else {
-                print("Error: \(error?.localizedDescription ?? "Unknown Error")")
-                return
-            }
-            
-            for item in response.mapItems { // for each returned item
-                
-                self.nearbyLocations.append(item.placemark) //adding to nearbyLocations array
-               let annotation = self.createAnnotation(item: item.placemark) //creating an annotation to place on map
-                mapView.addAnnotation(annotation)
-                let location = self.createLocation(item: item.placemark)
-             //   location.annotation = annotation as MKAnnotation
-                locations.append(location)
-                //print(nearbyLocations)
-            }
-        }
-    }
-    
     func createAnnotation(item: MKPlacemark) -> MKPointAnnotation { //creating white box annotation for view// not needed but here
         
         let address = "\(item.subThoroughfare ?? "") \(item.thoroughfare ?? ""), \(item.locality ?? ""), \(item.administrativeArea ?? "") \(item.postalCode ?? "")"
@@ -584,83 +528,53 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         return location
     }
     
-   
-    
-    func locationSearch(region: MKCoordinateRegion, userLocation: Bool? = nil) { //using MKLocalSearch, region, and naturalLanguageQuery to return location results
-        
-        mapView.removeAnnotations(mapView.annotations) //remove all current annotations from map
-        nearbyLocations.removeAll() //clear nearbyLocations array
-        locations.removeAll()
-        
-        let locationRequest = MKLocalSearch.Request()
-        if userLocation == nil {
-            locationRequest.naturalLanguageQuery = searchBar.text
+    func searchClient(region: MKCoordinateRegion? = nil, isUsersRegion: Bool) {
+        mapView.removeAnnotations(mapView.annotations)
+        myLocations.removeAll()
+        let request = MKLocalSearch.Request()
+        if let region = region {
+            request.region = region
         }
-        if userLocation == true { //if using user's location, naturalLanguageQuery will search user's location instead... This is for when the centerButton is tapped
-            //locationRequest.naturalLanguageQuery = "\(locationManager.location!.description)"
-            locationRequest.naturalLanguageQuery = searchBar.text
-            
-//            let categories: [MKPointOfInterestCategory] = [.cafe,.bakery]
-//            let filters = MKPointOfInterestFilter(excluding: categories)
-//            locationRequest.pointOfInterestFilter = .some(filters)
-
+        else {
+            request.region = mapView.region //default is current map region
         }
-        locationRequest.region = region
         
-        let request = MKLocalSearch(request: locationRequest)
-        request.start {[unowned self] response, error in
+        request.naturalLanguageQuery = isUsersRegion ? "Coffee":searchBar.text
+        
+        let locationSearch = MKLocalSearch(request: request)
+        locationSearch.start {[unowned self] response, error in
             guard let response = response else {
                 print("Error: \(error?.localizedDescription ?? "Unknown Error")")
                 return
             }
             
-            for item in response.mapItems { // for each returned item
-                self.nearbyLocations.append(item.placemark) //adding to nearbyLocations array
-                let annotation = self.createAnnotation(item: item.placemark) //creating an annotation to place on map
-                //print(nearbyLocations)
+            for item in response.mapItems {
+                let annotation = self.createAnnotation(item: item.placemark)
                 mapView.addAnnotation(annotation)
             }
-            let mapRegion = self.makeRegion(span: (0.05, 0.05), coordinate: self.nearbyLocations[0].coordinate) //creating new region where center will be the first returned location
-            guard let region = mapRegion else{return}
-            self.mapView.setRegion(region, animated: true) //zooming into the region on the map
-        }
-    }
-    
-    func showSetUserRegion() {
-        nearbyLocations.removeAll()
-        mapView.removeAnnotations(mapView.annotations)
-        if let userLocation = locationManager.location?.coordinate {
-           // print("user region is nil 1")
-            let region = makeRegion(span: (lat: 0.05, lon: 0.05), coordinate: userLocation)
-            guard let region = region else {
-               // print("user region is nil")
+            guard !isUsersRegion else { // if using searchbar text zoom to first annotation element
                 return
             }
             
-            self.mapView.setRegion(region, animated: true) //zooming into the region on the map
-            
-            getAreaSearch(myRegion: region)
-            
-
-           // locationSearch(region: checkedRegion, userLocation: true)
+            let firstCoordinate = response.mapItems[0].placemark.coordinate
+            let region = self.makeRegion(span: (0.05,0.05), coordinate: firstCoordinate)
+                
+            if let region = region {
+                mapView.setRegion(region, animated: true)
+            }
         }
-        else {
-            print("If locationMager.location.coordinate not called")
-        }
-        searchBar.text = ""
-       // getAreaSearch()
+        
     }
     
-}
-
-//MARK: Utility Methods
-extension MapSearchViewController {
-    func resizeImage(image: UIImage, widthX: CGFloat, heightX: CGFloat) -> UIImage? {
-        let scaledImage = CGSize(width: widthX*image.size.width, height: heightX*image.size.height)
-        UIGraphicsBeginImageContext(scaledImage)
-        image.draw(in: CGRect(origin: (.zero), size: scaledImage))
-         let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-         UIGraphicsEndImageContext()
-        return resizedImage
+    func showSetUserRegion() -> MKCoordinateRegion? {
+        mapView.removeAnnotations(mapView.annotations)
+        myLocations.removeAll()
+        searchBar.text = ""
+        guard let userLocation = locationManager.location?.coordinate else {
+            return nil
+        }
+         let region = makeRegion(span: (lat: 0.05, lon: 0.05), coordinate: userLocation)
+         return region
     }
+    
 }
