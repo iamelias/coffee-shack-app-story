@@ -24,6 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBar.appearance().tintColor = UIColor(red: 247/255, green: 156/255, blue: 91/255, alpha: 1)
         UITabBar.appearance().unselectedItemTintColor = .white
         
+        UITabBar.appearance().barTintColor = UIColor(red: 52/255, green: 42/255, blue: 35/255, alpha: 1)
+        UITabBar.appearance().isTranslucent = false
+        
         //Text Field
         UITextField.appearance().keyboardAppearance = .dark
                 

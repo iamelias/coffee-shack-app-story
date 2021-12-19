@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "unSelected Cup Icon pdf.pdf",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "unSelected Cup Icon pdf@2x.pdf",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "unSelected Cup Icon pdf@3x.pdf",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

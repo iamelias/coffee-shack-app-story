@@ -8,9 +8,9 @@
 import Foundation
 
 struct Favorite {
-    var title: String
-    var menu: URL
-    var address: String
-    var distance: Double
-    var openTime: String
+    var title: String?
+    var menu: URL?
+    var address: String?
+    var distance: Double?
+    var openTime: String?
 }
