@@ -49,7 +49,3 @@ class MapTableViewCell: UITableViewCell {
         
     }
 }
-
-
-//Elias Hayyek Eecheverri
-//Latin name
