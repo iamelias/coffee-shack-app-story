@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		390D4CD5276FAFB1002F9A27 /* FavoritesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D4CD4276FAFB1002F9A27 /* FavoritesViewCell.swift */; };
 		3915F73327442535008C2C6F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3915F73227442535008C2C6F /* Constants.swift */; };
 		392780342750465100B8EC07 /* CustomTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392780332750465100B8EC07 /* CustomTabController.swift */; };
 		39470761275361CD0046C8B4 /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39470760275361CD0046C8B4 /* Favorite.swift */; };
 		39470763275361EB0046C8B4 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39470762275361EB0046C8B4 /* Location.swift */; };
+		394FE0DE27705E68007A29DF /* LocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394FE0DD27705E68007A29DF /* LocationDelegate.swift */; };
 		396CBCCF27569F6F00409E3F /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396CBCCE27569F6F00409E3F /* Messages.swift */; };
 		3977B7CE274AB73D002C6900 /* MapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3977B7CD274AB73D002C6900 /* MapSearchViewController.swift */; };
 		398AF61427626CF900337248 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 398AF61227626CF900337248 /* Main.storyboard */; };
@@ -44,10 +46,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		390D4CD4276FAFB1002F9A27 /* FavoritesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewCell.swift; sourceTree = "<group>"; };
 		3915F73227442535008C2C6F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		392780332750465100B8EC07 /* CustomTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabController.swift; sourceTree = "<group>"; };
 		39470760275361CD0046C8B4 /* Favorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorite.swift; sourceTree = "<group>"; };
 		39470762275361EB0046C8B4 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		394FE0DD27705E68007A29DF /* LocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDelegate.swift; sourceTree = "<group>"; };
 		396CBCCE27569F6F00409E3F /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		3977B7CD274AB73D002C6900 /* MapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchViewController.swift; sourceTree = "<group>"; };
 		398AF61327626CF900337248 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -169,6 +173,8 @@
 				39E58680273DB9EF00906F7F /* FavoritesViewController.swift */,
 				39CF8653274027BB00774302 /* MapTableViewCell.swift */,
 				392780332750465100B8EC07 /* CustomTabController.swift */,
+				390D4CD4276FAFB1002F9A27 /* FavoritesViewCell.swift */,
+				394FE0DD27705E68007A29DF /* LocationDelegate.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -330,6 +336,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				394FE0DE27705E68007A29DF /* LocationDelegate.swift in Sources */,
 				64C4A6B52716298400A9FE8E /* CoffeeShackApp_Story.xcdatamodeld in Sources */,
 				64C4A6AB2716298400A9FE8E /* AppDelegate.swift in Sources */,
 				39470763275361EB0046C8B4 /* Location.swift in Sources */,
@@ -338,6 +345,7 @@
 				39E58681273DB9EF00906F7F /* FavoritesViewController.swift in Sources */,
 				396CBCCF27569F6F00409E3F /* Messages.swift in Sources */,
 				64C4A6AD2716298400A9FE8E /* SceneDelegate.swift in Sources */,
+				390D4CD5276FAFB1002F9A27 /* FavoritesViewCell.swift in Sources */,
 				39470761275361CD0046C8B4 /* Favorite.swift in Sources */,
 				3977B7CE274AB73D002C6900 /* MapSearchViewController.swift in Sources */,
 				3915F73327442535008C2C6F /* Constants.swift in Sources */,

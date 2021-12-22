@@ -25,6 +25,6 @@ class CustomTabController: UITabBarController {
 
         imageView.layer.add(bounceAnimation, forKey: nil)
     }
-
+    
 }
 
