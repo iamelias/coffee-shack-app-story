@@ -12,6 +12,7 @@ import CoreLocation
 import CoreData
 
 class MapSearchViewController: UIViewController {
+
     
     //MARK: IBOUTLETS
     @IBOutlet weak var popUpHeightConstraint: NSLayoutConstraint!
@@ -70,12 +71,16 @@ class MapSearchViewController: UIViewController {
         let image = UIImage(imageLiteralResourceName: "unSelected Cup Icon pdf")
         let scaledImage = CGSize(width: 0.5*image.size.width, height: 0.5*image.size.height)
         
-//        let resizedImage = resizeImage(image: image, widthX: 0.15, heightX: 0.15)
         return image
     }()
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    var searchNotification = Notification.Name(rawValue: "selected.location.key")
+    var addNotification = Notification.Name(rawValue: "add.location")
+
+    
     
     //MARK: VIEWDID LOAD
     
@@ -85,7 +90,6 @@ class MapSearchViewController: UIViewController {
         tableView.dataSource = self
         searchBar.delegate = self
         mapView.delegate = self
-        
         locationManager = CLLocationManager()
         //locationManager.desiredAccuracy
         locationManager.delegate = self
@@ -93,20 +97,19 @@ class MapSearchViewController: UIViewController {
         
         searchBarConfig()
         popUpConfig()
-        //togglePopUp()
-        //checkLocationAuthorization()
         popUpView.isHidden = true
         origHeight = popUpView.frame.height
         
         let mapTapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         mapView.addGestureRecognizer(mapTapGesture)
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
         popUpHeightConstraint.constant = 0
         popUpView.isHidden = false
         cardViewOpen = false
+        tabBarController?.selectedIndex = 0
+        tabBarController?.viewControllers?[1].view.layoutIfNeeded() //preloading second tab so observer works
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -121,7 +124,7 @@ class MapSearchViewController: UIViewController {
             popUpView.translatesAutoresizingMaskIntoConstraints = false
             popUpView.widthAnchor.constraint(equalToConstant: 80).isActive = true
             popUpLeadingConstraint.constant = 400
-//            popUpTrailingConstraint.constant = 100
+            popUpTrailingConstraint.constant = 100
             popUpTrailingConstraint.constant = view.window?.safeAreaInsets.right ?? .zero
             searchButtonBottomConstraint.constant = 5
             myLocationButtonBottomConstraint.constant = 5
@@ -135,6 +138,7 @@ class MapSearchViewController: UIViewController {
     }
     
     deinit {
+        NotificationCenter.default.removeObserver(self)
         print("deinit called")
     }
     
@@ -215,8 +219,6 @@ class MapSearchViewController: UIViewController {
             myLocationButton.isHidden = false
             searchAreaButton.isHidden = false
             mapTableToggleButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
-            
-            //togglePopUp()
         }
     }
     
@@ -239,7 +241,10 @@ class MapSearchViewController: UIViewController {
             
         })
         
-       myLocations = Sort.mergeSort(array: myLocations)
+      // myLocations = Sort.mergeSort(array: myLocations)
+        myLocations.sort {
+            $0.title ?? "NIL" < $1.title ?? "NIL"
+        }
         tableView.reloadData()
 
         myLocationButton.isHidden = true
@@ -288,6 +293,9 @@ class MapSearchViewController: UIViewController {
         if selectedLocation.liked == false {
             cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             selectedLocation.liked = true
+          //  delegate?.didLikeLocation(location: selectedLocation)
+            //let name = Notification.Name(rawValue: "selectedLocation")
+            NotificationCenter.default.post(name: addNotification, object: selectedLocation, userInfo: ["location": selectedLocation])
             //likedLocations.append(selectedLocation)
         }
         else {
@@ -576,5 +584,4 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
          let region = makeRegion(span: (lat: 0.05, lon: 0.05), coordinate: userLocation)
          return region
     }
-    
 }

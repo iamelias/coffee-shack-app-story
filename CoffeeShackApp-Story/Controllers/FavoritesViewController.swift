@@ -15,9 +15,14 @@ class FavoritesViewController: UIViewController {
     @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var noFavoritesLabel: UILabel!
     
     
     var favorites: [Favorite] = []
+    var selectedLocation: Location? = nil //from MapSearchViewController
+    var myLikedLocations: [Location] = []
+    var addNotification = Notification.Name(rawValue: "add.location")
+    var removeNotification = Notification.Name(rawValue: "remove.location")
 
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -31,7 +36,7 @@ class FavoritesViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        searchBar.delegate = self
+        searchBar.delegate = self        
         
         tableView.rowHeight = 147
 
@@ -44,6 +49,7 @@ class FavoritesViewController: UIViewController {
                 leftView.tintColor = UIColor.white
             }
         }
+        createObservers()
     }
     
     override func viewWillLayoutSubviews() {
@@ -57,17 +63,64 @@ class FavoritesViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        noFavoritesLabel.isHidden = true
+    }
+    override func viewDidAppear(_ animated: Bool) {
+         tableView.reloadData()
+
+    }
+    
+    func createObservers() {
+//        NotificationCenter.default.addObserver(forName: searchNotification , object: nil, queue: nil) { [unowned self] (note) in
+//            myLikedLocations.append(note.object as! Location)
+//        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FavoritesViewController.updateTableView), name: addNotification, object: nil)
+        
+//        NotificationCenter.default.addObserver(Notification, selector: #selector(FavoritesViewController.removeFromTableView(notification:)), name: removeNotification, object: nil)
+    
+    }
+    
+    @objc func updateTableView(notification: Notification) {
+        guard let selectedLocation = notification.userInfo?["location"] as? Location else {
+            print("nil in notification userInfo")
+            return
+        }
+        
+        myLikedLocations.append(selectedLocation)
+    }
+    
+    @objc func removeFromTableView(notification: Notification) {
+       // myLikedLocations = myLikedLocations.filter{$0 != notification.object as! Location}
+    }
+
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }
 
 extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        if myLikedLocations.count == 0 {
+            noFavoritesLabel.isHidden = false
+        }
+        else {
+            noFavoritesLabel.isHidden = true
+        }
+        return myLikedLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "favoriteCell", for: indexPath) as! FavoritesViewCell
         cell.selectionStyle = .none
+        cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
+        cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
+        cell.currentLikedLocation?.mkAnnotationView = myLikedLocations[indexPath.row].mkAnnotationView
         return cell
     }
     
@@ -83,5 +136,8 @@ extension FavoritesViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
-    
 }
+
+
+
+

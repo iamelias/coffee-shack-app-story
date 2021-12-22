@@ -237,7 +237,7 @@ Corpus Christi, TX 78412
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zte-yG-xx7">
-                                        <rect key="frame" x="111" y="55" width="214" height="52"/>
+                                        <rect key="frame" x="111" y="55" width="206" height="52"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <string key="text">4022 Saratoga Blvd.
@@ -245,7 +245,7 @@ Corpus Christi, TX 78412
 
 </string>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Line 4" translatesAutoresizingMaskIntoConstraints="NO" id="rPP-eM-j86">
@@ -445,7 +445,7 @@ Corpus Christi, TX 78412
         <!--Menus-->
         <scene sceneID="gIU-9F-7Qy">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="Bvr-a6-bDM" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NavCont" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="Bvr-a6-bDM" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Menus" image="Favorites Image" id="KEq-Ga-voW"/>
                     <toolbarItems/>
                     <nil key="simulatedTopBarMetrics"/>
@@ -503,7 +503,7 @@ Corpus Christi, TX 78412
         <!--Favorites View Controller-->
         <scene sceneID="0F0-Oo-SgB">
             <objects>
-                <viewController id="qty-Wz-nAT" customClass="FavoritesViewController" customModule="CoffeeShackApp_Story" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FavoritesVC" id="qty-Wz-nAT" customClass="FavoritesViewController" customModule="CoffeeShackApp_Story" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Aiu-gX-DwL">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -535,20 +535,13 @@ Corpus Christi, TX 78412
                                         <color key="backgroundColor" red="0.82979562786436567" green="0.70500055591341793" blue="0.59836524474396413" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <color key="sectionIndexBackgroundColor" red="0.96078431372549022" green="0.77647058823529413" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="147" id="u36-c8-p6q" customClass="MapTableViewCell" customModule="CoffeeShackApp_Story" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="favoriteCell" rowHeight="147" id="u36-c8-p6q" customClass="FavoritesViewCell" customModule="CoffeeShackApp_Story" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="44.666666030883789" width="390" height="147"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="u36-c8-p6q" id="8by-xJ-rAY">
                                                     <rect key="frame" x="0.0" y="0.0" width="390" height="147"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Directions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RbC-cc-4mt">
-                                                            <rect key="frame" x="20" y="106" width="82" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.5 Mi" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QpQ-Pe-WOZ">
                                                             <rect key="frame" x="23" y="30" width="49" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -557,32 +550,21 @@ Corpus Christi, TX 78412
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Starbucks" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N48-lo-Q4f">
-                                                            <rect key="frame" x="118" y="26" width="84" height="21"/>
+                                                            <rect key="frame" x="118" y="26" width="252" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Menu" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jxn-TB-UY9">
-                                                            <rect key="frame" x="20" y="71" width="45" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                            <color key="textColor" red="0.45882352939999999" green="0.2901960784" blue="0.16862745100000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Open 5:00am - 11:00pm " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7EL-jl-tfG">
-                                                            <rect key="frame" x="118" y="106" width="190" height="21"/>
+                                                            <rect key="frame" x="118" y="106" width="252" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trash" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Aac-Xa-ppn">
-                                                            <rect key="frame" x="346" y="62.666666666666657" width="19" height="20.666666666666686"/>
-                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </imageView>
-                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" scrollEnabled="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GTW-Cw-yWp">
-                                                            <rect key="frame" x="118" y="55" width="172" height="55"/>
+                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GTW-Cw-yWp">
+                                                            <rect key="frame" x="118" y="55" width="194" height="55"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <string key="text">4022 Saratoga Blvd.
@@ -590,20 +572,66 @@ Corpus Christi, TX 78412
 
 </string>
                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                         </textView>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Line 4" translatesAutoresizingMaskIntoConstraints="NO" id="6Oc-f0-gat">
                                                             <rect key="frame" x="105" y="9" width="7" height="128"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uui-LC-78d">
+                                                            <rect key="frame" x="340" y="60" width="30" height="27"/>
+                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <state key="normal" title="Button"/>
+                                                            <buttonConfiguration key="configuration" style="plain" image="trash" catalog="system">
+                                                                <directionalEdgeInsets key="contentInsets" top="5" leading="5" bottom="5" trailing="5"/>
+                                                            </buttonConfiguration>
+                                                            <connections>
+                                                                <action selector="trashButtonDidTouch:" destination="u36-c8-p6q" eventType="touchUpInside" id="vq1-UQ-pO4"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wo3-vT-MGi">
+                                                            <rect key="frame" x="20" y="105" width="82" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <state key="normal" title="Button"/>
+                                                            <buttonConfiguration key="configuration" style="plain" title="Directions">
+                                                                <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                                <directionalEdgeInsets key="contentInsets" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
+                                                                <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </buttonConfiguration>
+                                                            <connections>
+                                                                <action selector="directionsButtonDidTouch:" destination="u36-c8-p6q" eventType="touchUpInside" id="HG9-yb-mLS"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fG9-1Y-JGh">
+                                                            <rect key="frame" x="20" y="71" width="45" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <state key="normal" title="Button"/>
+                                                            <buttonConfiguration key="configuration" style="plain" title="Menu">
+                                                                <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                                <directionalEdgeInsets key="contentInsets" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
+                                                                <color key="baseForegroundColor" red="0.45882352939999999" green="0.2901960784" blue="0.16862745100000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </buttonConfiguration>
+                                                            <connections>
+                                                                <action selector="menuButtonDidTouch:" destination="u36-c8-p6q" eventType="touchUpInside" id="c2B-4V-lEg"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailingMargin" secondItem="Aac-Xa-ppn" secondAttribute="trailing" constant="5" id="FhZ-fq-hYs"/>
-                                                        <constraint firstItem="Aac-Xa-ppn" firstAttribute="centerY" secondItem="8by-xJ-rAY" secondAttribute="centerY" id="txa-fn-q5l"/>
+                                                        <constraint firstItem="Uui-LC-78d" firstAttribute="centerY" secondItem="8by-xJ-rAY" secondAttribute="centerY" id="YzE-km-0ML"/>
+                                                        <constraint firstItem="Uui-LC-78d" firstAttribute="trailing" secondItem="8by-xJ-rAY" secondAttribute="trailingMargin" id="bte-UP-4RA"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.96078431372549022" green="0.77647058823529413" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <outlet property="cellAddressTextView" destination="GTW-Cw-yWp" id="nwC-eq-ETJ"/>
+                                                    <outlet property="cellDistanceLabel" destination="QpQ-Pe-WOZ" id="aVC-Gy-nBd"/>
+                                                    <outlet property="cellHourstLabel" destination="7EL-jl-tfG" id="tHS-TF-2nT"/>
+                                                    <outlet property="cellTitle" destination="N48-lo-Q4f" id="aDH-CS-r80"/>
+                                                    <outlet property="directionsButton" destination="wo3-vT-MGi" id="6LJ-yc-oAf"/>
+                                                    <outlet property="menuButton" destination="fG9-1Y-JGh" id="Qzc-E7-aXE"/>
+                                                    <outlet property="trashButton" destination="Uui-LC-78d" id="VnA-Zf-hD8"/>
+                                                </connections>
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
@@ -626,13 +654,21 @@ Corpus Christi, TX 78412
                                             <constraint firstItem="yCx-Sq-oWb" firstAttribute="centerY" secondItem="ts9-Qk-kdt" secondAttribute="centerY" id="jbb-sn-sGk"/>
                                         </constraints>
                                     </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Favorites Saved" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iD7-Ip-CBE">
+                                        <rect key="frame" x="84.333333333333329" y="313.66666666666669" width="221.66666666666669" height="37"/>
+                                        <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="26"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.96078431372549022" green="0.77647058823529413" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="dLp-cS-4ca" firstAttribute="top" secondItem="ts9-Qk-kdt" secondAttribute="bottom" id="61b-0j-dRS"/>
                                     <constraint firstAttribute="bottom" secondItem="dLp-cS-4ca" secondAttribute="bottom" id="6DJ-mg-cPL"/>
                                     <constraint firstItem="ts9-Qk-kdt" firstAttribute="top" secondItem="3v7-vf-rLn" secondAttribute="top" id="7BR-E6-lIk"/>
+                                    <constraint firstItem="iD7-Ip-CBE" firstAttribute="centerX" secondItem="3v7-vf-rLn" secondAttribute="centerX" id="AZT-BM-sWq"/>
                                     <constraint firstAttribute="trailing" secondItem="dLp-cS-4ca" secondAttribute="trailing" id="kfM-tC-Vr7"/>
+                                    <constraint firstItem="iD7-Ip-CBE" firstAttribute="centerY" secondItem="3v7-vf-rLn" secondAttribute="centerY" id="nRJ-jK-BUU"/>
                                     <constraint firstItem="dLp-cS-4ca" firstAttribute="leading" secondItem="3v7-vf-rLn" secondAttribute="leading" id="pq7-Pf-Q6W"/>
                                 </constraints>
                             </view>
@@ -662,6 +698,7 @@ Corpus Christi, TX 78412
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="navBar" destination="7Jv-EJ-hHR" id="Zzx-6m-tUk"/>
+                        <outlet property="noFavoritesLabel" destination="iD7-Ip-CBE" id="9ZH-d1-G70"/>
                         <outlet property="searchBar" destination="sXn-Xs-dah" id="6O6-CI-CAv"/>
                         <outlet property="settingsButton" destination="aAc-m5-ZFn" id="kpt-GF-eUn"/>
                         <outlet property="tableView" destination="dLp-cS-4ca" id="Wrz-Dx-Opi"/>
@@ -670,7 +707,7 @@ Corpus Christi, TX 78412
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aRU-3h-adn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3645" y="1688"/>
+            <point key="canvasLocation" x="3644.6153846153843" y="1687.6777251184833"/>
         </scene>
     </scenes>
     <resources>
