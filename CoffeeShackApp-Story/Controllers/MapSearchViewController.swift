@@ -13,7 +13,6 @@ import CoreData
 
 class MapSearchViewController: UIViewController {
     
-    
     //MARK: IBOUTLETS
     
     //MARK: Constraint IBOutlets
@@ -45,11 +44,6 @@ class MapSearchViewController: UIViewController {
     @IBOutlet weak var cardLikeButton: UIButton!
     
     //MARK: ENUMS
-    public enum ViewType {
-        case map
-        case table
-    }
-    
     enum annotationIcon: String {
         case selected = "GrayCupIcon"
         case unselected = "Selected Cup Icon"
@@ -71,7 +65,6 @@ class MapSearchViewController: UIViewController {
     lazy var selectedMapIcon: UIImage? = {
         let image = UIImage(imageLiteralResourceName: "unSelected Cup Icon pdf")
         let scaledImage = CGSize(width: 0.5*image.size.width, height: 0.5*image.size.height)
-        
         return image
     }()
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -82,9 +75,7 @@ class MapSearchViewController: UIViewController {
     var searchNotification = Notification.Name(rawValue: "selected.location.key")
     var addNotification = Notification.Name(rawValue: "add.location")
     
-    
-    //MARK: VIEWDID LOAD
-    
+    //MARK: VIEWDIDLOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -101,7 +92,6 @@ class MapSearchViewController: UIViewController {
         
         let mapTapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         mapView.addGestureRecognizer(mapTapGesture)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -228,21 +218,16 @@ class MapSearchViewController: UIViewController {
         searchAreaButton.isHidden = currentView == .table
         mapTableToggleButton.setImage(UIImage(systemName: currentView.rawValue), for: .normal)
         yellowToggleButton.isHidden = currentView == .table
+        popUpView.isHidden = currentView == .table
         
         if currentView == .table {
             myLocations.sort {
                 $0.title ?? "NIL" < $1.title ?? "NIL"
             }
             tableView.reloadData()
-            closeView()
         }
         else {
-            if let selectedLocation = selectedLocation?.mkAnnotationView?.annotation {
-                mapView.selectAnnotation(selectedLocation, animated: false)
-            }
-            else {
-                return
-            }
+            checkSelectedAnnotation()
         }
     }
     
