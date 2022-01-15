@@ -14,6 +14,8 @@
 		39470763275361EB0046C8B4 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39470762275361EB0046C8B4 /* Location.swift */; };
 		394FE0DE27705E68007A29DF /* LocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394FE0DD27705E68007A29DF /* LocationDelegate.swift */; };
 		396CBCCF27569F6F00409E3F /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396CBCCE27569F6F00409E3F /* Messages.swift */; };
+		396CD88427921FFE00415F8A /* TableSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396CD88327921FFE00415F8A /* TableSettingViewModel.swift */; };
+		396CD8862792479000415F8A /* CurrentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396CD8852792479000415F8A /* CurrentView.swift */; };
 		3977B7CE274AB73D002C6900 /* MapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3977B7CD274AB73D002C6900 /* MapSearchViewController.swift */; };
 		398AF61427626CF900337248 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 398AF61227626CF900337248 /* Main.storyboard */; };
 		39CF8654274027BB00774302 /* MapTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CF8653274027BB00774302 /* MapTableViewCell.swift */; };
@@ -53,6 +55,8 @@
 		39470762275361EB0046C8B4 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		394FE0DD27705E68007A29DF /* LocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDelegate.swift; sourceTree = "<group>"; };
 		396CBCCE27569F6F00409E3F /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		396CD88327921FFE00415F8A /* TableSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSettingViewModel.swift; sourceTree = "<group>"; };
+		396CD8852792479000415F8A /* CurrentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentView.swift; sourceTree = "<group>"; };
 		3977B7CD274AB73D002C6900 /* MapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchViewController.swift; sourceTree = "<group>"; };
 		398AF61327626CF900337248 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		39CF8653274027BB00774302 /* MapTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTableViewCell.swift; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 		64C4A6E327163FA900A9FE8E /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				396CD88327921FFE00415F8A /* TableSettingViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -192,6 +197,7 @@
 				39470760275361CD0046C8B4 /* Favorite.swift */,
 				39470762275361EB0046C8B4 /* Location.swift */,
 				396CBCCE27569F6F00409E3F /* Messages.swift */,
+				396CD8852792479000415F8A /* CurrentView.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -340,11 +346,13 @@
 				64C4A6B52716298400A9FE8E /* CoffeeShackApp_Story.xcdatamodeld in Sources */,
 				64C4A6AB2716298400A9FE8E /* AppDelegate.swift in Sources */,
 				39470763275361EB0046C8B4 /* Location.swift in Sources */,
+				396CD88427921FFE00415F8A /* TableSettingViewModel.swift in Sources */,
 				392780342750465100B8EC07 /* CustomTabController.swift in Sources */,
 				39CF8654274027BB00774302 /* MapTableViewCell.swift in Sources */,
 				39E58681273DB9EF00906F7F /* FavoritesViewController.swift in Sources */,
 				396CBCCF27569F6F00409E3F /* Messages.swift in Sources */,
 				64C4A6AD2716298400A9FE8E /* SceneDelegate.swift in Sources */,
+				396CD8862792479000415F8A /* CurrentView.swift in Sources */,
 				390D4CD5276FAFB1002F9A27 /* FavoritesViewCell.swift in Sources */,
 				39470761275361CD0046C8B4 /* Favorite.swift in Sources */,
 				3977B7CE274AB73D002C6900 /* MapSearchViewController.swift in Sources */,
