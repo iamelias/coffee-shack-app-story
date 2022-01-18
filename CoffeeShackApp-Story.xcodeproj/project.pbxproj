@@ -174,9 +174,9 @@
 			isa = PBXGroup;
 			children = (
 				3977B7CD274AB73D002C6900 /* MapSearchViewController.swift */,
-				39E58680273DB9EF00906F7F /* FavoritesViewController.swift */,
 				39CF8653274027BB00774302 /* MapTableViewCell.swift */,
 				392780332750465100B8EC07 /* CustomTabController.swift */,
+				39E58680273DB9EF00906F7F /* FavoritesViewController.swift */,
 				390D4CD4276FAFB1002F9A27 /* FavoritesViewCell.swift */,
 				394FE0DD27705E68007A29DF /* LocationDelegate.swift */,
 			);

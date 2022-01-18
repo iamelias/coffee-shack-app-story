@@ -33,6 +33,7 @@ class MapSearchViewController: UIViewController {
     //MARK: Search IBOutlets
     @IBOutlet weak var searchAreaButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var searchBackgroundView: UIView!
     
     //MARK: Card Detail IBOutlets
     @IBOutlet weak var cardTitle: UILabel!
@@ -70,10 +71,11 @@ class MapSearchViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    
+        
     //MARK: Notfications
     var searchNotification = Notification.Name(rawValue: "selected.location.key")
     var addNotification = Notification.Name(rawValue: "add.location")
+    var removeNotification = Notification.Name(rawValue: "remove.location")
     
     //MARK: VIEWDIDLOAD
     override func viewDidLoad() {
@@ -85,13 +87,15 @@ class MapSearchViewController: UIViewController {
         locationManager = CLLocationManager()
         locationManager.delegate = self
         
+        //MARK: Initial Configurations
         searchBarConfig()
         popUpConfig()
+        searchBackgrViewConfig()
         
-        popUpView.isHidden = true
+        let dismissTapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        mapView.addGestureRecognizer(dismissTapGesture)
+        searchBackgroundView.addGestureRecognizer(dismissTapGesture)
         
-        let mapTapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        mapView.addGestureRecognizer(mapTapGesture)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -143,6 +147,7 @@ class MapSearchViewController: UIViewController {
     }
     
     func popUpConfig() {
+        popUpView.isHidden = true
         popUpView.layer.shadowOpacity = 0.4
         popUpView.layer.shadowOffset = CGSize.zero
         popUpView.layer.shadowRadius = CGFloat(15.0)
@@ -157,14 +162,22 @@ class MapSearchViewController: UIViewController {
         popUpView.addGestureRecognizer(swipeDownGesture)
     }
     
+    func searchBackgrViewConfig() {
+        searchBackgroundView.backgroundColor = .darkGray
+        searchBackgroundView.isHidden = true
+    }
+    
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     
     fileprivate func checkSelectedAnnotation() { //checking to see if Location was prev selected to restore when returning from another view
-        if selectedLocation != nil {
+        if selectedLocation != nil && currentView == .map {
+            
             popUpHeightConstraint.constant = 147
             popUpView.isHidden = false
+            
+            selectedLocation!.liked == true ? cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal) : cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal) //updating if open card is now liked or opp.
         }
         else {
             popUpHeightConstraint.constant = 0
@@ -177,7 +190,7 @@ class MapSearchViewController: UIViewController {
     }
     
     //MARK: ANIMATE METHODS
-    func openView() { //opening the popview
+    @objc func openView() { //opening the popview
         
         popUpView.isHidden = false
         popUpHeightConstraint.constant = 147
@@ -187,20 +200,14 @@ class MapSearchViewController: UIViewController {
         }, completion: nil)
     }
     
-    func closeView() { //closing the popview
+    @objc func closeView() { //closing the popview
         mapView.selectedAnnotations = []
         popUpHeightConstraint.constant = 0
         
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
             [unowned self] in
             view.layoutIfNeeded()
-            // view.layoutSubviews()
-        }, completion: { [weak self] _ in
-            guard let self = self else {
-                return
-            }
-            self.popUpView.isHidden = true
-        })
+        }, completion: nil)
     }
     
     func changeView() {
@@ -252,6 +259,7 @@ class MapSearchViewController: UIViewController {
         else {
             cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
             selectedLocation.liked = false
+            NotificationCenter.default.post(name: removeNotification, object: selectedLocation, userInfo: ["location" : selectedLocation])
         }
     }
     
@@ -265,7 +273,6 @@ class MapSearchViewController: UIViewController {
     
     @IBAction func searchThisAreaDidTouch(_ sender: UIButton) {
         // locationSearch(region: mapView.region, userLocation: false)
-        print("searchThisAreaDidTouch")
         searchClient(region: nil, isUsersRegion: true)
     }
 }
@@ -301,6 +308,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+//MARK: SEARCHBAR DELEGATE METHODS
 extension MapSearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
@@ -311,16 +319,25 @@ extension MapSearchViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) { //clear searchBar text
         searchBar.text = ""
+        //searchBackgroundView.layer.opacity = 1.0
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         mapView.deselectAnnotation(selectedAnnotationView?.annotation, animated: true)
+                
+        searchBackgroundView.layer.opacity = 0.5
+        searchBackgroundView.isHidden = false
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBackgroundView.layer.opacity = 1.0
+        searchBackgroundView.isHidden = true
     }
 }
 
 //MARK: MAPVIEW DELEGATE METHODS
 
 extension MapSearchViewController: MKMapViewDelegate { //creating the gylph annotation view
-    
+        
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation {
             return nil
@@ -343,6 +360,7 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             view?.annotation = annotation
         }
         view?.isEnabled = true
+
         let location = createLocations(annotation: annotation)
         location.mkAnnotationView = view
         myLocations.append(location)
@@ -356,6 +374,8 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             return
         }
         
+            togglePopUp()
+
         view.image = selectedMapIcon
         cardTitle.text = view.annotation?.title ?? "NIL"
         cardAddress.text = view.annotation?.subtitle ?? "NIL"
@@ -376,7 +396,6 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
                 cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             }
         }
-        togglePopUp()
     }
     
     func createLocations(annotation: MKAnnotation?) -> Location {
@@ -389,15 +408,13 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         
-        if view.annotation is MKUserLocation {
+        if view.annotation is MKUserLocation { //prevents userlocation from taking cup uiimage
             return
         }
+        togglePopUp()
         
         view.image = unselectedMapIcon
         view.frame.size = CGSize(width: view.image!.size.width/2.0, height: view.image!.size.height/2.0)
-        // togglePopUp()
-        popUpHeightConstraint.constant = 0
-        selectedAnnotationView = nil
         selectedLocation = nil
     }
     
@@ -462,7 +479,7 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkLocationAuthorization()
     }
-    
+        
     
     //MARK: LOCATION API METHODS
     
