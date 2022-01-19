@@ -16,6 +16,7 @@ class Location {
         var openTime: String?
         var liked: Bool?
         var mkAnnotationView: MKAnnotationView?
+        var mkItem: MKMapItem?
   //      var hash: Int?
    //     weak var annotation: MKAnnotation?
    //     var uuid: UUID = UUID()

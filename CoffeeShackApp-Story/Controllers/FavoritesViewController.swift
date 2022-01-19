@@ -16,9 +16,8 @@ class FavoritesViewController: UIViewController {
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noFavoritesLabel: UILabel!
+    @IBOutlet weak var searchBackgroundView: UIView!
     
-    
-    var favorites: [Favorite] = []
     var selectedLocation: Location? = nil //from MapSearchViewController
     var myLikedLocations: [Location] = []
     var addNotification = Notification.Name(rawValue: "add.location")
@@ -49,9 +48,14 @@ class FavoritesViewController: UIViewController {
                 leftView.tintColor = UIColor.white
             }
         }
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-//        searchBackgroundView.addGestureRecognizer(tapGesture)
+        
+        searchBackgrViewConfig()
         createObservers()
+        
+        //Gestures
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        searchBackgroundView.addGestureRecognizer(tapGesture)
+
     }
     
     override func viewWillLayoutSubviews() {
@@ -76,6 +80,11 @@ class FavoritesViewController: UIViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    func searchBackgrViewConfig() {
+        searchBackgroundView.backgroundColor = .darkGray
+        searchBackgroundView.isHidden = true
     }
     
     func createObservers() {
@@ -103,11 +112,9 @@ class FavoritesViewController: UIViewController {
             return
         }
 
-        print(selectedLocation)
-
-        print(myLikedLocations)
-        myLikedLocations = myLikedLocations.filter{$0.mkAnnotationView != selectedLocation.mkAnnotationView}
-        print(myLikedLocations)
+//        myLikedLocations = myLikedLocations.filter{$0.mkAnnotationView != selectedLocation.mkAnnotationView}
+        
+        myLikedLocations = myLikedLocations.filter{$0.mkItem != selectedLocation.mkItem}
     }
 
     
@@ -134,9 +141,6 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
         cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
-       // cell.currentLikedLocation.liked = myLikedLocations[indexPath.row].liked
-//        cell.currentLikedLocation?.mkAnnotationView =
-//        myLikedLocations[indexPath.row].mkAnnotationView
         cell.favoritesViewController = self
         cell.favoritesDelegate = self
         return cell
@@ -161,7 +165,22 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
 extension FavoritesViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
+        view.endEditing(true) //dismiss keyboard
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) { //clear searchBar text
+        searchBar.text = ""
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+                
+        searchBackgroundView.layer.opacity = 0.5
+        searchBackgroundView.isHidden = false
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBackgroundView.layer.opacity = 1.0
+        searchBackgroundView.isHidden = true
     }
 }
 

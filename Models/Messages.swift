@@ -8,6 +8,6 @@
 import Foundation
 
 enum AuthMessages: String {
-    case denied = "Please grant Get Coordinates permission to use your location in settings"
-    case restricted = "User is restricted from using their location"
+    case denied = "Please grant CoffeeShack permission to use your location in settings"
+    case restricted = "User is restricted from using location"
 }

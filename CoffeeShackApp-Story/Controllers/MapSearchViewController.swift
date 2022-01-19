@@ -71,6 +71,8 @@ class MapSearchViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    weak var currentItem: MKMapItem?
         
     //MARK: Notfications
     var searchNotification = Notification.Name(rawValue: "selected.location.key")
@@ -92,6 +94,7 @@ class MapSearchViewController: UIViewController {
         popUpConfig()
         searchBackgrViewConfig()
         
+        //Gestures
         let dismissTapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         mapView.addGestureRecognizer(dismissTapGesture)
         searchBackgroundView.addGestureRecognizer(dismissTapGesture)
@@ -100,7 +103,12 @@ class MapSearchViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         
+        if currentView == .map {
         checkSelectedAnnotation()
+        }
+        else {
+            tableView.reloadData()
+        }
         tabBarController?.selectedIndex = 0
         tabBarController?.viewControllers?[1].view.layoutIfNeeded() //preloading second tab so observer works
     }
@@ -275,6 +283,22 @@ class MapSearchViewController: UIViewController {
         // locationSearch(region: mapView.region, userLocation: false)
         searchClient(region: nil, isUsersRegion: true)
     }
+    
+    @IBAction func cardMenuButtonDidTouch(_ sender: UIButton) {
+        
+        if let selectedLocation = selectedLocation {
+          print(selectedLocation.mkItem?.url)
+        }
+        else {
+            print("Error with url&******&")
+        }
+        
+    }
+    @IBAction func cardDirectionsButtonDidTouch(_ sender: Any) {
+        
+    }
+    
+    
 }
 
 extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
@@ -296,9 +320,11 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
         cell.cellAddressTextView.text = myLocations[indexPath.row].address
         if myLocations[indexPath.row].liked ?? false {
             cell.cellLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+            
         }
         else {
             cell.cellLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
+
         }
         return cell
     }
@@ -363,6 +389,7 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
 
         let location = createLocations(annotation: annotation)
         location.mkAnnotationView = view
+        location.mkItem = currentItem
         myLocations.append(location)
         
         return view
@@ -484,7 +511,7 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
     //MARK: LOCATION API METHODS
     
     func createAnnotation(item: MKPlacemark) -> MKPointAnnotation { //creating white box annotation for view// not needed but here
-        
+                
         let address = "\(item.subThoroughfare ?? "") \(item.thoroughfare ?? ""), \(item.locality ?? ""), \(item.administrativeArea ?? "") \(item.postalCode ?? "")"
         
         let annotation = MKPointAnnotation()
@@ -494,11 +521,8 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         return annotation
     }
     
-    func createLocation(item: MKPlacemark) -> Location {
-        let location = Location()
-        location.title = item.name
-        location.address = item.title
-        return location
+    func createMapItem() {
+        
     }
     
     func searchClient(region: MKCoordinateRegion? = nil, isUsersRegion: Bool) {
@@ -523,6 +547,10 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
             
             for item in response.mapItems {
                 let annotation = self.createAnnotation(item: item.placemark)
+//                let location = createLocations(annotation: annotation)
+//                location.mkItem = item
+//                myLocations.append(location)
+        
                 mapView.addAnnotation(annotation)
             }
             guard !isUsersRegion else { // if using searchbar text zoom to first annotation element

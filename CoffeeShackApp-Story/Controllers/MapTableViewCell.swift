@@ -18,6 +18,8 @@ class MapTableViewCell: UITableViewCell {
     @IBOutlet weak var directionsButton: UIButton!
 
     weak var currentLocation: Location?
+    var addNotification = Notification.Name(rawValue: "add.location")
+    var removeNotification = Notification.Name(rawValue: "remove.location")
     
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
         print("Menu button is tapped")
@@ -33,6 +35,7 @@ class MapTableViewCell: UITableViewCell {
             cellLikeButton.tag = 1
             if let currentLocation = currentLocation {
                 currentLocation.liked = true
+                NotificationCenter.default.post(name: addNotification, object: currentLocation, userInfo: ["location": currentLocation])
             }
         }
         else {
@@ -40,6 +43,7 @@ class MapTableViewCell: UITableViewCell {
                 cellLikeButton.tag = 0
             if let currentLocation = currentLocation {
                 currentLocation.liked = false
+                NotificationCenter.default.post(name: removeNotification, object: currentLocation, userInfo: ["location" : currentLocation])
             }
             }
     }
