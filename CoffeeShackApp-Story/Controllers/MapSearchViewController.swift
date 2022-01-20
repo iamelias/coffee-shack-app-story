@@ -302,7 +302,13 @@ class MapSearchViewController: UIViewController {
         
     }
     @IBAction func cardDirectionsButtonDidTouch(_ sender: Any) {
-        
+        if let selectedLocation = selectedLocation {
+            guard let hash = selectedLocation.locationHash, let mkItem = dictionary[hash] else {
+                print("Direction Hash error")
+                return
+            }
+            MKMapItem.openMaps(with: [mkItem], launchOptions: [:])
+        }
     }
 }
 
@@ -394,6 +400,7 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         
         let location = createLocations(annotation: annotation)
         location.mkAnnotationView = view
+        location.locationHash = annotation.hash
         location.menu = dictionary[annotation.hash]?.url
         myLocations.append(location)
         

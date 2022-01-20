@@ -19,4 +19,5 @@ class Location {
         var mkItem: MKMapItem?
         var annotation: MKAnnotation?
         var uuid: UUID = UUID()
+        var locationHash: Int?
     }
