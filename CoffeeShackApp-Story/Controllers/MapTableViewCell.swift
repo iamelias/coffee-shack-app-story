@@ -19,7 +19,6 @@ class MapTableViewCell: UITableViewCell {
     @IBOutlet weak var directionsButton: UIButton!
 
     weak var currentLocation: Location?
-    var dictionary: [Int:MKMapItem] = [:]
     var hashInt: Int?
     var mkItem: MKMapItem?
     var addNotification = Notification.Name(rawValue: "add.location")

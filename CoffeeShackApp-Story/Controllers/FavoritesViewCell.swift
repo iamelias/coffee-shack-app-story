@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import MapKit
 
 class FavoritesViewCell: UITableViewCell {
     @IBOutlet weak var cellTitle: UILabel!
@@ -22,14 +23,26 @@ class FavoritesViewCell: UITableViewCell {
     var deletedCell: Bool = false
     var favoritesViewController: FavoritesViewController?
     var favoritesDelegate: FavoritesViewControllerDelegate?
+    var hashInt: Int?
+    var mkItem: MKMapItem?
 
-    
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
-        print("Menu button is tapped")
+        if let currentLikedLocation = currentLikedLocation {
+            if let menuURL = currentLikedLocation.menu {
+                UIApplication.shared.open(menuURL, options: [:], completionHandler: { success in
+                })
+            }
+            else {
+                print("No Menu")
+            }
+        }
     }
     
     @IBAction func directionsButtonDidTouch(_ sender: UIButton) {
-        print("Direction button is tapped")
+            guard let mkItem = self.mkItem else {
+                return
+            }
+            MKMapItem.openMaps(with: [mkItem], launchOptions: [:])
     }
     
     @IBAction func trashButtonDidTouch(_ sender: UIButton) {

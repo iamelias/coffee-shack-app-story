@@ -141,6 +141,8 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
         cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
+        cell.hashInt = myLikedLocations[indexPath.row].locationHash
+        cell.mkItem = myLikedLocations[indexPath.row].mkItem
         cell.favoritesViewController = self
         cell.favoritesDelegate = self
         return cell

@@ -404,6 +404,7 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         location.mkAnnotationView = view
         location.locationHash = annotation.hash
         location.menu = dictionary[annotation.hash]?.url
+        location.mkItem = dictionary[annotation.hash]
         myLocations.append(location)
         
         return view
