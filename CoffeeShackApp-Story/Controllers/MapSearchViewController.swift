@@ -73,11 +73,14 @@ class MapSearchViewController: UIViewController {
     }
     
     weak var currentItem: MKMapItem?
+    var mkItems: [MKMapItem] = []
         
     //MARK: Notfications
     var searchNotification = Notification.Name(rawValue: "selected.location.key")
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
+    
+    var dictionary: [Int: MKMapItem] = [:]
     
     //MARK: VIEWDIDLOAD
     override func viewDidLoad() {
@@ -287,18 +290,20 @@ class MapSearchViewController: UIViewController {
     @IBAction func cardMenuButtonDidTouch(_ sender: UIButton) {
         
         if let selectedLocation = selectedLocation {
-          print(selectedLocation.mkItem?.url)
-        }
-        else {
-            print("Error with url&******&")
+            if let menuURL = selectedLocation.menu {
+                UIApplication.shared.open(menuURL, options: [:], completionHandler: { success in
+                    print("Success")
+                })
+            }
+            else {
+                print("No Menu")
+            }
         }
         
     }
     @IBAction func cardDirectionsButtonDidTouch(_ sender: Any) {
         
     }
-    
-    
 }
 
 extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
@@ -386,10 +391,10 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             view?.annotation = annotation
         }
         view?.isEnabled = true
-
+        
         let location = createLocations(annotation: annotation)
         location.mkAnnotationView = view
-        location.mkItem = currentItem
+        location.menu = dictionary[annotation.hash]?.url
         myLocations.append(location)
         
         return view
@@ -414,6 +419,8 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             if selectedAnnotationView == i.mkAnnotationView {
                 selectedLocation = i
             }
+
+            
         }
         if let selectedLocation = selectedLocation {
             if selectedLocation.liked == false {
@@ -547,9 +554,14 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
             
             for item in response.mapItems {
                 let annotation = self.createAnnotation(item: item.placemark)
+               
+                dictionary[annotation.hash] = item
+                mkItems.append(item)
 //                let location = createLocations(annotation: annotation)
 //                location.mkItem = item
+//                location.annotation = annotation
 //                myLocations.append(location)
+
         
                 mapView.addAnnotation(annotation)
             }
