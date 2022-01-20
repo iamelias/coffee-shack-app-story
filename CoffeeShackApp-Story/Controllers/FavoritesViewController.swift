@@ -16,9 +16,8 @@ class FavoritesViewController: UIViewController {
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noFavoritesLabel: UILabel!
+    @IBOutlet weak var searchBackgroundView: UIView!
     
-    
-    var favorites: [Favorite] = []
     var selectedLocation: Location? = nil //from MapSearchViewController
     var myLikedLocations: [Location] = []
     var addNotification = Notification.Name(rawValue: "add.location")
@@ -49,7 +48,14 @@ class FavoritesViewController: UIViewController {
                 leftView.tintColor = UIColor.white
             }
         }
+        
+        searchBackgrViewConfig()
         createObservers()
+        
+        //Gestures
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        searchBackgroundView.addGestureRecognizer(tapGesture)
+
     }
     
     override func viewWillLayoutSubviews() {
@@ -72,14 +78,20 @@ class FavoritesViewController: UIViewController {
 
     }
     
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    func searchBackgrViewConfig() {
+        searchBackgroundView.backgroundColor = .darkGray
+        searchBackgroundView.isHidden = true
+    }
+    
     func createObservers() {
-//        NotificationCenter.default.addObserver(forName: searchNotification , object: nil, queue: nil) { [unowned self] (note) in
-//            myLikedLocations.append(note.object as! Location)
-//        }
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(FavoritesViewController.updateTableView), name: addNotification, object: nil)
         
-//        NotificationCenter.default.addObserver(Notification, selector: #selector(FavoritesViewController.removeFromTableView(notification:)), name: removeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FavoritesViewController.removeFromTableView(notification:)), name: removeNotification, object: nil)
     
     }
     
@@ -92,8 +104,17 @@ class FavoritesViewController: UIViewController {
         myLikedLocations.append(selectedLocation)
     }
     
+    
     @objc func removeFromTableView(notification: Notification) {
-       // myLikedLocations = myLikedLocations.filter{$0 != notification.object as! Location}
+        
+        guard let selectedLocation = notification.userInfo?["location"] as? Location else {
+            print("nil in notification userInfo")
+            return
+        }
+
+//        myLikedLocations = myLikedLocations.filter{$0.mkAnnotationView != selectedLocation.mkAnnotationView}
+        
+        myLikedLocations = myLikedLocations.filter{$0.mkItem != selectedLocation.mkItem}
     }
 
     
@@ -120,7 +141,8 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
         cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
-        cell.currentLikedLocation?.mkAnnotationView = myLikedLocations[indexPath.row].mkAnnotationView
+        cell.favoritesViewController = self
+        cell.favoritesDelegate = self
         return cell
     }
     
@@ -128,14 +150,46 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return nil
     }
-    
+
+    func deleteCell(cell: FavoritesViewCell) {
+
+        if let toDeleteIndexPath = tableView.indexPath(for: cell) {
+            
+            myLikedLocations[toDeleteIndexPath.row].liked = false
+            myLikedLocations.remove(at: toDeleteIndexPath.row)
+            tableView.deleteRows(at: [toDeleteIndexPath], with: .automatic)
+        }
+    }
 }
 
 extension FavoritesViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
+        view.endEditing(true) //dismiss keyboard
     }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) { //clear searchBar text
+        searchBar.text = ""
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+                
+        searchBackgroundView.layer.opacity = 0.5
+        searchBackgroundView.isHidden = false
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBackgroundView.layer.opacity = 1.0
+        searchBackgroundView.isHidden = true
+    }
+}
+
+extension FavoritesViewController: FavoritesViewControllerDelegate {
+    func didUnlikeLocation(cell: FavoritesViewCell) {
+        deleteCell(cell: cell)
+    }
+    
+    
 }
 
 

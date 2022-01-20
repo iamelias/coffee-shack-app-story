@@ -17,8 +17,12 @@ class FavoritesViewCell: UITableViewCell {
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var directionsButton: UIButton!
     
-    weak var currentLikedLocation: Location?
+    var currentLikedLocation: Location?
     var delegate: FavoritesViewControllerDelegate?
+    var deletedCell: Bool = false
+    var favoritesViewController: FavoritesViewController?
+    var favoritesDelegate: FavoritesViewControllerDelegate?
+
     
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
         print("Menu button is tapped")
@@ -29,23 +33,14 @@ class FavoritesViewCell: UITableViewCell {
     }
     
     @IBAction func trashButtonDidTouch(_ sender: UIButton) {
-       // if trashButton.tag == 0 {
-            trashButton.setImage(UIImage(systemName: "trash.fill"), for: .normal)
-           // trashButton.tag = 1
-            currentLikedLocation?.liked = false
-            delegate?.didUnlikeLocation()
-            
-//        }
-//        else {
+          //  trashButton.setImage(UIImage(systemName: "trash.fill"), for: .normal)
+        favoritesDelegate?.didUnlikeLocation(cell: self)
+
 //            cellLikeButton.setImage(UIImage(systemName: "trash"), for: .normal)
-//                cellLikeButton.tag = 0
-//            if let currentLocation = currentLikedLocation {
-//                currentLocation.liked = false
-//            }
-//            }
+
     }
 }
 
 protocol FavoritesViewControllerDelegate: AnyObject {
-    func didUnlikeLocation()
+    func didUnlikeLocation(cell: FavoritesViewCell)
 }

@@ -14,7 +14,6 @@ struct Constants {
         
     }
     
-    
     static func createAlert(message: (title: String, alertMessage: String, alertActionMessage: String)) -> UIAlertController {
         
         let alert = UIAlertController(title: message.title, message: message.alertMessage, preferredStyle: .alert)
@@ -28,6 +27,18 @@ struct Constants {
         
     }
     
+    static func createDeleteAlert() -> UIAlertController {
+        let alert = UIAlertController(title: "Delete Item", message: "Do you want to permanently delete this item?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        
+        return alert
+        
+    }
 }
 
 //MARK: Utility Methods
@@ -46,38 +57,6 @@ class Test {
     
     class func getTest() {
         
-    }
-}
-
-class Sort {
-
-    class func mergeSort(array: [Location]) -> [Location] {
-
-        guard array.count > 1 else  { //checking if array has more than one object
-            return array //if only 1 or no elements doesn't need to be sorted
-        }
-        
-        //splitting the array in 2 a left array and right array
-        let leftArray = Array(array[0..<array.count/2]) //first half of array
-        let rightArray = Array(array[array.count/2..<array.count]) //second half of array
-        return merge(left: mergeSort(array: leftArray), right: mergeSort(array: rightArray)) //using recursion to split up arrays
-    }
-
-    class func merge(left: [Location], right: [Location]) -> [Location] { //taking 2 arrays left and right
-        
-        var mergedArray: [Location] = [] //creating merged array what we will build
-        var left = left //taking parameters, creating mutable arrays
-        var right = right // creating mutable arrays
-        
-        while left.count > 0 && right.count > 0 { // only runs if elements in both left & righ
-            if left.first!.title! < right.first!.title! { //comparing first element in both
-                mergedArray.append(left.removeFirst())// append from left array. removeFirst pulls off first element then shifts everything down
-            } else {
-                mergedArray.append(right.removeFirst()) // append from right
-            }
-        }
-        
-        return mergedArray + left + right // merging everything that is left that is already in order
     }
 }
 
