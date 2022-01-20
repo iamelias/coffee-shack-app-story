@@ -327,6 +327,8 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mapCell", for: indexPath) as! MapTableViewCell
         cell.selectionStyle = .none
         cell.currentLocation = myLocations[indexPath.row]
+        cell.hashInt = myLocations[indexPath.row].locationHash
+        cell.mkItem = dictionary[myLocations[indexPath.row].locationHash ?? 0]
         cell.cellTitle.text = myLocations[indexPath.row].title
         cell.cellAddressTextView.text = myLocations[indexPath.row].address
         if myLocations[indexPath.row].liked ?? false {
