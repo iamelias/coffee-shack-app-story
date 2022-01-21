@@ -394,6 +394,10 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             view?.canShowCallout = false //taping on to point and show white box
             view?.image = unselectedMapIcon
             view!.frame.size = CGSize(width: view!.image!.size.width/2.0, height: view!.image!.size.height/2.0)
+
+            let offset = CGPoint(x:0, y: -(view!.frame.height / 2) )
+            view!.centerOffset = offset //moving the unselected annotation up so the pointy part is on the location and not the center of the whole annotation view
+            
         }
         else {
             view?.annotation = annotation
@@ -419,6 +423,9 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             togglePopUp()
 
         view.image = selectedMapIcon
+        let offset = CGPoint(x:0, y: -(view.frame.height / 2) )
+        view.centerOffset = offset //moving the selected annotation view up so the pointy part is on the location and not the center of the whole annotation view
+        
         cardTitle.text = view.annotation?.title ?? "NIL"
         cardAddress.text = view.annotation?.subtitle ?? "NIL"
         cardAddress.text = view.annotation?.subtitle ?? "NIL"
@@ -567,12 +574,7 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
                
                 dictionary[annotation.hash] = item
                 mkItems.append(item)
-//                let location = createLocations(annotation: annotation)
-//                location.mkItem = item
-//                location.annotation = annotation
-//                myLocations.append(location)
 
-        
                 mapView.addAnnotation(annotation)
             }
             guard !isUsersRegion else { // if using searchbar text zoom to first annotation element
