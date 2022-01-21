@@ -397,7 +397,6 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
 
             let offset = CGPoint(x:0, y: -(view!.frame.height / 2) )
             view!.centerOffset = offset //moving the unselected annotation up so the pointy part is on the location and not the center of the whole annotation view
-            
         }
         else {
             view?.annotation = annotation
@@ -419,7 +418,6 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         if view.annotation is MKUserLocation {
             return
         }
-        
             togglePopUp()
 
         view.image = selectedMapIcon
@@ -436,8 +434,6 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             if selectedAnnotationView == i.mkAnnotationView {
                 selectedLocation = i
             }
-
-            
         }
         if let selectedLocation = selectedLocation {
             if selectedLocation.liked == false {
@@ -466,6 +462,9 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         
         view.image = unselectedMapIcon
         view.frame.size = CGSize(width: view.image!.size.width/2.0, height: view.image!.size.height/2.0)
+        var offset = CGPoint(x:0, y:0 )
+            offset = CGPoint(x:0, y: -(view.frame.height / 2) )
+            view.centerOffset = offset //moving the selected annotation view up so the pointy part is on the location and not the center of the whole annotation view
         selectedLocation = nil
     }
     
