@@ -68,6 +68,7 @@ class MapSearchViewController: UIViewController {
         let scaledImage = CGSize(width: 0.5*image.size.width, height: 0.5*image.size.height)
         return image
     }()
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -339,6 +340,15 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
             cell.cellLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
 
         }
+        
+        if let unwrappedLocation = myLocations[indexPath.row].mkAnnotationView?.annotation?.coordinate {
+            let firstLocation = CLLocation(latitude: unwrappedLocation.latitude, longitude: unwrappedLocation.longitude)
+            cell.cellDistanceLabel.text = getUserDistance(itemLocation: firstLocation)
+        }
+        else {
+            cell.cellDistanceLabel.text = "Error"
+        }
+        
         return cell
     }
     
@@ -443,7 +453,36 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
                 cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             }
         }
+        
+        guard let unWrappedLocation = selectedLocation?.mkAnnotationView?.annotation else {
+            cardDistanceLabel.text = ":)"
+            return
+        }
+            
+        let firstLocation = CLLocation(latitude: unWrappedLocation.coordinate.latitude, longitude: unWrappedLocation.coordinate.longitude)
+
+        cardDistanceLabel.text = getUserDistance(itemLocation: firstLocation)
+        
     }
+    
+    
+    
+    func getUserDistance(itemLocation: CLLocation) -> String {
+        let firstLocation = itemLocation
+    
+    let secondLocation = CLLocation(latitude: mapView.userLocation.coordinate.latitude, longitude: mapView.userLocation.coordinate.longitude)
+    
+    let distanceInMeters = firstLocation.distance(from: secondLocation) //returns distance in meters
+    let distanceInMiles = distanceInMeters * 0.000621
+    
+    guard distanceInMiles < 100.0 else {
+        return "> 99 Mi"
+    }
+    return String(format: "%.2f", distanceInMiles) + " Mi"
+    }
+    
+    
+    
     
     func createLocations(annotation: MKAnnotation?) -> Location {
         let location = Location()

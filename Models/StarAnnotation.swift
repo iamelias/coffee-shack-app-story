@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 import MapKit
 
-
+@IBDesignable class SelectedAnnotation {
+    
+}
 
 
 
