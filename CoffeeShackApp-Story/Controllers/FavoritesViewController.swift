@@ -95,6 +95,7 @@ class FavoritesViewController: UIViewController {
     
     }
     
+    
     @objc func updateTableView(notification: Notification) {
         guard let selectedLocation = notification.userInfo?["location"] as? Location else {
             print("nil in notification userInfo")

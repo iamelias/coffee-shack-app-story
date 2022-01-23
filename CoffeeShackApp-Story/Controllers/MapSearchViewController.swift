@@ -241,7 +241,7 @@ class MapSearchViewController: UIViewController {
         
         if currentView == .table {
             myLocations.sort {
-                $0.title ?? "NIL" < $1.title ?? "NIL"
+                $0.distance ?? 0.0 < $1.distance ?? 0.0
             }
             tableView.reloadData()
         }
@@ -341,14 +341,17 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
 
         }
         
-        if let unwrappedLocation = myLocations[indexPath.row].mkAnnotationView?.annotation?.coordinate {
-            let firstLocation = CLLocation(latitude: unwrappedLocation.latitude, longitude: unwrappedLocation.longitude)
-            cell.cellDistanceLabel.text = getUserDistance(itemLocation: firstLocation)
+        if let unwrappedDistance = myLocations[indexPath.row].distance {
+            if unwrappedDistance > 99.0 {
+                cell.cellDistanceLabel.text = "> 99 Mi"
+            }
+            else {
+                cell.cellDistanceLabel.text = String(format: "%.2f", unwrappedDistance) + " Mi"
+            }
         }
         else {
-            cell.cellDistanceLabel.text = "Error"
+            cell.cellDistanceLabel.text = ":)"
         }
-        
         return cell
     }
     
@@ -418,6 +421,11 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         location.locationHash = annotation.hash
         location.menu = dictionary[annotation.hash]?.url
         location.mkItem = dictionary[annotation.hash]
+        
+        let firstLocation = CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
+
+        location.distance = getUserDistance(itemLocation: firstLocation)
+
         myLocations.append(location)
         
         return view
@@ -461,24 +469,28 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             
         let firstLocation = CLLocation(latitude: unWrappedLocation.coordinate.latitude, longitude: unWrappedLocation.coordinate.longitude)
 
-        cardDistanceLabel.text = getUserDistance(itemLocation: firstLocation)
+        let distanceInMiles = getUserDistance(itemLocation: firstLocation)
+        
+        guard distanceInMiles < 100.0 else {
+            cardDistanceLabel.text = "> 99 Mi"
+            return
+        }
+        
+        cardDistanceLabel.text = String(format: "%.2f", distanceInMiles) + " Mi"
         
     }
     
     
     
-    func getUserDistance(itemLocation: CLLocation) -> String {
+    func getUserDistance(itemLocation: CLLocation) -> Double {
         let firstLocation = itemLocation
     
     let secondLocation = CLLocation(latitude: mapView.userLocation.coordinate.latitude, longitude: mapView.userLocation.coordinate.longitude)
     
     let distanceInMeters = firstLocation.distance(from: secondLocation) //returns distance in meters
     let distanceInMiles = distanceInMeters * 0.000621
-    
-    guard distanceInMiles < 100.0 else {
-        return "> 99 Mi"
-    }
-    return String(format: "%.2f", distanceInMiles) + " Mi"
+
+    return distanceInMiles
     }
     
     

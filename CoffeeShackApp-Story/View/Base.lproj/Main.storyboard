@@ -330,12 +330,6 @@ Corpus Christi, TX 78412
                                     <action selector="myLocationButtonDidTouch:" destination="hoP-IR-T4t" eventType="touchUpInside" id="OKS-Yb-Vba"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" id="Ork-gR-XQH">
-                                <rect key="frame" x="0.0" y="48" width="390" height="747"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgI-Cw-KBj">
                                 <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                                 <color key="barTintColor" red="0.20392156862745098" green="0.16470588235294117" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -371,6 +365,11 @@ Corpus Christi, TX 78412
                                     <action selector="toggleButtonDidTouch:" destination="hoP-IR-T4t" eventType="touchUpInside" id="Mdy-UP-Y0q"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w4l-ZC-XUW">
+                                <rect key="frame" x="0.0" y="97" width="390" height="747"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ncj-9B-TcP"/>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.16470588235294117" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -385,6 +384,8 @@ Corpus Christi, TX 78412
                             <constraint firstItem="EJv-V2-Pjz" firstAttribute="bottom" secondItem="ncj-9B-TcP" secondAttribute="bottom" id="EBO-GZ-Uhz"/>
                             <constraint firstItem="RgI-Cw-KBj" firstAttribute="top" secondItem="ncj-9B-TcP" secondAttribute="top" id="Fbb-d7-Lpg"/>
                             <constraint firstItem="gsR-CC-Skr" firstAttribute="trailing" secondItem="ncj-9B-TcP" secondAttribute="trailing" id="Mel-4t-dds"/>
+                            <constraint firstAttribute="bottom" secondItem="w4l-ZC-XUW" secondAttribute="bottom" id="MwY-k0-yRm"/>
+                            <constraint firstItem="w4l-ZC-XUW" firstAttribute="leading" secondItem="pAm-vg-nSI" secondAttribute="leading" id="NTV-n5-PtT"/>
                             <constraint firstItem="TrU-at-6Gp" firstAttribute="top" secondItem="Foa-cZ-XoB" secondAttribute="bottom" constant="14" id="PtE-Fr-4vM"/>
                             <constraint firstItem="ncj-9B-TcP" firstAttribute="bottom" secondItem="ctr-Nr-lng" secondAttribute="bottom" id="QTP-Tp-cdO"/>
                             <constraint firstItem="Kqy-fG-zc8" firstAttribute="top" secondItem="Foa-cZ-XoB" secondAttribute="bottom" id="TUa-1o-oYD"/>
@@ -395,6 +396,7 @@ Corpus Christi, TX 78412
                             <constraint firstItem="ctr-Nr-lng" firstAttribute="trailing" secondItem="pAm-vg-nSI" secondAttribute="trailing" id="aLy-2z-d47"/>
                             <constraint firstItem="gsR-CC-Skr" firstAttribute="leading" secondItem="Foa-cZ-XoB" secondAttribute="trailing" id="cI0-ua-hJJ"/>
                             <constraint firstItem="RgI-Cw-KBj" firstAttribute="trailing" secondItem="ncj-9B-TcP" secondAttribute="trailing" id="eST-f6-kaZ"/>
+                            <constraint firstAttribute="trailing" secondItem="w4l-ZC-XUW" secondAttribute="trailing" id="gkJ-mn-9sd"/>
                             <constraint firstItem="Foa-cZ-XoB" firstAttribute="leading" secondItem="ncj-9B-TcP" secondAttribute="leading" id="ign-9E-px9"/>
                             <constraint firstItem="EJv-V2-Pjz" firstAttribute="trailing" secondItem="ncj-9B-TcP" secondAttribute="trailing" id="lqv-tu-qCI"/>
                             <constraint firstItem="TrU-at-6Gp" firstAttribute="leading" secondItem="ncj-9B-TcP" secondAttribute="leading" constant="16" id="nBO-IP-b4e"/>
@@ -402,6 +404,7 @@ Corpus Christi, TX 78412
                             <constraint firstItem="RgI-Cw-KBj" firstAttribute="leading" secondItem="ncj-9B-TcP" secondAttribute="leading" id="oGM-dp-7an"/>
                             <constraint firstItem="ctr-Nr-lng" firstAttribute="leading" secondItem="pAm-vg-nSI" secondAttribute="leading" id="r2K-Ex-QFM"/>
                             <constraint firstItem="ctr-Nr-lng" firstAttribute="top" secondItem="Foa-cZ-XoB" secondAttribute="bottom" id="szu-PV-VrJ"/>
+                            <constraint firstItem="w4l-ZC-XUW" firstAttribute="top" secondItem="Foa-cZ-XoB" secondAttribute="bottom" id="wN2-sR-agr"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="gWV-UG-scm"/>
@@ -423,7 +426,7 @@ Corpus Christi, TX 78412
                         <outlet property="popUpTrailingConstraint" destination="lqv-tu-qCI" id="NeT-Nh-nvM"/>
                         <outlet property="popUpView" destination="EJv-V2-Pjz" id="iDm-AY-Bgm"/>
                         <outlet property="searchAreaButton" destination="yYG-wT-qXE" id="Uqu-cW-Ehy"/>
-                        <outlet property="searchBackgroundView" destination="Ork-gR-XQH" id="7K7-mE-Acc"/>
+                        <outlet property="searchBackgroundView" destination="w4l-ZC-XUW" id="AO9-UO-5AJ"/>
                         <outlet property="searchBar" destination="Foa-cZ-XoB" id="h5z-9v-0aX"/>
                         <outlet property="searchButtonBottomConstraint" destination="DXa-IK-1hf" id="MLs-kA-TjW"/>
                         <outlet property="tableView" destination="ctr-Nr-lng" id="YDL-hz-hOa"/>
@@ -556,13 +559,6 @@ Corpus Christi, TX 78412
                                                     <rect key="frame" x="0.0" y="0.0" width="390" height="147"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.5 Mi" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QpQ-Pe-WOZ">
-                                                            <rect key="frame" x="23" y="30" width="49" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Starbucks" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N48-lo-Q4f">
                                                             <rect key="frame" x="118" y="26" width="252" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -605,7 +601,7 @@ Corpus Christi, TX 78412
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wo3-vT-MGi">
-                                                            <rect key="frame" x="20" y="105" width="82" height="21"/>
+                                                            <rect key="frame" x="20" y="89" width="82" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <state key="normal" title="Button"/>
                                                             <buttonConfiguration key="configuration" style="plain" title="Directions">
@@ -618,7 +614,7 @@ Corpus Christi, TX 78412
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fG9-1Y-JGh">
-                                                            <rect key="frame" x="20" y="71" width="45" height="21"/>
+                                                            <rect key="frame" x="20" y="45" width="45" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <state key="normal" title="Button"/>
                                                             <buttonConfiguration key="configuration" style="plain" title="Menu">
@@ -639,7 +635,6 @@ Corpus Christi, TX 78412
                                                 <color key="backgroundColor" red="0.96078431372549022" green="0.77647058823529413" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <connections>
                                                     <outlet property="cellAddressTextView" destination="GTW-Cw-yWp" id="nwC-eq-ETJ"/>
-                                                    <outlet property="cellDistanceLabel" destination="QpQ-Pe-WOZ" id="aVC-Gy-nBd"/>
                                                     <outlet property="cellHourstLabel" destination="7EL-jl-tfG" id="tHS-TF-2nT"/>
                                                     <outlet property="cellTitle" destination="N48-lo-Q4f" id="aDH-CS-r80"/>
                                                     <outlet property="directionsButton" destination="wo3-vT-MGi" id="6LJ-yc-oAf"/>
