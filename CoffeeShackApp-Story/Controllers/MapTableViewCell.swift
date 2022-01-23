@@ -13,7 +13,7 @@ class MapTableViewCell: UITableViewCell {
     @IBOutlet weak var cellTitle: UILabel!
     @IBOutlet weak var cellLikeButton: UIButton!
     @IBOutlet weak var cellAddressTextView: UITextView!
-    @IBOutlet weak var cellHourstLabel: UILabel!
+    @IBOutlet weak var cellPhoneNumLabel: UILabel!
     @IBOutlet weak var cellDistanceLabel: UILabel!
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var directionsButton: UIButton!
@@ -25,11 +25,9 @@ class MapTableViewCell: UITableViewCell {
     var removeNotification = Notification.Name(rawValue: "remove.location")
     
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
-        print("Menu button is tapped")
         if let currentLocation = currentLocation {
             if let menuURL = currentLocation.menu {
                 UIApplication.shared.open(menuURL, options: [:], completionHandler: { success in
-                    print("Success")
                 })
             }
             else {
@@ -39,17 +37,16 @@ class MapTableViewCell: UITableViewCell {
     }
     
     @IBAction func directionsButtonDidTouch(_ sender: UIButton) {
-        print("Direction button is tapped")
-        
             guard let mkItem = self.mkItem else {
-                print("Direction button error in table")
                 return
             }
             MKMapItem.openMaps(with: [mkItem], launchOptions: [:])
     }
     
     @IBAction func tableLikeButtonSelected(_ sender: UIButton) {
+        StartLikeButtonAnimation()
         if cellLikeButton.tag == 0 {
+            Constants.startHapticFeedBack()
             cellLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             cellLikeButton.tag = 1
             if let currentLocation = currentLocation {
@@ -68,7 +65,30 @@ class MapTableViewCell: UITableViewCell {
     }
     
     func updateLocation(index: Location) {
-        
-        
+    }
+    
+    
+     func StartLikeButtonAnimation() {
+        //Animating the like button with bounce when selected
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.cellLikeButton.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.2, animations: { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                self.cellLikeButton.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.2, animations: { [weak self] in
+                    guard let self = self else {
+                        return
+                    }
+                    self.cellLikeButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                }, completion: nil)
+            })
+        })
     }
 }

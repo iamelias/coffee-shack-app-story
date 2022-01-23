@@ -13,7 +13,7 @@ class Location {
         var menu: URL?
         var address: String?
         var distance: Double?
-        var openTime: String?
+        var phoneNumber: String?
         var liked: Bool?
         var mkAnnotationView: MKAnnotationView?
         var mkItem: MKMapItem?

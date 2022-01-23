@@ -255,15 +255,42 @@ class MapSearchViewController: UIViewController {
         togglePopUp()
     }
     
+     func StartLikeButtonAnimation() {
+        //Animating the like button with bounce when selected
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.cardLikeButton.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.2, animations: { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                self.cardLikeButton.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.2, animations: { [weak self] in
+                    guard let self = self else {
+                        return
+                    }
+                    self.cardLikeButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                    
+                }, completion: nil)
+            })
+        })
+    }
+    
     @IBAction func cardLikeButtonDidTouch(_ sender: UIButton) {
         
         guard let selectedLocation = selectedLocation else {
             return
         }
+        StartLikeButtonAnimation()
         
         if selectedLocation.liked == false {
             cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             selectedLocation.liked = true
+            Constants.startHapticFeedBack()
             //  delegate?.didLikeLocation(location: selectedLocation)
             //let name = Notification.Name(rawValue: "selectedLocation")
             NotificationCenter.default.post(name: addNotification, object: selectedLocation, userInfo: ["location": selectedLocation])
@@ -332,9 +359,9 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
         cell.mkItem = dictionary[myLocations[indexPath.row].locationHash ?? 0]
         cell.cellTitle.text = myLocations[indexPath.row].title
         cell.cellAddressTextView.text = myLocations[indexPath.row].address
+        cell.cellPhoneNumLabel.text = myLocations[indexPath.row].mkItem?.phoneNumber
         if myLocations[indexPath.row].liked ?? false {
             cell.cellLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
-            
         }
         else {
             cell.cellLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
@@ -363,7 +390,6 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
 //MARK: SEARCHBAR DELEGATE METHODS
 extension MapSearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
         mapView.removeAnnotations(mapView.annotations) //remove all current annotations from map
         searchClient(region: mapView.region.self, isUsersRegion: false)
         view.endEditing(true) //dismiss keyboard
@@ -444,8 +470,7 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         
         cardTitle.text = view.annotation?.title ?? "NIL"
         cardAddress.text = view.annotation?.subtitle ?? "NIL"
-        cardAddress.text = view.annotation?.subtitle ?? "NIL"
-        
+
         selectedAnnotationView = view
         
         for i in myLocations {
@@ -461,6 +486,8 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
                 cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             }
         }
+        
+        cardHours.text = selectedLocation?.mkItem?.phoneNumber
         
         guard let unWrappedLocation = selectedLocation?.mkAnnotationView?.annotation else {
             cardDistanceLabel.text = ":)"
@@ -585,7 +612,7 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
     //MARK: LOCATION API METHODS
     
     func createAnnotation(item: MKPlacemark) -> MKPointAnnotation { //creating white box annotation for view// not needed but here
-                
+                        
         let address = "\(item.subThoroughfare ?? "") \(item.thoroughfare ?? ""), \(item.locality ?? ""), \(item.administrativeArea ?? "") \(item.postalCode ?? "")"
         
         let annotation = MKPointAnnotation()
@@ -594,15 +621,13 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         annotation.subtitle = address
         return annotation
     }
-    
-    func createMapItem() {
-        
-    }
-    
+
     func searchClient(region: MKCoordinateRegion? = nil, isUsersRegion: Bool) {
         mapView.removeAnnotations(mapView.annotations)
         myLocations.removeAll()
         let request = MKLocalSearch.Request()
+        request.pointOfInterestFilter = .some(MKPointOfInterestFilter(including: [MKPointOfInterestCategory.cafe]))
+        
         if let region = region {
             request.region = region
         }
@@ -621,12 +646,12 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
             
             for item in response.mapItems {
                 let annotation = self.createAnnotation(item: item.placemark)
-               
                 dictionary[annotation.hash] = item
                 mkItems.append(item)
 
                 mapView.addAnnotation(annotation)
             }
+            
             guard !isUsersRegion else { // if using searchbar text zoom to first annotation element
                 return
             }
@@ -640,6 +665,12 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         }
     }
     
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        if currentView == .table {
+            tableView.reloadData()
+        }
+    }
+        
     func showSetUserRegion() -> MKCoordinateRegion? {
         mapView.removeAnnotations(mapView.annotations)
         myLocations.removeAll()

@@ -142,6 +142,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
         cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
+        cell.cellPhoneNumLabel.text = myLikedLocations[indexPath.row].mkItem?.phoneNumber
         cell.hashInt = myLikedLocations[indexPath.row].locationHash
         cell.mkItem = myLikedLocations[indexPath.row].mkItem
         cell.favoritesViewController = self
@@ -157,7 +158,6 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     func deleteCell(cell: FavoritesViewCell) {
 
         if let toDeleteIndexPath = tableView.indexPath(for: cell) {
-            
             myLikedLocations[toDeleteIndexPath.row].liked = false
             myLikedLocations.remove(at: toDeleteIndexPath.row)
             tableView.deleteRows(at: [toDeleteIndexPath], with: .automatic)
