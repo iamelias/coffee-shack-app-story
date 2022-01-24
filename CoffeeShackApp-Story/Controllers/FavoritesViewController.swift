@@ -107,9 +107,11 @@ class FavoritesViewController: UIViewController {
         let thirdAction = UIAlertAction(title: SortOptions.newestToOldest.rawValue, style: .default, handler: {_ in
             self.sort(sortType: .newestToOldest)
         })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(firstAction)
         alert.addAction(secondAction)
         alert.addAction(thirdAction)
+        alert.addAction(cancelAction)
         
         present(alert, animated: true, completion: nil)
     }

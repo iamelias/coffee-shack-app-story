@@ -43,6 +43,7 @@ class MapSearchViewController: UIViewController {
     @IBOutlet weak var cardMenuButton: UIButton!
     @IBOutlet weak var cardDirectionsButton: UIButton!
     @IBOutlet weak var cardLikeButton: UIButton!
+    @IBOutlet weak var noResultsLabel: UILabel!
     
     //MARK: ENUMS
     enum annotationIcon: String {
@@ -179,6 +180,10 @@ class MapSearchViewController: UIViewController {
         searchBackgroundView.isHidden = true
     }
     
+    func tableConfig() {
+        noResultsLabel.isHidden = true
+    }
+    
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -225,6 +230,12 @@ class MapSearchViewController: UIViewController {
     func changeView() {
         if currentView == .map {
             UIView.transition(from: mapView, to: tableView, duration: 0.5, options: [.transitionFlipFromLeft, .showHideTransitionViews], completion: nil)
+//            if myLocations.count > 0 {
+//                noResultsLabel.isHidden = false
+//            }
+//            else {
+//                noResultsLabel.isHidden = true
+//            }
             currentView = .table
         }
         else {
@@ -238,6 +249,7 @@ class MapSearchViewController: UIViewController {
         mapTableToggleButton.setImage(UIImage(systemName: currentView.rawValue), for: .normal)
         yellowToggleButton.isHidden = currentView == .table
         popUpView.isHidden = currentView == .table
+        noResultsLabel.isHidden = currentView == .table && myLocations.count > 0
         
         if currentView == .table {
             myLocations.sort {

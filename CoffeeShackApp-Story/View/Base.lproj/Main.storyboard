@@ -209,6 +209,12 @@ Corpus Christi, TX 78412
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fo1-dB-3QT" userLabel="No Results">
+                                <rect key="frame" x="133" y="403.66666666666669" width="124" height="37"/>
+                                <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="26"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Kqy-fG-zc8">
                                 <rect key="frame" x="0.0" y="97" width="390" height="664"/>
                             </mapView>
@@ -389,6 +395,7 @@ Corpus Christi, TX 78412
                             <constraint firstItem="TrU-at-6Gp" firstAttribute="top" secondItem="Foa-cZ-XoB" secondAttribute="bottom" constant="14" id="PtE-Fr-4vM"/>
                             <constraint firstItem="ncj-9B-TcP" firstAttribute="bottom" secondItem="ctr-Nr-lng" secondAttribute="bottom" id="QTP-Tp-cdO"/>
                             <constraint firstItem="Kqy-fG-zc8" firstAttribute="top" secondItem="Foa-cZ-XoB" secondAttribute="bottom" id="TUa-1o-oYD"/>
+                            <constraint firstItem="fo1-dB-3QT" firstAttribute="centerX" secondItem="pAm-vg-nSI" secondAttribute="centerX" id="TVo-Xx-adB"/>
                             <constraint firstItem="gsR-CC-Skr" firstAttribute="top" secondItem="Foa-cZ-XoB" secondAttribute="top" id="Tpe-gf-HiB"/>
                             <constraint firstItem="Foa-cZ-XoB" firstAttribute="top" secondItem="ncj-9B-TcP" secondAttribute="top" constant="2" id="Y9u-su-iKw"/>
                             <constraint firstItem="yYG-wT-qXE" firstAttribute="top" secondItem="blU-sm-a3N" secondAttribute="bottom" constant="20" id="ZX5-gc-d16"/>
@@ -397,6 +404,7 @@ Corpus Christi, TX 78412
                             <constraint firstItem="gsR-CC-Skr" firstAttribute="leading" secondItem="Foa-cZ-XoB" secondAttribute="trailing" id="cI0-ua-hJJ"/>
                             <constraint firstItem="RgI-Cw-KBj" firstAttribute="trailing" secondItem="ncj-9B-TcP" secondAttribute="trailing" id="eST-f6-kaZ"/>
                             <constraint firstAttribute="trailing" secondItem="w4l-ZC-XUW" secondAttribute="trailing" id="gkJ-mn-9sd"/>
+                            <constraint firstItem="fo1-dB-3QT" firstAttribute="centerY" secondItem="pAm-vg-nSI" secondAttribute="centerY" id="iPF-mb-3JW"/>
                             <constraint firstItem="Foa-cZ-XoB" firstAttribute="leading" secondItem="ncj-9B-TcP" secondAttribute="leading" id="ign-9E-px9"/>
                             <constraint firstItem="EJv-V2-Pjz" firstAttribute="trailing" secondItem="ncj-9B-TcP" secondAttribute="trailing" id="lqv-tu-qCI"/>
                             <constraint firstItem="TrU-at-6Gp" firstAttribute="leading" secondItem="ncj-9B-TcP" secondAttribute="leading" constant="16" id="nBO-IP-b4e"/>
@@ -421,6 +429,7 @@ Corpus Christi, TX 78412
                         <outlet property="mapView" destination="Kqy-fG-zc8" id="Mgc-2l-4bO"/>
                         <outlet property="myLocationButton" destination="blU-sm-a3N" id="IS9-Xf-HU4"/>
                         <outlet property="myLocationButtonBottomConstraint" destination="ZX5-gc-d16" id="6xb-Kg-Rza"/>
+                        <outlet property="noResultsLabel" destination="fo1-dB-3QT" id="a23-oF-aN8"/>
                         <outlet property="popUpHeightConstraint" destination="290-EC-DWS" id="vUa-da-67o"/>
                         <outlet property="popUpLeadingConstraint" destination="7j7-0E-w1z" id="yTH-Up-SkZ"/>
                         <outlet property="popUpTrailingConstraint" destination="lqv-tu-qCI" id="NeT-Nh-nvM"/>
