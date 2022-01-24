@@ -39,6 +39,12 @@ struct Constants {
         return alert
         
     }
+    static func startHapticFeedBack() {
+        let hapticFeedback = UISelectionFeedbackGenerator()
+        hapticFeedback.selectionChanged()
+    }
+    
+    
 }
 
 //MARK: Utility Methods

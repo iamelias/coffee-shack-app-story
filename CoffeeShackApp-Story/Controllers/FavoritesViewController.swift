@@ -12,7 +12,7 @@ class FavoritesViewController: UIViewController {
 
     @IBOutlet weak var navBar: UINavigationBar!
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var sortButton: UIButton!
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noFavoritesLabel: UILabel!
@@ -22,6 +22,12 @@ class FavoritesViewController: UIViewController {
     var myLikedLocations: [Location] = []
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
+    
+    enum SortOptions: String {
+        case alphabetic = "A to Z"
+        case oldestToNewest = "Oldest to Newest"
+        case newestToOldest = "Newest to Oldest"
+    }
 
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -78,6 +84,9 @@ class FavoritesViewController: UIViewController {
 
     }
     
+    @IBAction func sortButtonDidTouch(_ sender: Any) {
+        createAlert()
+    }
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -87,12 +96,44 @@ class FavoritesViewController: UIViewController {
         searchBackgroundView.isHidden = true
     }
     
+    func createAlert() {
+        let alert = UIAlertController(title: "Sort by:", message: "Pick how you want to sort your favorites", preferredStyle: .actionSheet)
+        let firstAction = UIAlertAction(title: SortOptions.alphabetic.rawValue, style: .default, handler: {_ in
+            self.sort(sortType: .alphabetic)
+        })
+        let secondAction = UIAlertAction(title: SortOptions.oldestToNewest.rawValue, style: .default, handler: {_ in
+            self.sort(sortType: .oldestToNewest)
+        })
+        let thirdAction = UIAlertAction(title: SortOptions.newestToOldest.rawValue, style: .default, handler: {_ in
+            self.sort(sortType: .newestToOldest)
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(firstAction)
+        alert.addAction(secondAction)
+        alert.addAction(thirdAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     func createObservers() {
 
         NotificationCenter.default.addObserver(self, selector: #selector(FavoritesViewController.updateTableView), name: addNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(FavoritesViewController.removeFromTableView(notification:)), name: removeNotification, object: nil)
     
+    }
+    
+    func sort(sortType: SortOptions) {
+        switch sortType {
+        case .alphabetic:
+            myLikedLocations.sort { $0.title ?? "" < $1.title ?? "" }
+        case .oldestToNewest:
+            myLikedLocations.sort { $0.dateCreated < $1.dateCreated }
+        case .newestToOldest:
+            myLikedLocations.sort { $0.dateCreated > $1.dateCreated }
+        }
+        tableView.reloadData()
     }
     
     @objc func updateTableView(notification: Notification) {
@@ -141,6 +182,9 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
         cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
+        cell.cellPhoneNumLabel.text = myLikedLocations[indexPath.row].mkItem?.phoneNumber
+        cell.hashInt = myLikedLocations[indexPath.row].locationHash
+        cell.mkItem = myLikedLocations[indexPath.row].mkItem
         cell.favoritesViewController = self
         cell.favoritesDelegate = self
         return cell
@@ -154,7 +198,6 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     func deleteCell(cell: FavoritesViewCell) {
 
         if let toDeleteIndexPath = tableView.indexPath(for: cell) {
-            
             myLikedLocations[toDeleteIndexPath.row].liked = false
             myLikedLocations.remove(at: toDeleteIndexPath.row)
             tableView.deleteRows(at: [toDeleteIndexPath], with: .automatic)
