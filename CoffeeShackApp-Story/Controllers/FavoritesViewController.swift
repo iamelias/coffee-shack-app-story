@@ -12,7 +12,7 @@ class FavoritesViewController: UIViewController {
 
     @IBOutlet weak var navBar: UINavigationBar!
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var sortButton: UIButton!
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noFavoritesLabel: UILabel!
@@ -22,6 +22,12 @@ class FavoritesViewController: UIViewController {
     var myLikedLocations: [Location] = []
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
+    
+    enum SortOptions: String {
+        case alphabetic = "A to Z"
+        case oldestToNewest = "Oldest to Newest"
+        case newestToOldest = "Newest to Oldest"
+    }
 
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -78,6 +84,9 @@ class FavoritesViewController: UIViewController {
 
     }
     
+    @IBAction func sortButtonDidTouch(_ sender: Any) {
+        createAlert()
+    }
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -85,6 +94,24 @@ class FavoritesViewController: UIViewController {
     func searchBackgrViewConfig() {
         searchBackgroundView.backgroundColor = .darkGray
         searchBackgroundView.isHidden = true
+    }
+    
+    func createAlert() {
+        let alert = UIAlertController(title: "Sort by:", message: "Pick how you want to sort your favorites", preferredStyle: .actionSheet)
+        let firstAction = UIAlertAction(title: SortOptions.alphabetic.rawValue, style: .default, handler: {_ in
+            self.sort(sortType: .alphabetic)
+        })
+        let secondAction = UIAlertAction(title: SortOptions.oldestToNewest.rawValue, style: .default, handler: {_ in
+            self.sort(sortType: .oldestToNewest)
+        })
+        let thirdAction = UIAlertAction(title: SortOptions.newestToOldest.rawValue, style: .default, handler: {_ in
+            self.sort(sortType: .newestToOldest)
+        })
+        alert.addAction(firstAction)
+        alert.addAction(secondAction)
+        alert.addAction(thirdAction)
+        
+        present(alert, animated: true, completion: nil)
     }
     
     func createObservers() {
@@ -95,6 +122,17 @@ class FavoritesViewController: UIViewController {
     
     }
     
+    func sort(sortType: SortOptions) {
+        switch sortType {
+        case .alphabetic:
+            myLikedLocations.sort { $0.title ?? "" < $1.title ?? "" }
+        case .oldestToNewest:
+            myLikedLocations.sort { $0.dateCreated < $1.dateCreated }
+        case .newestToOldest:
+            myLikedLocations.sort { $0.dateCreated > $1.dateCreated }
+        }
+        tableView.reloadData()
+    }
     
     @objc func updateTableView(notification: Notification) {
         guard let selectedLocation = notification.userInfo?["location"] as? Location else {

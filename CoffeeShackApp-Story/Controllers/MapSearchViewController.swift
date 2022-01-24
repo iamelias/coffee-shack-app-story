@@ -390,6 +390,11 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
 //MARK: SEARCHBAR DELEGATE METHODS
 extension MapSearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let check = searchBar.text?.replacingOccurrences(of: " ", with: "")
+        if let check = check, check.count == 0 {
+            view.endEditing(true) //dismiss keyboard
+            return
+        }
         mapView.removeAnnotations(mapView.annotations) //remove all current annotations from map
         searchClient(region: mapView.region.self, isUsersRegion: false)
         view.endEditing(true) //dismiss keyboard

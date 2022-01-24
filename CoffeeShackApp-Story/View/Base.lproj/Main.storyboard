@@ -543,6 +543,9 @@ Corpus Christi, TX 78412
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="arrow.up.arrow.down" catalog="system"/>
+                                <connections>
+                                    <action selector="sortButtonDidTouch:" destination="qty-Wz-nAT" eventType="touchUpInside" id="t87-kT-0Ce"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3v7-vf-rLn">
                                 <rect key="frame" x="0.0" y="97" width="390" height="664"/>
@@ -719,7 +722,7 @@ Corpus Christi, TX 78412
                         <outlet property="noFavoritesLabel" destination="iD7-Ip-CBE" id="9ZH-d1-G70"/>
                         <outlet property="searchBackgroundView" destination="GTO-L6-Sgt" id="yhv-7Y-w3W"/>
                         <outlet property="searchBar" destination="sXn-Xs-dah" id="6O6-CI-CAv"/>
-                        <outlet property="settingsButton" destination="aAc-m5-ZFn" id="kpt-GF-eUn"/>
+                        <outlet property="sortButton" destination="aAc-m5-ZFn" id="kpt-GF-eUn"/>
                         <outlet property="tableView" destination="dLp-cS-4ca" id="Wrz-Dx-Opi"/>
                         <outlet property="titleView" destination="ts9-Qk-kdt" id="2RA-O1-FcR"/>
                     </connections>

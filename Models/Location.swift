@@ -20,4 +20,5 @@ class Location {
         var annotation: MKAnnotation?
         var uuid: UUID = UUID()
         var locationHash: Int?
+        var dateCreated: Date = Date()
     }
