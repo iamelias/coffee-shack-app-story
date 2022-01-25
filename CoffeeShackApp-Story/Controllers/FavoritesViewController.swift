@@ -65,6 +65,9 @@ class FavoritesViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
        // searchBackgroundView.addGestureRecognizer(tapGesture)
         view.addGestureRecognizer(tapGesture)
+        tableView.keyboardDismissMode = .onDrag
+        
+        
 
     }
     
@@ -150,6 +153,9 @@ class FavoritesViewController: UIViewController {
         }
         
         myLikedLocations.append(selectedLocation)
+        if isSearching {
+            searchStrings.append(selectedLocation)
+        }
     }
     
     
@@ -245,8 +251,6 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func deleteFromLikedArray(location: Location) {
         myLikedLocations = myLikedLocations.filter{$0.locationHash != location.locationHash}
-        
-        
     }
 }
 
@@ -270,6 +274,10 @@ extension FavoritesViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         isSearching = true
         searchStrings = myLikedLocations.filter({$0.title?.lowercased().prefix(searchText.count) ?? "" == searchText.lowercased()})
+        
+        if searchBar.text == "" {
+            isSearching = false
+        }
         tableView.reloadData()
     }
     
