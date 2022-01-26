@@ -168,7 +168,7 @@ class FavoritesViewController: UIViewController {
 
 //        myLikedLocations = myLikedLocations.filter{$0.mkAnnotationView != selectedLocation.mkAnnotationView}
         
-        myLikedLocations = myLikedLocations.filter{$0.mkItem != selectedLocation.mkItem}
+        myLikedLocations = myLikedLocations.filter{$0.address != selectedLocation.address}
     }
 
     
@@ -209,6 +209,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
             cell.cellPhoneNumLabel.text = searchStrings[indexPath.row].mkItem?.phoneNumber
             cell.hashInt = searchStrings[indexPath.row].locationHash
             cell.mkItem = searchStrings[indexPath.row].mkItem
+            cell.currentLikedLocation = searchStrings[indexPath.row]
             cell.favoritesViewController = self
             cell.favoritesDelegate = self
         }
@@ -218,6 +219,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
             cell.cellPhoneNumLabel.text = myLikedLocations[indexPath.row].mkItem?.phoneNumber
             cell.hashInt = myLikedLocations[indexPath.row].locationHash
             cell.mkItem = myLikedLocations[indexPath.row].mkItem
+            cell.currentLikedLocation = myLikedLocations[indexPath.row]
             cell.favoritesViewController = self
             cell.favoritesDelegate = self
         }

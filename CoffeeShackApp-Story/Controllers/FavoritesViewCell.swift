@@ -25,6 +25,8 @@ class FavoritesViewCell: UITableViewCell {
     var favoritesDelegate: FavoritesViewControllerDelegate?
     var hashInt: Int?
     var mkItem: MKMapItem?
+    var removeLikedNotification = Notification.Name(rawValue: "remove.liked.location")
+
     
     
     func startHapticFeedBack() {
@@ -85,6 +87,11 @@ class FavoritesViewCell: UITableViewCell {
             }
             self.favoritesDelegate?.didUnlikeLocation(cell: self)
             self.trashButton.setImage(UIImage(systemName: "trash"), for: .normal)
+            
+            if let currentLikedLocation = self.currentLikedLocation {
+                NotificationCenter.default.post(name: self.removeLikedNotification, object: currentLikedLocation, userInfo: ["location": currentLikedLocation])
+            }
+
         })
         let cancelAction = UIAlertAction(title: action2Title, style: .cancel, handler: {_ in
             self.trashButton.setImage(UIImage(systemName: "trash"), for: .normal)
