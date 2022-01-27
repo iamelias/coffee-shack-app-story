@@ -58,6 +58,7 @@ class MapSearchViewController: UIViewController {
     }
     weak var selectedAnnotationView: MKAnnotationView? = nil
     var myLocations: [Location] = []
+//    var myLocations = Set<Location>()
     var myLikedLocations: [Location] = []
     weak var selectedLocation: Location?
     var locationManager: CLLocationManager!
@@ -485,7 +486,7 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         let reuseIdentifier = "mapPin" // declaring reuse identifier
         
         var view: MKAnnotationView? = nil
-        
+                
         view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
         
         if view == nil {
@@ -512,8 +513,16 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         let firstLocation = CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
 
         location.distance = getUserDistance(itemLocation: firstLocation)
-
+        
+        for i in myLocations {
+            if i.address == location.address {
+                
+                return i.mkAnnotationView
+            }
+        }
+        
         myLocations.append(location)
+        
         
         return view
     }
