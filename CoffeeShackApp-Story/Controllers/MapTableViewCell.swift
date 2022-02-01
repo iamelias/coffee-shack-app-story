@@ -19,16 +19,19 @@ class MapTableViewCell: UITableViewCell {
     @IBOutlet weak var directionsButton: UIButton!
 
     weak var currentLocation: Location?
-    var hashInt: Int?
+   // var hashInt: Int?
     var mkItem: MKMapItem?
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
     var mapSearchDelegate: MapSearchViewControllerDelegate?
     
+    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+
+    
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
         if let currentLocation = currentLocation {
-            if let menuURL = currentLocation.menu {
-                UIApplication.shared.open(menuURL, options: [:], completionHandler: { success in
+            if let menuURL = currentLocation.menu, let url = URL(string: menuURL) {
+                UIApplication.shared.open(url, options: [:], completionHandler: { success in
                 })
             }
             else {
@@ -106,3 +109,7 @@ class MapTableViewCell: UITableViewCell {
 protocol MapSearchViewControllerDelegate {
     func didUpdateMyLikedLocations(location: Location, didAdd: Bool)
 }
+
+
+
+

@@ -7,6 +7,7 @@
 
 import UIKit
 import Foundation
+import CoreData
 
 class FavoritesViewController: UIViewController {
 
@@ -24,6 +25,9 @@ class FavoritesViewController: UIViewController {
     var removeNotification = Notification.Name(rawValue: "remove.location")
     var searchStrings: [Location] = []
     var isSearching: Bool = false
+    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+
+    //var secondContext: NSManagedObjectContext?
     
     enum SortOptions: String {
         case alphabetic = "A to Z"
@@ -43,7 +47,7 @@ class FavoritesViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        searchBar.delegate = self        
+        searchBar.delegate = self
         
         tableView.rowHeight = 147
 
@@ -165,10 +169,14 @@ class FavoritesViewController: UIViewController {
             print("nil in notification userInfo")
             return
         }
-
-//        myLikedLocations = myLikedLocations.filter{$0.mkAnnotationView != selectedLocation.mkAnnotationView}
         
         myLikedLocations = myLikedLocations.filter{$0.address != selectedLocation.address}
+        
+        for i in myLikedLocations {
+            if i.address == selectedLocation.address {
+                
+            }
+        }
     }
 
     
@@ -206,9 +214,9 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         if isSearching == true {
             cell.cellTitle.text = searchStrings[indexPath.row].title ?? "NIL"
             cell.cellAddressTextView.text = searchStrings[indexPath.row].address ?? "NIL"
-            cell.cellPhoneNumLabel.text = searchStrings[indexPath.row].mkItem?.phoneNumber
-            cell.hashInt = searchStrings[indexPath.row].locationHash
-            cell.mkItem = searchStrings[indexPath.row].mkItem
+            cell.cellPhoneNumLabel.text = searchStrings[indexPath.row].phoneNumber
+            //cell.hashInt = searchStrings[indexPath.row].locationHash
+           // cell.mkItem = searchStrings[indexPath.row].mkItem
             cell.currentLikedLocation = searchStrings[indexPath.row]
             cell.favoritesViewController = self
             cell.favoritesDelegate = self
@@ -216,9 +224,9 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         else {
             cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
             cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
-            cell.cellPhoneNumLabel.text = myLikedLocations[indexPath.row].mkItem?.phoneNumber
-            cell.hashInt = myLikedLocations[indexPath.row].locationHash
-            cell.mkItem = myLikedLocations[indexPath.row].mkItem
+            cell.cellPhoneNumLabel.text = myLikedLocations[indexPath.row].phoneNumber
+           // cell.hashInt = myLikedLocations[indexPath.row].locationHash
+         //   cell.mkItem = myLikedLocations[indexPath.row].mkItem
             cell.currentLikedLocation = myLikedLocations[indexPath.row]
             cell.favoritesViewController = self
             cell.favoritesDelegate = self
@@ -252,7 +260,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func deleteFromLikedArray(location: Location) {
-        myLikedLocations = myLikedLocations.filter{$0.locationHash != location.locationHash}
+        myLikedLocations = myLikedLocations.filter{$0.address != location.address}
     }
 }
 

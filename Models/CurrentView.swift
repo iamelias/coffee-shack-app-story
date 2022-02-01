@@ -7,6 +7,8 @@
 
 import Foundation
 
+import Foundation
+
 enum CurrentView: String {
     case map
     case table = "list.bullet"

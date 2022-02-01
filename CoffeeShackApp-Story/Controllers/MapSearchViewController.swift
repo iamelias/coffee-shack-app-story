@@ -12,7 +12,7 @@ import CoreLocation
 import CoreData
 
 class MapSearchViewController: UIViewController {
-    //Testing github
+    
     //MARK: IBOUTLETS
     
     //MARK: Constraint IBOutlets
@@ -85,7 +85,15 @@ class MapSearchViewController: UIViewController {
     var removeNotification = Notification.Name(rawValue: "remove.location")
     var removeLikedNotification = Notification.Name(rawValue: "remove.liked.location")
     
-    var dictionary: [Int: MKMapItem] = [:]
+    var dictionary: [String: MKMapItem] = [:]
+    
+    var userPermissionAppeared: Bool = false
+    
+    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+    
+    var firstOpen: Bool = true
+    var fetchedLocations: [LocationItem] = [] //Core Data
+
     
     //MARK: VIEWDIDLOAD
     override func viewDidLoad() {
@@ -120,9 +128,10 @@ class MapSearchViewController: UIViewController {
         }
         tabBarController?.selectedIndex = 0
         tabBarController?.viewControllers?[1].view.layoutIfNeeded() //preloading second tab so observer works
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
+        if firstOpen == true {
+            getAllCoreLocations()
+            firstOpen = false
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -190,6 +199,19 @@ class MapSearchViewController: UIViewController {
     
     func createObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(MapSearchViewController.removeLikedLocation(notification:)), name: removeLikedNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(MapSearchViewController.removeLocation(notification:)), name: removeNotification, object: nil)
+    }
+    
+    @objc func removeLocation(notification: Notification) {
+        guard let selectedLocation = notification.userInfo?["location"] as? Location else {
+            return}
+        
+        for i in myLocations {
+            if i.address == selectedLocation.address {
+                i.liked = false
+            }
+        }
     }
     
     @objc func removeLikedLocation(notification: Notification) {
@@ -199,9 +221,15 @@ class MapSearchViewController: UIViewController {
                 for i in myLikedLocations {
                     if i.address == selectedLocation.address {
                        myLikedLocations = myLikedLocations.filter{$0.address != selectedLocation.address}
+                    
                     }
-
                 }
+        for i in fetchedLocations {
+            if selectedLocation.address == i.address {
+                deleteCoreLocation(location: i)
+            }
+        }
+        
         if currentView == .table {
             tableView.reloadData()
         }
@@ -211,13 +239,25 @@ class MapSearchViewController: UIViewController {
         view.endEditing(true)
     }
     
+    
     fileprivate func checkSelectedAnnotation() { //checking to see if Location was prev selected to restore when returning from another view
+        
         if selectedLocation != nil && currentView == .map {
+            
+            var locationIsLiked: Bool = false
+            selectedLocation?.liked = false
+            for i in myLikedLocations {
+                if i.address == selectedLocation!.address {
+                    locationIsLiked = true
+                    selectedLocation?.liked = true
+
+                }
+            }
             
             popUpHeightConstraint.constant = 147
             popUpView.isHidden = false
             
-            selectedLocation!.liked == true ? cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal) : cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal) //updating if open card is now liked or opp.
+            locationIsLiked == true ? cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal) : cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal) //updating if open card is now liked or opp.
         }
         else {
             popUpHeightConstraint.constant = 0
@@ -253,13 +293,9 @@ class MapSearchViewController: UIViewController {
     func changeView() {
         if currentView == .map {
             UIView.transition(from: mapView, to: tableView, duration: 0.5, options: [.transitionFlipFromLeft, .showHideTransitionViews], completion: nil)
-//            if myLocations.count > 0 {
-//                noResultsLabel.isHidden = false
-//            }
-//            else {
-//                noResultsLabel.isHidden = true
-//            }
+
             currentView = .table
+            tableView.reloadData()// ensuring latest tableview data is shown
         }
         else {
             UIView.transition(from: tableView, to: mapView, duration: 0.5, options: [ .transitionFlipFromRight,.showHideTransitionViews], completion: nil)
@@ -278,7 +314,7 @@ class MapSearchViewController: UIViewController {
             myLocations.sort {
                 $0.distance ?? 0.0 < $1.distance ?? 0.0
             }
-            tableView.reloadData()
+            tableView.reloadData() //reloading with searched tableview data
         }
         else {
             checkSelectedAnnotation()
@@ -328,15 +364,20 @@ class MapSearchViewController: UIViewController {
             selectedLocation.liked = true
             myLikedLocations.append(selectedLocation)
             Constants.startHapticFeedBack()
-            //  delegate?.didLikeLocation(location: selectedLocation)
-            //let name = Notification.Name(rawValue: "selectedLocation")
             NotificationCenter.default.post(name: addNotification, object: selectedLocation, userInfo: ["location": selectedLocation])
+            createCoreLocation(location: selectedLocation)
         }
         else {
             cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
             selectedLocation.liked = false
             myLikedLocations = myLikedLocations.filter{$0.address != selectedLocation.address}
             NotificationCenter.default.post(name: removeNotification, object: selectedLocation, userInfo: ["location" : selectedLocation])
+            
+            for i in fetchedLocations { //deleting location from core data
+                if i.address == selectedLocation.address {
+                    deleteCoreLocation(location: i)
+                }
+            }
         }
     }
     
@@ -360,22 +401,14 @@ class MapSearchViewController: UIViewController {
     }
     
     @IBAction func searchThisAreaDidTouch(_ sender: UIButton) {
-        // locationSearch(region: mapView.region, userLocation: false)
-//        for liked in myLikedLocations {
-//            for i in myLocations {
-//                if i.address == liked.address {
-//                    f
-//                }
-//            }
-//        }
         searchClient(region: nil, isUsersRegion: true)
     }
     
     @IBAction func cardMenuButtonDidTouch(_ sender: UIButton) {
         
         if let selectedLocation = selectedLocation {
-            if let menuURL = selectedLocation.menu {
-                UIApplication.shared.open(menuURL, options: [:], completionHandler: { success in
+            if let menuURL = selectedLocation.menu, let url = URL(string: menuURL) {
+                UIApplication.shared.open(url, options: [:], completionHandler: { success in
                     print("Success")
                 })
             }
@@ -387,8 +420,8 @@ class MapSearchViewController: UIViewController {
     }
     @IBAction func cardDirectionsButtonDidTouch(_ sender: Any) {
         if let selectedLocation = selectedLocation {
-            guard let hash = selectedLocation.locationHash, let mkItem = dictionary[hash] else {
-                print("Direction Hash error")
+            guard let address = selectedLocation.address, let mkItem = dictionary[address] else {
+                print("Direction address error")
                 return
             }
             MKMapItem.openMaps(with: [mkItem], launchOptions: [:])
@@ -411,11 +444,9 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mapCell", for: indexPath) as! MapTableViewCell
         cell.selectionStyle = .none
         cell.currentLocation = myLocations[indexPath.row]
-        cell.hashInt = myLocations[indexPath.row].locationHash
-        cell.mkItem = dictionary[myLocations[indexPath.row].locationHash ?? 0]
         cell.cellTitle.text = myLocations[indexPath.row].title
         cell.cellAddressTextView.text = myLocations[indexPath.row].address
-        cell.cellPhoneNumLabel.text = myLocations[indexPath.row].mkItem?.phoneNumber
+        cell.cellPhoneNumLabel.text = myLocations[indexPath.row].phoneNumber
         cell.mapSearchDelegate = self
         if myLocations[indexPath.row].liked ?? false {
             cell.cellLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
@@ -505,24 +536,19 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         view?.isEnabled = true
         
         let location = createLocations(annotation: annotation)
-        location.mkAnnotationView = view
-        location.locationHash = annotation.hash
-        location.menu = dictionary[annotation.hash]?.url
-        location.mkItem = dictionary[annotation.hash]
+        location.menu = dictionary[location.address ?? ""]?.url?.absoluteString
+        location.phoneNumber = dictionary[location.address ?? ""]?.phoneNumber
         
         let firstLocation = CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
 
         location.distance = getUserDistance(itemLocation: firstLocation)
-        
         for i in myLocations {
             if i.address == location.address {
-                
-                return i.mkAnnotationView
+                return view
             }
         }
         
         myLocations.append(location)
-        
         
         return view
     }
@@ -544,14 +570,13 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         selectedAnnotationView = view
         
         for i in myLocations {
-            if selectedAnnotationView == i.mkAnnotationView {
+            if view.annotation?.subtitle == i.address {
                 selectedLocation = i
             }
         }
         
-        
+        checkSelectedAnnotation()
         if let selectedLocation = selectedLocation {
-           // checkIfLiked(location: selectedLocation)
             if selectedLocation.liked == false {
                 cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
             }
@@ -560,9 +585,9 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
             }
         }
         
-        cardHours.text = selectedLocation?.mkItem?.phoneNumber
+        cardHours.text = selectedLocation?.phoneNumber
         
-        guard let unWrappedLocation = selectedLocation?.mkAnnotationView?.annotation else {
+        guard let unWrappedLocation = view.annotation else {
             cardDistanceLabel.text = ":)"
             return
         }
@@ -592,9 +617,6 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
 
     return distanceInMiles
     }
-    
-    
-    
     
     func createLocations(annotation: MKAnnotation?) -> Location {
         let location = Location()
@@ -649,6 +671,7 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         case .denied:
             print("Authorization denied")
             let alert = Constants.createAlert(message: ("Denied", AuthMessages.denied.rawValue, "Ok"))
+           // userPermissionAppeared = true
             present(alert, animated: true)
             break
         case .authorizedWhenInUse:
@@ -719,7 +742,7 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
             
             for item in response.mapItems {
                 let annotation = self.createAnnotation(item: item.placemark)
-                dictionary[annotation.hash] = item
+                dictionary[annotation.subtitle ?? ""] = item
                 mkItems.append(item)
 
                 mapView.addAnnotation(annotation)
@@ -771,6 +794,7 @@ extension MapSearchViewController: MapSearchViewControllerDelegate {
     func didUpdateMyLikedLocations(location: Location, didAdd: Bool) {
         if didAdd {
             myLikedLocations.append(location)
+            createCoreLocation(location: location)
         }
         else {
             for i in myLikedLocations {
@@ -779,6 +803,93 @@ extension MapSearchViewController: MapSearchViewControllerDelegate {
                 }
             }
             myLikedLocations = myLikedLocations.filter{$0.address != location.address}
+            for i in fetchedLocations {
+                if i.address == location.address {
+                    deleteCoreLocation(location: i)
+                }
+            }
         }
     }
 }
+
+//MARK: Core Data Code
+extension MapSearchViewController {
+    func getAllCoreLocations() {
+        
+        do {
+            guard let context = context else {
+                return
+            }
+            
+            fetchedLocations = try context.fetch(LocationItem.fetchRequest())
+            for i in fetchedLocations {
+                let location = Location()
+                location.title = i.title
+                location.address = i.address
+                location.liked = i.liked
+                location.phoneNumber = i.phoneNumber
+                location.menu = i.menu
+                location.distance = i.distance
+                myLikedLocations.append(location)
+                NotificationCenter.default.post(name: addNotification, object: location, userInfo: ["location": location])
+            }
+        }
+        catch {
+            print("core fetch all error")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func createCoreLocation(location: Location) {
+        guard let context = context else {
+            return
+        }
+        let coreLocation = LocationItem(context: context)
+        coreLocation.title = location.title
+        coreLocation.address = location.address
+        coreLocation.liked = location.liked ?? false
+        coreLocation.menu = location.menu
+        coreLocation.phoneNumber = location.phoneNumber ?? "+1 (000) 000-0000 "
+        coreLocation.distance = location.distance ?? 0.0
+        
+        fetchedLocations.append(coreLocation)
+        
+        do {
+            try context.save()
+        }
+        catch {
+            print("core add error")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func deleteCoreLocation(location: LocationItem) {
+        guard let context = context else {
+            return
+        }
+        context.delete(location)
+        do {
+            try context.save()
+        }
+        catch {
+            print("core delete error")
+            print(error.localizedDescription)
+        }
+        
+    }
+    
+    func updateCoreLocation(location: LocationItem, isLiked: Bool) {
+        guard let context = context else {
+            return
+        }
+        location.liked = isLiked
+        do {
+            try context.save()
+        }
+        catch {
+            print("core update error")
+            print(error.localizedDescription)
+        }
+    }
+}
+

@@ -23,9 +23,13 @@ class FavoritesViewCell: UITableViewCell {
     var deletedCell: Bool = false
     var favoritesViewController: FavoritesViewController?
     var favoritesDelegate: FavoritesViewControllerDelegate?
-    var hashInt: Int?
+    //var hashInt: Int?
     var mkItem: MKMapItem?
     var removeLikedNotification = Notification.Name(rawValue: "remove.liked.location")
+    var removeNotification = Notification.Name(rawValue: "remove.location")
+
+    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+
 
     
     
@@ -61,8 +65,8 @@ class FavoritesViewCell: UITableViewCell {
 
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
         if let currentLikedLocation = currentLikedLocation {
-            if let menuURL = currentLikedLocation.menu {
-                UIApplication.shared.open(menuURL, options: [:], completionHandler: { success in
+            if let menuURL = currentLikedLocation.menu, let url = URL(string: menuURL) {
+                UIApplication.shared.open(url, options: [:], completionHandler: { success in
                 })
             }
             else {
@@ -90,6 +94,8 @@ class FavoritesViewCell: UITableViewCell {
             
             if let currentLikedLocation = self.currentLikedLocation {
                 NotificationCenter.default.post(name: self.removeLikedNotification, object: currentLikedLocation, userInfo: ["location": currentLikedLocation])
+                
+                NotificationCenter.default.post(name: self.removeNotification, object: currentLikedLocation, userInfo: ["location": currentLikedLocation])
             }
 
         })
@@ -121,3 +127,4 @@ class FavoritesViewCell: UITableViewCell {
 protocol FavoritesViewControllerDelegate: AnyObject {
     func didUnlikeLocation(cell: FavoritesViewCell)
 }
+
