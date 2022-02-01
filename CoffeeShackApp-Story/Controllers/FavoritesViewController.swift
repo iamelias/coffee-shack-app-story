@@ -22,6 +22,8 @@ class FavoritesViewController: UIViewController {
     var myLikedLocations: [Location] = []
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
+    var searchStrings: [Location] = []
+    var isSearching: Bool = false
     
     enum SortOptions: String {
         case alphabetic = "A to Z"
@@ -47,6 +49,7 @@ class FavoritesViewController: UIViewController {
 
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
 
+            textfield.textColor = .white
             textfield.attributedPlaceholder = NSAttributedString(string: textfield.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
 
             if let leftView = textfield.leftView as? UIImageView {
@@ -60,7 +63,11 @@ class FavoritesViewController: UIViewController {
         
         //Gestures
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        searchBackgroundView.addGestureRecognizer(tapGesture)
+       // searchBackgroundView.addGestureRecognizer(tapGesture)
+        view.addGestureRecognizer(tapGesture)
+        tableView.keyboardDismissMode = .onDrag
+        
+        
 
     }
     
@@ -83,6 +90,9 @@ class FavoritesViewController: UIViewController {
          tableView.reloadData()
 
     }
+    override func viewWillDisappear(_ animated: Bool) {
+      //  isSearching = false
+    }
     
     @IBAction func sortButtonDidTouch(_ sender: Any) {
         createAlert()
@@ -92,7 +102,7 @@ class FavoritesViewController: UIViewController {
     }
     
     func searchBackgrViewConfig() {
-        searchBackgroundView.backgroundColor = .darkGray
+//        searchBackgroundView.backgroundColor = .darkGray
         searchBackgroundView.isHidden = true
     }
     
@@ -143,6 +153,9 @@ class FavoritesViewController: UIViewController {
         }
         
         myLikedLocations.append(selectedLocation)
+        if isSearching {
+            searchStrings.append(selectedLocation)
+        }
     }
     
     
@@ -155,7 +168,7 @@ class FavoritesViewController: UIViewController {
 
 //        myLikedLocations = myLikedLocations.filter{$0.mkAnnotationView != selectedLocation.mkAnnotationView}
         
-        myLikedLocations = myLikedLocations.filter{$0.mkItem != selectedLocation.mkItem}
+        myLikedLocations = myLikedLocations.filter{$0.address != selectedLocation.address}
     }
 
     
@@ -174,19 +187,44 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         else {
             noFavoritesLabel.isHidden = true
         }
+        if isSearching == true {
+            return searchStrings.count
+        }
+        else {
         return myLikedLocations.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+
+        
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "favoriteCell", for: indexPath) as! FavoritesViewCell
         cell.selectionStyle = .none
-        cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
-        cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
-        cell.cellPhoneNumLabel.text = myLikedLocations[indexPath.row].mkItem?.phoneNumber
-        cell.hashInt = myLikedLocations[indexPath.row].locationHash
-        cell.mkItem = myLikedLocations[indexPath.row].mkItem
-        cell.favoritesViewController = self
-        cell.favoritesDelegate = self
+        
+        if isSearching == true {
+            cell.cellTitle.text = searchStrings[indexPath.row].title ?? "NIL"
+            cell.cellAddressTextView.text = searchStrings[indexPath.row].address ?? "NIL"
+            cell.cellPhoneNumLabel.text = searchStrings[indexPath.row].mkItem?.phoneNumber
+            cell.hashInt = searchStrings[indexPath.row].locationHash
+            cell.mkItem = searchStrings[indexPath.row].mkItem
+            cell.currentLikedLocation = searchStrings[indexPath.row]
+            cell.favoritesViewController = self
+            cell.favoritesDelegate = self
+        }
+        else {
+            cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
+            cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
+            cell.cellPhoneNumLabel.text = myLikedLocations[indexPath.row].mkItem?.phoneNumber
+            cell.hashInt = myLikedLocations[indexPath.row].locationHash
+            cell.mkItem = myLikedLocations[indexPath.row].mkItem
+            cell.currentLikedLocation = myLikedLocations[indexPath.row]
+            cell.favoritesViewController = self
+            cell.favoritesDelegate = self
+        }
+        
+
         return cell
     }
     
@@ -196,12 +234,25 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func deleteCell(cell: FavoritesViewCell) {
-
         if let toDeleteIndexPath = tableView.indexPath(for: cell) {
+            if isSearching == true {
+                searchStrings[toDeleteIndexPath.row].liked = false
+                deleteFromLikedArray(location: searchStrings[toDeleteIndexPath.row])
+                searchStrings.remove(at: toDeleteIndexPath.row)
+            }
+            else {
             myLikedLocations[toDeleteIndexPath.row].liked = false
             myLikedLocations.remove(at: toDeleteIndexPath.row)
+                //deleteFromLikedArray(location: myLikedLocations[toDeleteIndexPath.row])
+            }
             tableView.deleteRows(at: [toDeleteIndexPath], with: .automatic)
+//            deleteFromLikedArray(location: myLikedLocations[toDeleteIndexPath.row])
+
         }
+    }
+    
+    func deleteFromLikedArray(location: Location) {
+        myLikedLocations = myLikedLocations.filter{$0.locationHash != location.locationHash}
     }
 }
 
@@ -212,18 +263,29 @@ extension FavoritesViewController: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) { //clear searchBar text
+        isSearching = false
         searchBar.text = ""
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-                
-        searchBackgroundView.layer.opacity = 0.5
-        searchBackgroundView.isHidden = false
+//
+//        searchBackgroundView.layer.opacity = 0.5
+//        searchBackgroundView.isHidden = false
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        isSearching = true
+        searchStrings = myLikedLocations.filter({$0.title?.lowercased().prefix(searchText.count) ?? "" == searchText.lowercased()})
+        
+        if searchBar.text == "" {
+            isSearching = false
+        }
+        tableView.reloadData()
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        searchBackgroundView.layer.opacity = 1.0
-        searchBackgroundView.isHidden = true
+//        searchBackgroundView.layer.opacity = 1.0
+//        searchBackgroundView.isHidden = true
     }
 }
 

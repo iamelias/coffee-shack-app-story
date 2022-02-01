@@ -538,7 +538,7 @@ Corpus Christi, TX 78412
                                 <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                                 <color key="barTintColor" red="0.20392156859999999" green="0.1647058824" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </navigationBar>
-                            <searchBar contentMode="redraw" restorationIdentifier="searchBar" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="sXn-Xs-dah">
+                            <searchBar contentMode="redraw" restorationIdentifier="searchBar1" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="sXn-Xs-dah">
                                 <rect key="frame" x="0.0" y="46" width="341" height="51"/>
                                 <color key="barTintColor" red="0.20392156859999999" green="0.1647058824" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textInputTraits key="textInputTraits"/>

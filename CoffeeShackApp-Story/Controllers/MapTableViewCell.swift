@@ -23,6 +23,7 @@ class MapTableViewCell: UITableViewCell {
     var mkItem: MKMapItem?
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
+    var mapSearchDelegate: MapSearchViewControllerDelegate?
     
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
         if let currentLocation = currentLocation {
@@ -45,22 +46,31 @@ class MapTableViewCell: UITableViewCell {
     
     @IBAction func tableLikeButtonSelected(_ sender: UIButton) {
         StartLikeButtonAnimation()
-        if cellLikeButton.tag == 0 {
+        
+        guard let currentLocation = currentLocation else {
+            return
+        }
+
+        if currentLocation.liked == false {
             Constants.startHapticFeedBack()
             cellLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             cellLikeButton.tag = 1
-            if let currentLocation = currentLocation {
+        //    if let currentLocation = currentLocation {
                 currentLocation.liked = true
+                mapSearchDelegate?.didUpdateMyLikedLocations(location: currentLocation, didAdd: true)
                 NotificationCenter.default.post(name: addNotification, object: currentLocation, userInfo: ["location": currentLocation])
-            }
+
+        //    }
         }
         else {
             cellLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
                 cellLikeButton.tag = 0
-            if let currentLocation = currentLocation {
+       //     if let currentLocation = currentLocation {
                 currentLocation.liked = false
+                mapSearchDelegate?.didUpdateMyLikedLocations(location: currentLocation, didAdd: false)
                 NotificationCenter.default.post(name: removeNotification, object: currentLocation, userInfo: ["location" : currentLocation])
-            }
+
+        //    }
             }
     }
     
@@ -91,4 +101,8 @@ class MapTableViewCell: UITableViewCell {
             })
         })
     }
+}
+
+protocol MapSearchViewControllerDelegate {
+    func didUpdateMyLikedLocations(location: Location, didAdd: Bool)
 }

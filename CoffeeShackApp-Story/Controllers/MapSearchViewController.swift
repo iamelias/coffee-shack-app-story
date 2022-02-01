@@ -58,6 +58,7 @@ class MapSearchViewController: UIViewController {
     }
     weak var selectedAnnotationView: MKAnnotationView? = nil
     var myLocations: [Location] = []
+    var myLikedLocations: [Location] = []
     weak var selectedLocation: Location?
     var locationManager: CLLocationManager!
     lazy var unselectedMapIcon: UIImage? = {
@@ -81,6 +82,7 @@ class MapSearchViewController: UIViewController {
     var searchNotification = Notification.Name(rawValue: "selected.location.key")
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
+    var removeLikedNotification = Notification.Name(rawValue: "remove.liked.location")
     
     var dictionary: [Int: MKMapItem] = [:]
     
@@ -98,6 +100,7 @@ class MapSearchViewController: UIViewController {
         searchBarConfig()
         popUpConfig()
         searchBackgrViewConfig()
+        createObservers()
         
         //Gestures
         let dismissTapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -182,6 +185,25 @@ class MapSearchViewController: UIViewController {
     
     func tableConfig() {
         noResultsLabel.isHidden = true
+    }
+    
+    func createObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(MapSearchViewController.removeLikedLocation(notification:)), name: removeLikedNotification, object: nil)
+    }
+    
+    @objc func removeLikedLocation(notification: Notification) {
+        guard let selectedLocation = notification.userInfo?["location"] as? Location else {
+            return}
+
+                for i in myLikedLocations {
+                    if i.address == selectedLocation.address {
+                       myLikedLocations = myLikedLocations.filter{$0.address != selectedLocation.address}
+                    }
+
+                }
+        if currentView == .table {
+            tableView.reloadData()
+        }
     }
     
     @objc func dismissKeyboard() {
@@ -299,9 +321,11 @@ class MapSearchViewController: UIViewController {
         }
         StartLikeButtonAnimation()
         
+        
         if selectedLocation.liked == false {
             cardLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             selectedLocation.liked = true
+            myLikedLocations.append(selectedLocation)
             Constants.startHapticFeedBack()
             //  delegate?.didLikeLocation(location: selectedLocation)
             //let name = Notification.Name(rawValue: "selectedLocation")
@@ -310,7 +334,19 @@ class MapSearchViewController: UIViewController {
         else {
             cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
             selectedLocation.liked = false
+            myLikedLocations = myLikedLocations.filter{$0.address != selectedLocation.address}
             NotificationCenter.default.post(name: removeNotification, object: selectedLocation, userInfo: ["location" : selectedLocation])
+        }
+    }
+    
+    func checkIfLiked(location: Location) {
+        for i in myLikedLocations {
+            if i.address == location.address {
+                selectedLocation?.liked = true
+            }
+            else {
+                selectedLocation?.liked = false
+            }
         }
     }
     
@@ -324,6 +360,13 @@ class MapSearchViewController: UIViewController {
     
     @IBAction func searchThisAreaDidTouch(_ sender: UIButton) {
         // locationSearch(region: mapView.region, userLocation: false)
+//        for liked in myLikedLocations {
+//            for i in myLocations {
+//                if i.address == liked.address {
+//                    f
+//                }
+//            }
+//        }
         searchClient(region: nil, isUsersRegion: true)
     }
     
@@ -372,6 +415,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
         cell.cellTitle.text = myLocations[indexPath.row].title
         cell.cellAddressTextView.text = myLocations[indexPath.row].address
         cell.cellPhoneNumLabel.text = myLocations[indexPath.row].mkItem?.phoneNumber
+        cell.mapSearchDelegate = self
         if myLocations[indexPath.row].liked ?? false {
             cell.cellLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
         }
@@ -495,7 +539,10 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
                 selectedLocation = i
             }
         }
+        
+        
         if let selectedLocation = selectedLocation {
+           // checkIfLiked(location: selectedLocation)
             if selectedLocation.liked == false {
                 cardLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
             }
@@ -682,7 +729,18 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         }
     }
     
+    func checkLiked() {
+        for liked in myLikedLocations {
+            for i in myLocations {
+                if (liked.title == i.title) && (liked.address == i.address) {
+                    i.liked = true
+                }
+            }
+        }
+    }
+    
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        checkLiked()
         if currentView == .table {
             tableView.reloadData()
         }
@@ -697,5 +755,21 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
         }
         let region = makeRegion(span: (lat: 0.05, lon: 0.05), coordinate: userLocation)
         return region
+    }
+}
+
+extension MapSearchViewController: MapSearchViewControllerDelegate {
+    func didUpdateMyLikedLocations(location: Location, didAdd: Bool) {
+        if didAdd {
+            myLikedLocations.append(location)
+        }
+        else {
+            for i in myLikedLocations {
+               if i.address == location.address {
+                    location.liked = false
+                }
+            }
+            myLikedLocations = myLikedLocations.filter{$0.address != location.address}
+        }
     }
 }
