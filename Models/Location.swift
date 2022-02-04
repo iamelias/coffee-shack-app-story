@@ -13,11 +13,12 @@ import MapKit
 
 class Location {
         var title: String?
-        var menu: String?
+        var menuUrl: String?
         var address: String?
         var distance: Double?
         var phoneNumber: String?
         var liked: Bool?
-       // var locationHash: Int?
+        var latitude: Double?
+        var longitude: Double?
         var dateCreated: Date = Date()
     }

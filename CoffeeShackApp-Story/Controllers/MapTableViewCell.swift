@@ -30,7 +30,7 @@ class MapTableViewCell: UITableViewCell {
     
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
         if let currentLocation = currentLocation {
-            if let menuURL = currentLocation.menu, let url = URL(string: menuURL) {
+            if let menuURL = currentLocation.menuUrl, let url = URL(string: menuURL) {
                 UIApplication.shared.open(url, options: [:], completionHandler: { success in
                 })
             }
@@ -41,10 +41,10 @@ class MapTableViewCell: UITableViewCell {
     }
     
     @IBAction func directionsButtonDidTouch(_ sender: UIButton) {
-            guard let mkItem = self.mkItem else {
+        guard let mkItem = self.mkItem else {
                 return
             }
-            MKMapItem.openMaps(with: [mkItem], launchOptions: [:])
+        MKMapItem.openMaps(with: [mkItem], launchOptions: [:])
     }
     
     @IBAction func tableLikeButtonSelected(_ sender: UIButton) {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		390D4CD5276FAFB1002F9A27 /* FavoritesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D4CD4276FAFB1002F9A27 /* FavoritesViewCell.swift */; };
+		3911C96227AA2462002BB196 /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3911C96127AA2462002BB196 /* LocationViewModel.swift */; };
 		3915F73327442535008C2C6F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3915F73227442535008C2C6F /* Constants.swift */; };
 		392780342750465100B8EC07 /* CustomTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392780332750465100B8EC07 /* CustomTabController.swift */; };
 		39307894279A1EDE004C786D /* StarAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39307893279A1EDE004C786D /* StarAnnotation.swift */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		390D4CD4276FAFB1002F9A27 /* FavoritesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewCell.swift; sourceTree = "<group>"; };
+		3911C96127AA2462002BB196 /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
 		3915F73227442535008C2C6F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		392780332750465100B8EC07 /* CustomTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabController.swift; sourceTree = "<group>"; };
 		39307893279A1EDE004C786D /* StarAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarAnnotation.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 		64C4A6E22716325C00A9FE8E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3911C96127AA2462002BB196 /* LocationViewModel.swift */,
 				3977B7CD274AB73D002C6900 /* MapSearchViewController.swift */,
 				39CF8653274027BB00774302 /* MapTableViewCell.swift */,
 				392780332750465100B8EC07 /* CustomTabController.swift */,
@@ -353,6 +356,7 @@
 				396CD88427921FFE00415F8A /* TableSettingViewModel.swift in Sources */,
 				392780342750465100B8EC07 /* CustomTabController.swift in Sources */,
 				39CF8654274027BB00774302 /* MapTableViewCell.swift in Sources */,
+				3911C96227AA2462002BB196 /* LocationViewModel.swift in Sources */,
 				39E58681273DB9EF00906F7F /* FavoritesViewController.swift in Sources */,
 				396CBCCF27569F6F00409E3F /* Messages.swift in Sources */,
 				64C4A6AD2716298400A9FE8E /* SceneDelegate.swift in Sources */,

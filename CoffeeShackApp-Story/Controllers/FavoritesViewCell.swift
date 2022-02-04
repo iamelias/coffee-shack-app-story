@@ -65,7 +65,7 @@ class FavoritesViewCell: UITableViewCell {
 
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
         if let currentLikedLocation = currentLikedLocation {
-            if let menuURL = currentLikedLocation.menu, let url = URL(string: menuURL) {
+            if let menuURL = currentLikedLocation.menuUrl, let url = URL(string: menuURL) {
                 UIApplication.shared.open(url, options: [:], completionHandler: { success in
                 })
             }

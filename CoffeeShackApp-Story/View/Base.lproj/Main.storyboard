@@ -285,7 +285,7 @@ Corpus Christi, TX 78412
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQ7-oh-MUg">
-                                        <rect key="frame" x="332.66666666666669" y="57.666666666666622" width="32.333333333333314" height="31.666666666666664"/>
+                                        <rect key="frame" x="337.66666666666669" y="57.666666666666622" width="32.333333333333314" height="31.666666666666664"/>
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="suit.heart" catalog="system" imagePadding="0.0">
@@ -303,7 +303,7 @@ Corpus Christi, TX 78412
                                 <color key="tintColor" red="0.20392156859999999" green="0.1647058824" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="147" id="290-EC-DWS"/>
-                                    <constraint firstAttribute="trailing" secondItem="nQ7-oh-MUg" secondAttribute="trailing" constant="25" id="Omu-C6-IOf"/>
+                                    <constraint firstAttribute="trailing" secondItem="nQ7-oh-MUg" secondAttribute="trailing" constant="20" id="Omu-C6-IOf"/>
                                     <constraint firstItem="nQ7-oh-MUg" firstAttribute="centerY" secondItem="EJv-V2-Pjz" secondAttribute="centerY" id="Vjr-Bg-82t"/>
                                     <constraint firstItem="nQ7-oh-MUg" firstAttribute="top" secondItem="EJv-V2-Pjz" secondAttribute="top" constant="57.670000000000002" id="ewW-PS-blP"/>
                                 </constraints>
