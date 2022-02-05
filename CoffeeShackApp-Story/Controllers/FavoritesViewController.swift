@@ -114,12 +114,27 @@ class FavoritesViewController: UIViewController {
         let alert = UIAlertController(title: "Sort by:", message: "Pick how you want to sort your favorites", preferredStyle: .actionSheet)
         let firstAction = UIAlertAction(title: SortOptions.alphabetic.rawValue, style: .default, handler: {_ in
             self.sort(sortType: .alphabetic)
+            if self.isSearching {
+                self.isSearching = false
+                self.searchBar.text = ""
+                self.tableView.reloadData()
+            }
         })
         let secondAction = UIAlertAction(title: SortOptions.oldestToNewest.rawValue, style: .default, handler: {_ in
             self.sort(sortType: .oldestToNewest)
+            if self.isSearching {
+                self.isSearching = false
+                self.searchBar.text = ""
+                self.tableView.reloadData()
+            }
         })
         let thirdAction = UIAlertAction(title: SortOptions.newestToOldest.rawValue, style: .default, handler: {_ in
             self.sort(sortType: .newestToOldest)
+            if self.isSearching {
+                self.isSearching = false
+                self.searchBar.text = ""
+                self.tableView.reloadData()
+            }
         })
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(firstAction)
@@ -283,10 +298,12 @@ extension FavoritesViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         isSearching = true
+        sortButton.isEnabled = false
         searchStrings = myLikedLocations.filter({$0.title?.lowercased().prefix(searchText.count) ?? "" == searchText.lowercased()})
         
         if searchBar.text == "" {
             isSearching = false
+            sortButton.isEnabled = true
         }
         tableView.reloadData()
     }

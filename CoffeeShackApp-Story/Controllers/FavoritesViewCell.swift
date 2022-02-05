@@ -119,8 +119,6 @@ class FavoritesViewCell: UITableViewCell {
             trashButton.setImage(UIImage(systemName: "trash.fill"), for: .normal)
 
         //favoritesDelegate?.didUnlikeLocation(cell: self)
-
-
     }
 }
 

@@ -429,6 +429,12 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
     //MARK: TABLE VIEW METHODS
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       //  return myLocations.count
+        if locationsListVM.numberOfRowsInSection(section: 1) > 0 {
+            noResultsLabel.isHidden = true
+        }
+        else {
+            noResultsLabel.isHidden = false
+        }
         return locationsListVM.numberOfRowsInSection(section: 1)
     }
     
@@ -446,14 +452,8 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
         cell.mapSearchDelegate = self
         cell.mkItem = mkItems[indexPath.row]
         cell.cellLikeButton.setImage(locationsListVM.locationAtIndex(index: indexPath.row).image , for: .normal)
-        
         cell.currentLocation?.distance = getUserDistance(itemLocation: CLLocation(latitude: locationsListVM.locationAtIndex(index: indexPath.row).latitude ?? 0.0, longitude: locationsListVM.locationAtIndex(index: indexPath.row).longitude ?? 0.0))
-        
         cell.cellDistanceLabel.text = locationsListVM.locationAtIndex(index: indexPath.row).distance
-        
-        
-        
-       // cell.cellDistanceLabel.text = locationsListVM.locationAtIndex(index: indexPath.row).distance
         return cell
     }
     
