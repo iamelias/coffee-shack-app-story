@@ -88,6 +88,7 @@ class MapSearchViewController: UIViewController {
     
     //View Models
     var locationsListVM: LocationViewModelList = LocationViewModelList()
+    var popUpVM: PopUpViewModel?
 
     //MARK: VIEWDIDLOAD
     override func viewDidLoad() {
@@ -119,26 +120,31 @@ class MapSearchViewController: UIViewController {
             tabBarController?.viewControllers?[1].view.layoutIfNeeded() //preloading second
             getAllCoreLocations()
             firstOpen = false
+
         }
     }
     
-    override func viewDidLayoutSubviews() {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if UIDevice.current.orientation.isLandscape { //if moving to landscape change constraints
             popUpView.translatesAutoresizingMaskIntoConstraints = false
-         //   popUpView.widthAnchor.constraint(equalToConstant: 80).isActive = true
-            popUpLeadingConstraint.constant = 350
-        //    popUpTrailingConstraint.constant = 700
-          //  popUpTrailingConstraint.constant = popUpView.window?.safeAreaInsets.left ?? .zero + 20
             searchButtonBottomConstraint.constant = 5
             myLocationButtonBottomConstraint.constant = 5
-           // mapView.
+            popUpView.widthAnchor.constraint(equalToConstant: 375.0).isActive = true
         }
         else { //if changing to portrait
-            popUpLeadingConstraint.constant = 0
-            popUpTrailingConstraint.constant = 0
+            searchAreaButton.translatesAutoresizingMaskIntoConstraints = false
+            myLocationButton.translatesAutoresizingMaskIntoConstraints = false
             searchButtonBottomConstraint.constant = 50
             myLocationButtonBottomConstraint.constant = 20
         }
+        view.layoutSubviews()
+    }
+    
+    override func viewWillLayoutSubviews() {
+    }
+    
+    override func viewDidLayoutSubviews() {
+
     }
     
     deinit {
@@ -168,10 +174,21 @@ class MapSearchViewController: UIViewController {
         popUpView.layer.cornerRadius = 15
         popUpView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         popUpView.translatesAutoresizingMaskIntoConstraints = false
+        if UIDevice.current.orientation.isLandscape {
+        popUpView.widthAnchor.constraint(equalToConstant: 375.0).isActive = true
+        }
+
         //swipe down on popupview will close popup
         let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(togglePopUp))
         swipeDownGesture.direction = .down
         popUpView.addGestureRecognizer(swipeDownGesture)
+        
+        if UIDevice.current.orientation.isLandscape {
+        searchButtonBottomConstraint.constant = 5
+        myLocationButtonBottomConstraint.constant = 5
+        }
+        
+       // popUpVM = PopUpViewModel(popUpView: popUpView)
     }
     
     func searchBackgrViewConfig() {
@@ -499,6 +516,14 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         return view
     }
     
+    fileprivate func adjustMapRegion(coordinate: CLLocationCoordinate2D) {
+        var visibleMapRect = mapView.visibleMapRect
+        let mapPoint = MKMapPoint(coordinate)
+        visibleMapRect.origin.x = mapPoint.x - visibleMapRect.size.width * 0.25
+        visibleMapRect.origin.y = mapPoint.y - visibleMapRect.size.height * 0.5
+        mapView.setVisibleMapRect(visibleMapRect, animated: true)
+    }
+    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if view.annotation is MKUserLocation {
             return
@@ -530,6 +555,7 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         let distanceInMiles = getUserDistance(itemLocation: CLLocation(latitude: unWrappedLocation.coordinate.latitude, longitude: unWrappedLocation.coordinate.longitude))
         selectedLocation.distance = distanceInMiles
         cardDistanceLabel.text = locationVM.distance
+        adjustMapRegion(coordinate: CLLocationCoordinate2D(latitude: unWrappedLocation.coordinate.latitude, longitude: unWrappedLocation.coordinate.longitude))
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {

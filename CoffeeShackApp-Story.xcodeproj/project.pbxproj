@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		390D4CD5276FAFB1002F9A27 /* FavoritesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390D4CD4276FAFB1002F9A27 /* FavoritesViewCell.swift */; };
 		3911C96227AA2462002BB196 /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3911C96127AA2462002BB196 /* LocationViewModel.swift */; };
+		3911EFB927ADA7C400038045 /* PopUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3911EFB827ADA7C400038045 /* PopUpViewModel.swift */; };
+		3911EFBB27ADAF7300038045 /* SearchBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3911EFBA27ADAF7300038045 /* SearchBarViewModel.swift */; };
 		3915F73327442535008C2C6F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3915F73227442535008C2C6F /* Constants.swift */; };
 		392780342750465100B8EC07 /* CustomTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392780332750465100B8EC07 /* CustomTabController.swift */; };
 		39307894279A1EDE004C786D /* StarAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39307893279A1EDE004C786D /* StarAnnotation.swift */; };
@@ -52,6 +54,8 @@
 /* Begin PBXFileReference section */
 		390D4CD4276FAFB1002F9A27 /* FavoritesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewCell.swift; sourceTree = "<group>"; };
 		3911C96127AA2462002BB196 /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
+		3911EFB827ADA7C400038045 /* PopUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewModel.swift; sourceTree = "<group>"; };
+		3911EFBA27ADAF7300038045 /* SearchBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarViewModel.swift; sourceTree = "<group>"; };
 		3915F73227442535008C2C6F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		392780332750465100B8EC07 /* CustomTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabController.swift; sourceTree = "<group>"; };
 		39307893279A1EDE004C786D /* StarAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarAnnotation.swift; sourceTree = "<group>"; };
@@ -178,12 +182,14 @@
 			isa = PBXGroup;
 			children = (
 				3911C96127AA2462002BB196 /* LocationViewModel.swift */,
+				3911EFB827ADA7C400038045 /* PopUpViewModel.swift */,
 				3977B7CD274AB73D002C6900 /* MapSearchViewController.swift */,
 				39CF8653274027BB00774302 /* MapTableViewCell.swift */,
 				392780332750465100B8EC07 /* CustomTabController.swift */,
 				39E58680273DB9EF00906F7F /* FavoritesViewController.swift */,
 				390D4CD4276FAFB1002F9A27 /* FavoritesViewCell.swift */,
 				394FE0DD27705E68007A29DF /* LocationDelegate.swift */,
+				3911EFBA27ADAF7300038045 /* SearchBarViewModel.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -356,8 +362,10 @@
 				396CD88427921FFE00415F8A /* TableSettingViewModel.swift in Sources */,
 				392780342750465100B8EC07 /* CustomTabController.swift in Sources */,
 				39CF8654274027BB00774302 /* MapTableViewCell.swift in Sources */,
+				3911EFB927ADA7C400038045 /* PopUpViewModel.swift in Sources */,
 				3911C96227AA2462002BB196 /* LocationViewModel.swift in Sources */,
 				39E58681273DB9EF00906F7F /* FavoritesViewController.swift in Sources */,
+				3911EFBB27ADAF7300038045 /* SearchBarViewModel.swift in Sources */,
 				396CBCCF27569F6F00409E3F /* Messages.swift in Sources */,
 				64C4A6AD2716298400A9FE8E /* SceneDelegate.swift in Sources */,
 				396CD8862792479000415F8A /* CurrentView.swift in Sources */,
@@ -546,6 +554,10 @@
 				DEVELOPMENT_TEAM = KFS7JDA8K2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CoffeeShackApp-Story/Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Always when in use";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Always Usage Description";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Usage Description";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "When in use description";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -575,6 +587,10 @@
 				DEVELOPMENT_TEAM = KFS7JDA8K2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CoffeeShackApp-Story/Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Always when in use";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Always Usage Description";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Usage Description";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "When in use description";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
