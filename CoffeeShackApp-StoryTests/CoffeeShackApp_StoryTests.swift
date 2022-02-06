@@ -1,33 +1,48 @@
-//
+
 //  CoffeeShackApp_StoryTests.swift
 //  CoffeeShackApp-StoryTests
 //
 //  Created by Elias Hall on 10/12/21.
-//
+
 
 import XCTest
+import UIKit
 @testable import CoffeeShackApp_Story
 
 class CoffeeShackApp_StoryTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    func testCanInitialize() throws -> MapSearchViewController { //testing initializing of initial VC as tabBarController and first VC
+        let bundle = Bundle(for: MapSearchViewController.self)
+        let storyB = UIStoryboard(name: "Main", bundle: bundle)
+        
+        let initialVC = storyB.instantiateInitialViewController()
+        let tabController = try XCTUnwrap(initialVC as? UITabBarController)
+        
+        let navController = try XCTUnwrap(tabController.viewControllers?[0] as? UINavigationController)
+        
+        let result = try XCTUnwrap(navController.topViewController as? MapSearchViewController)
+        
+        return result
+        
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testViewDidLoadDelegates() throws {
+        let selfInit = try testCanInitialize()
+        selfInit.loadViewIfNeeded()
+        
+        //Testing to ensure delegates and datasources contain an instance of 'self' and not nil
+        XCTAssertNotNil(selfInit.tableView.delegate)
+        XCTAssertNotNil(selfInit.tableView.dataSource)
+        XCTAssertNotNil(selfInit.searchBar.delegate)
+        XCTAssertNotNil(selfInit.mapView.delegate)
+       // XCTAssertNotNil(selfInit.locationManager.delegate)
+        
+        //Testing if delegates hold and instance of "self" class
+//        XCTAssertIdentical(selfInit.tableView.delegate, selfInit)
+//        XCTAssertIdentical(selfInit.tableView.dataSource, selfInit)
+//        XCTAssertIdentical(selfInit.searchBar.delegate, selfInit)
+//        XCTAssertIdentical(selfInit.mapView.delegate, selfInit)
+//        XCTAssertIdentical(selfInit.locationManager.delegate, selfInit)
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
+

@@ -99,7 +99,7 @@ class MapSearchViewController: UIViewController {
         mapView.delegate = self
         locationManager = CLLocationManager()
         locationManager.delegate = self
-        
+
         //MARK: Initial Configurations
         searchBarConfig()
         popUpConfig()
