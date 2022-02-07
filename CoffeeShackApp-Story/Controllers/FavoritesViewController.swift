@@ -26,7 +26,6 @@ class FavoritesViewController: UIViewController {
     var removeNotification = Notification.Name(rawValue: "remove.location")
     var searchStrings: [Location] = []
     
-
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -132,11 +131,8 @@ class FavoritesViewController: UIViewController {
     }
     
     func createObservers() {
-
         NotificationCenter.default.addObserver(self, selector: #selector(FavoritesViewController.updateTableView), name: addNotification, object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(FavoritesViewController.removeFromTableView(notification:)), name: removeNotification, object: nil)
-    
     }
     
     @objc func updateTableView(notification: Notification) {
@@ -144,7 +140,6 @@ class FavoritesViewController: UIViewController {
             print("nil in notification userInfo")
             return
         }
-        
         favoritesListVM.locations.append(selectedLocation)
         if favoritesListVM.currentState == .searching {
             favoritesListVM.searchingLocations.append(selectedLocation)
@@ -158,9 +153,7 @@ class FavoritesViewController: UIViewController {
             print("nil in notification userInfo")
             return
         }
-        
         favoritesListVM.locations = favoritesListVM.locations.filter{$0.address != selectedLocation.address}
-
         for i in favoritesListVM.locations {
             if i.address == selectedLocation.address {
                 

@@ -24,7 +24,6 @@ class MapSearchViewController: UIViewController {
     
     //MARK: Mapview/Tableview IBOutlets
     @IBOutlet weak var popUpView: UIView!
-    @IBOutlet weak var yellowToggleButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapTableToggleButton: UIButton!
@@ -309,7 +308,6 @@ class MapSearchViewController: UIViewController {
         myLocationButton.isHidden = currentView == .table
         searchAreaButton.isHidden = currentView == .table
         mapTableToggleButton.setImage(UIImage(systemName: currentView == .map ? CurrentView.table.rawValue:CurrentView.map.rawValue), for: .normal)
-        yellowToggleButton.isHidden = currentView == .table
         popUpView.isHidden = currentView == .table
         noResultsLabel.isHidden = currentView == .table && locationsListVM.locations.count > 0
     }
@@ -339,10 +337,6 @@ class MapSearchViewController: UIViewController {
     }
     
     //MARK: IBACTIONS
-    @IBAction func toggleButtonDidTouch(_ sender: UIButton) {
-        togglePopUp()
-    }
-
     @IBAction func cardLikeButtonDidTouch(_ sender: UIButton) {
         guard let selectedLocation = selectedLocation else {
             return

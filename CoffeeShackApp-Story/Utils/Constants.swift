@@ -10,32 +10,24 @@ import UIKit
 
 struct Constants {
     
-    struct Urls {
-        
-    }
-    
+//    struct Urls {
+//
+//    }
+//
     static func createAlert(message: (title: String, alertMessage: String, alertActionMessage: String)) -> UIAlertController {
-        
         let alert = UIAlertController(title: message.title, message: message.alertMessage, preferredStyle: .alert)
-        
         let okAction = UIAlertAction(title: message.alertActionMessage, style: .default, handler: nil)
-        
         alert.addAction(okAction)
-        
-        //present(alert, animated: true) //add this to calling function
         return alert
         
     }
     
     static func createDeleteAlert() -> UIAlertController {
         let alert = UIAlertController(title: "Delete Item", message: "Do you want to permanently delete this item?", preferredStyle: .alert)
-        
         let deleteAction = UIAlertAction(title: "Delete", style: .default, handler: nil)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
-        
         return alert
     }
     static func startHapticFeedBack() {
@@ -56,12 +48,12 @@ extension MapSearchViewController {
     }
 }
 
-class Test {
-    
-    class func getTest() {
-        
-    }
-}
+//class Test {
+//
+//    class func getTest() {
+//
+//    }
+//}
 
 
 

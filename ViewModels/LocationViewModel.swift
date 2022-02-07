@@ -9,9 +9,6 @@ import Foundation
 import UIKit
 import MapKit
 
-
-//MKAnnotationViewModel
-
 class MKAnnotationViewModel {
     var view: MKAnnotationView?
     enum State {
@@ -54,7 +51,6 @@ class MKAnnotationViewModel {
         self.state = state
     }
 }
-
 
 //Table View Model
 class LocationViewModelList {
