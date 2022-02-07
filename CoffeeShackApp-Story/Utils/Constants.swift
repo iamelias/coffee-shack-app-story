@@ -48,12 +48,5 @@ extension MapSearchViewController {
     }
 }
 
-//class Test {
-//
-//    class func getTest() {
-//
-//    }
-//}
-
 
 
