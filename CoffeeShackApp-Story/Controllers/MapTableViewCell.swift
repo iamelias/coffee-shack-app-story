@@ -18,7 +18,7 @@ class MapTableViewCell: UITableViewCell {
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var directionsButton: UIButton!
     weak var currentLocation: Location?
-    var mkItem: MKMapItem?
+    weak var mkItem: MKMapItem?
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
     var mapSearchDelegate: MapSearchViewControllerDelegate?

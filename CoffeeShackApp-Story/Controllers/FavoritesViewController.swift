@@ -19,7 +19,7 @@ class FavoritesViewController: UIViewController {
     @IBOutlet weak var noFavoritesLabel: UILabel!
     @IBOutlet weak var searchBackgroundView: UIView!
     
-    var selectedLocation: Location? = nil //from MapSearchViewController
+    weak var selectedLocation: Location? = nil //from MapSearchViewController
     var myLikedLocations: [Location] = []
     var favoritesListVM: FavoritesViewModelList = FavoritesViewModelList()
     var addNotification = Notification.Name(rawValue: "add.location")

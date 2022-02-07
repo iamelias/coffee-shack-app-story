@@ -18,12 +18,12 @@ class FavoritesViewCell: UITableViewCell {
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var directionsButton: UIButton!
     
-    var currentLikedLocation: Location?
-    var delegate: FavoritesViewControllerDelegate?
+    weak var currentLikedLocation: Location?
+    weak var delegate: FavoritesViewControllerDelegate?
     var deletedCell: Bool = false
-    var favoritesViewController: FavoritesViewController?
-    var favoritesDelegate: FavoritesViewControllerDelegate?
-    var mkItem: MKMapItem?
+    weak var favoritesViewController: FavoritesViewController?
+    weak var favoritesDelegate: FavoritesViewControllerDelegate?
+    weak var mkItem: MKMapItem?
     var removeLikedNotification = Notification.Name(rawValue: "remove.liked.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
