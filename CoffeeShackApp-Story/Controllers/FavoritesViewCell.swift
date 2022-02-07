@@ -23,16 +23,11 @@ class FavoritesViewCell: UITableViewCell {
     var deletedCell: Bool = false
     var favoritesViewController: FavoritesViewController?
     var favoritesDelegate: FavoritesViewControllerDelegate?
-    //var hashInt: Int?
     var mkItem: MKMapItem?
     var removeLikedNotification = Notification.Name(rawValue: "remove.liked.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
-
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
 
-
-    
-    
     func startHapticFeedBack() {
         let hapticFeedBack = UINotificationFeedbackGenerator()
         hapticFeedBack.notificationOccurred(.success)
@@ -57,7 +52,6 @@ class FavoritesViewCell: UITableViewCell {
                         return
                     }
                     self.trashButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                    
                 }, completion: nil)
             })
         })
@@ -76,34 +70,34 @@ class FavoritesViewCell: UITableViewCell {
     }
     
     @IBAction func directionsButtonDidTouch(_ sender: UIButton) {
-            guard let mkItem = self.mkItem else {
-                return
-            }
+        guard let latitude = currentLikedLocation?.latitude, let longitude = currentLikedLocation?.longitude else {
+             return
+        }
+            let placemark = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+            let mkItem = MKMapItem(placemark: placemark)
+            mkItem.name = currentLikedLocation?.title ?? "No title"
+            mkItem.phoneNumber = currentLikedLocation?.phoneNumber
+            mkItem.pointOfInterestCategory = .cafe
             MKMapItem.openMaps(with: [mkItem], launchOptions: [:])
     }
     
     func startDeleteAlert(title: String, message: String, action1Title: String? = nil, action2Title: String? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
-        
         let deleteAction = UIAlertAction(title: action1Title, style: .destructive, handler: { [weak self]_ in
             guard let self = self else {
                 return
             }
             self.favoritesDelegate?.didUnlikeLocation(cell: self)
             self.trashButton.setImage(UIImage(systemName: "trash"), for: .normal)
-            
             if let currentLikedLocation = self.currentLikedLocation {
                 NotificationCenter.default.post(name: self.removeLikedNotification, object: currentLikedLocation, userInfo: ["location": currentLikedLocation])
-                
                 NotificationCenter.default.post(name: self.removeNotification, object: currentLikedLocation, userInfo: ["location": currentLikedLocation])
             }
-
         })
         let cancelAction = UIAlertAction(title: action2Title, style: .cancel, handler: {_ in
             self.trashButton.setImage(UIImage(systemName: "trash"), for: .normal)
         })
         alert.addAction(cancelAction)
-
         alert.addAction(deleteAction)
         if let favoritesViewController = favoritesViewController {
             favoritesViewController.present(alert,animated:true,completion:nil)
@@ -113,12 +107,9 @@ class FavoritesViewCell: UITableViewCell {
     }
     
     @IBAction func trashButtonDidTouch(_ sender: UIButton) {
-          //  trashButton.setImage(UIImage(systemName: "trash.fill"), for: .normal)
         StartTrashButtonAnimation()
         startDeleteAlert(title: "Delete Item?", message: "Are you sure you want to permanently delete this item?", action1Title: "Delete", action2Title: "Cancel")
             trashButton.setImage(UIImage(systemName: "trash.fill"), for: .normal)
-
-        //favoritesDelegate?.didUnlikeLocation(cell: self)
     }
 }
 

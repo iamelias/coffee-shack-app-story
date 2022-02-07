@@ -70,7 +70,6 @@ class MapSearchViewController: UIViewController {
         return popUpHeightConstraint.constant == 147
     }
     var firstOpen: Bool = true
-    var myLocations: [Location] = [] //Locations of API returned Location items
     var myLikedLocations: [Location] = [] //Locations of liked Location items
     var locationManager: CLLocationManager!
     weak var selectedLocation: Location?
@@ -81,14 +80,12 @@ class MapSearchViewController: UIViewController {
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     var fetchedLocations: [LocationItem] = [] //Core Data
     //MARK: NOTIFICATIONS
-    //var searchNotification = Notification.Name(rawValue: "selected.location.key")
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
     var removeLikedNotification = Notification.Name(rawValue: "remove.liked.location")
     
     //View Models
     var locationsListVM: LocationViewModelList = LocationViewModelList()
-    var popUpVM: PopUpViewModel?
 
     //MARK: VIEWDIDLOAD
     override func viewDidLoad() {
@@ -140,13 +137,6 @@ class MapSearchViewController: UIViewController {
         view.layoutSubviews()
     }
     
-    override func viewWillLayoutSubviews() {
-    }
-    
-    override func viewDidLayoutSubviews() {
-
-    }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
         print("deinit called")
@@ -155,7 +145,6 @@ class MapSearchViewController: UIViewController {
     //MARK: CONFIG METHODS
     func searchBarConfig() {
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
-            
             textfield.textColor = UIColor.white
             textfield.attributedPlaceholder = NSAttributedString(string: textfield.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
             
@@ -177,7 +166,6 @@ class MapSearchViewController: UIViewController {
         if UIDevice.current.orientation.isLandscape {
         popUpView.widthAnchor.constraint(equalToConstant: 375.0).isActive = true
         }
-
         //swipe down on popupview will close popup
         let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(togglePopUp))
         swipeDownGesture.direction = .down
@@ -187,8 +175,6 @@ class MapSearchViewController: UIViewController {
         searchButtonBottomConstraint.constant = 5
         myLocationButtonBottomConstraint.constant = 5
         }
-        
-       // popUpVM = PopUpViewModel(popUpView: popUpView)
     }
     
     func searchBackgrViewConfig() {
@@ -198,7 +184,6 @@ class MapSearchViewController: UIViewController {
     
     func createObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(MapSearchViewController.removeLikedLocation(notification:)), name: removeLikedNotification, object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(MapSearchViewController.removeLocation(notification:)), name: removeNotification, object: nil)
     }
     
@@ -280,10 +265,8 @@ class MapSearchViewController: UIViewController {
     
     //MARK: ANIMATE METHODS
     @objc func openView() { //opening the popview
-        
         popUpView.isHidden = false
         popUpHeightConstraint.constant = 147
-        
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: { [unowned self] in
             view.layoutIfNeeded()
         }, completion: nil)
@@ -292,7 +275,6 @@ class MapSearchViewController: UIViewController {
     @objc func closeView() { //closing the popview
         mapView.selectedAnnotations = []
         popUpHeightConstraint.constant = 0
-        
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
             [unowned self] in
             view.layoutIfNeeded()
@@ -302,7 +284,6 @@ class MapSearchViewController: UIViewController {
     func changeView() { //switching from view from map to table vv when toggle button is tapped
         if currentView == .map { //transition view animation map -> table
             UIView.transition(from: mapView, to: tableView, duration: 0.5, options: [.transitionFlipFromLeft, .showHideTransitionViews], completion: nil)
-
             currentView = .table
             tableView.reloadData()// ensuring latest tableview data is shown
         }
@@ -352,7 +333,6 @@ class MapSearchViewController: UIViewController {
                         return
                     }
                     self.cardLikeButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                    
                 }, completion: nil)
             })
         })
@@ -420,6 +400,7 @@ class MapSearchViewController: UIViewController {
                 return
             }
             MKMapItem.openMaps(with: [mkItem], launchOptions: [:])
+            
         }
     }
 }
@@ -428,7 +409,6 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     //MARK: TABLE VIEW METHODS
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      //  return myLocations.count
         if locationsListVM.numberOfRowsInSection(section: 1) > 0 {
             noResultsLabel.isHidden = true
         }
@@ -541,7 +521,6 @@ extension MapSearchViewController: MKMapViewDelegate { //creating the gylph anno
         guard let selectedLocation = selectedLocation else {
             return
         }
-        
         let locationVM = LocationViewModel(location: selectedLocation)
         cardTitle.text = locationVM.title
         cardAddress.text = locationVM.address
@@ -704,7 +683,6 @@ extension MapSearchViewController: CLLocationManagerDelegate { //User Location M
     
 func showSetUserRegion() -> MKCoordinateRegion? {
     mapView.removeAnnotations(mapView.annotations)
-    //myLocations.removeAll()
     locationsListVM.locations.removeAll()
     searchBar.text = ""
     guard let userLocation = locationManager.location?.coordinate else {
@@ -765,6 +743,8 @@ extension MapSearchViewController {
         location.phoneNumber = i.phoneNumber
         location.menuUrl = i.menu
         location.distance = i.distance
+        location.latitude = i.latitude
+        location.longitude = i.longitude
         return location
     }
     

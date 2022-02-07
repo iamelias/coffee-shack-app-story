@@ -17,17 +17,13 @@ class MapTableViewCell: UITableViewCell {
     @IBOutlet weak var cellDistanceLabel: UILabel!
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var directionsButton: UIButton!
-
     weak var currentLocation: Location?
-   // var hashInt: Int?
     var mkItem: MKMapItem?
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
     var mapSearchDelegate: MapSearchViewControllerDelegate?
-    
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
 
-    
     @IBAction func menuButtonDidTouch(_ sender: UIButton) {
         if let currentLocation = currentLocation {
             if let menuURL = currentLocation.menuUrl, let url = URL(string: menuURL) {
@@ -49,37 +45,28 @@ class MapTableViewCell: UITableViewCell {
     
     @IBAction func tableLikeButtonSelected(_ sender: UIButton) {
         StartLikeButtonAnimation()
-        
         guard let currentLocation = currentLocation else {
             return
         }
-
         if currentLocation.liked == false {
             Constants.startHapticFeedBack()
             cellLikeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             cellLikeButton.tag = 1
-        //    if let currentLocation = currentLocation {
                 currentLocation.liked = true
                 mapSearchDelegate?.didUpdateMyLikedLocations(location: currentLocation, didAdd: true)
                 NotificationCenter.default.post(name: addNotification, object: currentLocation, userInfo: ["location": currentLocation])
-
-        //    }
         }
         else {
             cellLikeButton.setImage(UIImage(systemName: "suit.heart"), for: .normal)
                 cellLikeButton.tag = 0
-       //     if let currentLocation = currentLocation {
                 currentLocation.liked = false
                 mapSearchDelegate?.didUpdateMyLikedLocations(location: currentLocation, didAdd: false)
                 NotificationCenter.default.post(name: removeNotification, object: currentLocation, userInfo: ["location" : currentLocation])
-
-        //    }
             }
     }
     
     func updateLocation(index: Location) {
     }
-    
     
      func StartLikeButtonAnimation() {
         //Animating the like button with bounce when selected

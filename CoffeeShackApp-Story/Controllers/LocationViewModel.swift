@@ -14,34 +14,25 @@ import MapKit
 
 class MKAnnotationViewModel {
     var view: MKAnnotationView?
-    
     enum State {
         case unselected
         case selected
     }
-    
     var state: State
-
     var annotation: MKAnnotation {
         return self.annotation
     }
     
     var image: UIImage? {
         return state == .unselected ? UIImage(named: "Selected Cup Icon pdf") : UIImage(named: "unSelected Cup Icon pdf")
-        //return UIImage(named: "Selected Cup Icon pdf")
     }
     
     var size: CGSize {
         guard let imageView = view?.image else {
             return CGSize.zero
         }
-        
         return state == .unselected ? CGSize(width: imageView.size.width/2.0, height: imageView.size.height/2.0) : CGSize(width: 0.5*imageView.size.width, height: 0.5*imageView.size.height)
-        
-        
-      //  return CGSize(width: imageView.size.width/2.0, height: imageView.size.height/2.0)
     }
-    
     var offSet: CGPoint {
         guard let view = view else {
             return CGPoint.zero
@@ -54,7 +45,6 @@ class MKAnnotationViewModel {
             return offset
         }
     }
-    
     var isCalloutShown: Bool {
         return false
     }
@@ -70,7 +60,6 @@ class MKAnnotationViewModel {
 class LocationViewModelList {
     var locations = [Location]()
     let rowHeight: CGFloat = 147
-    
     var numberOfSections: Int {
         return 1
     }
@@ -121,22 +110,18 @@ class LocationViewModel {
             return ":)"
         }
     }
-    
     var liked: Bool? {
         return self.location.liked
     }
     var dateCreated: Date {
         return self.location.dateCreated
     }
-    
     var image: UIImage? {
         guard let liked = liked else {
             return nil
         }
         return liked ? UIImage(systemName: "suit.heart.fill") : UIImage(systemName: "suit.heart")
     }
-    
-    
     
     public init(location: Location) {
         self.location = location

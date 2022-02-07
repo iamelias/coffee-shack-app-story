@@ -21,21 +21,12 @@ class FavoritesViewController: UIViewController {
     
     var selectedLocation: Location? = nil //from MapSearchViewController
     var myLikedLocations: [Location] = []
+    var favoritesListVM: FavoritesViewModelList = FavoritesViewModelList()
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
     var searchStrings: [Location] = []
-    var isSearching: Bool = false
-    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
-
-    //var secondContext: NSManagedObjectContext?
     
-    enum SortOptions: String {
-        case alphabetic = "A to Z"
-        case oldestToNewest = "Oldest to Newest"
-        case newestToOldest = "Newest to Oldest"
-    }
 
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -48,11 +39,9 @@ class FavoritesViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
-        
         tableView.rowHeight = 147
 
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
-
             textfield.textColor = .white
             textfield.attributedPlaceholder = NSAttributedString(string: textfield.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
 
@@ -61,18 +50,13 @@ class FavoritesViewController: UIViewController {
                 leftView.tintColor = UIColor.white
             }
         }
-        
         searchBackgrViewConfig()
         createObservers()
         
         //Gestures
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-       // searchBackgroundView.addGestureRecognizer(tapGesture)
         view.addGestureRecognizer(tapGesture)
         tableView.keyboardDismissMode = .onDrag
-        
-        
-
     }
     
     override func viewWillLayoutSubviews() {
@@ -80,7 +64,6 @@ class FavoritesViewController: UIViewController {
         bottomLayer.borderWidth = 1.0
         bottomLayer.frame = CGRect(x:0,y:titleView.frame.size.height-1.0, width: self.view.safeAreaLayoutGuide.layoutFrame.width, height: 1.0)
         bottomLayer.borderColor = UIColor(red: 194/255, green: 156/255, blue: 130/255, alpha: 0.7).cgColor
-        
         titleView.layer.addSublayer(bottomLayer)
     }
     
@@ -95,7 +78,6 @@ class FavoritesViewController: UIViewController {
 
     }
     override func viewWillDisappear(_ animated: Bool) {
-      //  isSearching = false
     }
     
     @IBAction func sortButtonDidTouch(_ sender: Any) {
@@ -106,32 +88,36 @@ class FavoritesViewController: UIViewController {
     }
     
     func searchBackgrViewConfig() {
-//        searchBackgroundView.backgroundColor = .darkGray
         searchBackgroundView.isHidden = true
     }
     
     func createAlert() {
         let alert = UIAlertController(title: "Sort by:", message: "Pick how you want to sort your favorites", preferredStyle: .actionSheet)
         let firstAction = UIAlertAction(title: SortOptions.alphabetic.rawValue, style: .default, handler: {_ in
-            self.sort(sortType: .alphabetic)
-            if self.isSearching {
-                self.isSearching = false
+            self.favoritesListVM.sort(sortType: .alphabetic)
+            self.tableView.reloadData()
+            if self.favoritesListVM.currentState == .searching {
+                self.favoritesListVM.currentState = .notSearching
                 self.searchBar.text = ""
                 self.tableView.reloadData()
             }
         })
         let secondAction = UIAlertAction(title: SortOptions.oldestToNewest.rawValue, style: .default, handler: {_ in
-            self.sort(sortType: .oldestToNewest)
-            if self.isSearching {
-                self.isSearching = false
+           // self.sort(sortType: .oldestToNewest)
+            self.favoritesListVM.sort(sortType: .oldestToNewest)
+            self.tableView.reloadData()
+            if self.favoritesListVM.currentState == .searching {
+                self.favoritesListVM.currentState = .notSearching
                 self.searchBar.text = ""
                 self.tableView.reloadData()
             }
         })
         let thirdAction = UIAlertAction(title: SortOptions.newestToOldest.rawValue, style: .default, handler: {_ in
-            self.sort(sortType: .newestToOldest)
-            if self.isSearching {
-                self.isSearching = false
+            //self.sort(sortType: .newestToOldest)
+            self.favoritesListVM.sort(sortType: .newestToOldest)
+            self.tableView.reloadData()
+            if self.favoritesListVM.currentState == .searching {
+                self.favoritesListVM.currentState = .notSearching
                 self.searchBar.text = ""
                 self.tableView.reloadData()
             }
@@ -153,27 +139,15 @@ class FavoritesViewController: UIViewController {
     
     }
     
-    func sort(sortType: SortOptions) {
-        switch sortType {
-        case .alphabetic:
-            myLikedLocations.sort { $0.title ?? "" < $1.title ?? "" }
-        case .oldestToNewest:
-            myLikedLocations.sort { $0.dateCreated < $1.dateCreated }
-        case .newestToOldest:
-            myLikedLocations.sort { $0.dateCreated > $1.dateCreated }
-        }
-        tableView.reloadData()
-    }
-    
     @objc func updateTableView(notification: Notification) {
         guard let selectedLocation = notification.userInfo?["location"] as? Location else {
             print("nil in notification userInfo")
             return
         }
         
-        myLikedLocations.append(selectedLocation)
-        if isSearching {
-            searchStrings.append(selectedLocation)
+        favoritesListVM.locations.append(selectedLocation)
+        if favoritesListVM.currentState == .searching {
+            favoritesListVM.searchingLocations.append(selectedLocation)
         }
     }
     
@@ -185,16 +159,15 @@ class FavoritesViewController: UIViewController {
             return
         }
         
-        myLikedLocations = myLikedLocations.filter{$0.address != selectedLocation.address}
-        
-        for i in myLikedLocations {
+        favoritesListVM.locations = favoritesListVM.locations.filter{$0.address != selectedLocation.address}
+
+        for i in favoritesListVM.locations {
             if i.address == selectedLocation.address {
                 
             }
         }
     }
 
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -204,53 +177,21 @@ class FavoritesViewController: UIViewController {
 extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if myLikedLocations.count == 0 {
-            noFavoritesLabel.isHidden = false
-        }
-        else {
-            noFavoritesLabel.isHidden = true
-        }
-        if isSearching == true {
-            return searchStrings.count
-        }
-        else {
-        return myLikedLocations.count
-        }
+        noFavoritesLabel.isHidden = favoritesListVM.favoritesLabelHidden
+        return favoritesListVM.numOfRowsInSection()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-
-        
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "favoriteCell", for: indexPath) as! FavoritesViewCell
         cell.selectionStyle = .none
-        
-        if isSearching == true {
-            cell.cellTitle.text = searchStrings[indexPath.row].title ?? "NIL"
-            cell.cellAddressTextView.text = searchStrings[indexPath.row].address ?? "NIL"
-            cell.cellPhoneNumLabel.text = searchStrings[indexPath.row].phoneNumber
-            //cell.hashInt = searchStrings[indexPath.row].locationHash
-           // cell.mkItem = searchStrings[indexPath.row].mkItem
-            cell.currentLikedLocation = searchStrings[indexPath.row]
-            cell.favoritesViewController = self
-            cell.favoritesDelegate = self
-        }
-        else {
-            cell.cellTitle.text = myLikedLocations[indexPath.row].title ?? "NIL"
-            cell.cellAddressTextView.text = myLikedLocations[indexPath.row].address ?? "NIL"
-            cell.cellPhoneNumLabel.text = myLikedLocations[indexPath.row].phoneNumber
-           // cell.hashInt = myLikedLocations[indexPath.row].locationHash
-         //   cell.mkItem = myLikedLocations[indexPath.row].mkItem
-            cell.currentLikedLocation = myLikedLocations[indexPath.row]
-            cell.favoritesViewController = self
-            cell.favoritesDelegate = self
-        }
-        
-
+        cell.cellTitle.text = favoritesListVM.locationAtView(at: indexPath.row).title ?? "NIL"
+        cell.cellAddressTextView.text = favoritesListVM.locationAtView(at: indexPath.row).address ?? "NIL"
+        cell.cellPhoneNumLabel.text = favoritesListVM.locationAtView(at: indexPath.row).phoneNumber
+        cell.currentLikedLocation = favoritesListVM.locationAtView(at: indexPath.row).location
+        cell.favoritesViewController = self
+        cell.favoritesDelegate = self
         return cell
     }
-    
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return nil
@@ -258,24 +199,10 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
 
     func deleteCell(cell: FavoritesViewCell) {
         if let toDeleteIndexPath = tableView.indexPath(for: cell) {
-            if isSearching == true {
-                searchStrings[toDeleteIndexPath.row].liked = false
-                deleteFromLikedArray(location: searchStrings[toDeleteIndexPath.row])
-                searchStrings.remove(at: toDeleteIndexPath.row)
-            }
-            else {
-            myLikedLocations[toDeleteIndexPath.row].liked = false
-            myLikedLocations.remove(at: toDeleteIndexPath.row)
-                //deleteFromLikedArray(location: myLikedLocations[toDeleteIndexPath.row])
-            }
-            tableView.deleteRows(at: [toDeleteIndexPath], with: .automatic)
-//            deleteFromLikedArray(location: myLikedLocations[toDeleteIndexPath.row])
-
+                favoritesListVM.locationAtView(at: toDeleteIndexPath.row).liked = false
+            favoritesListVM.deleteFromLikedArray(index: toDeleteIndexPath.row)
+                tableView.deleteRows(at: [toDeleteIndexPath], with: .automatic)
         }
-    }
-    
-    func deleteFromLikedArray(location: Location) {
-        myLikedLocations = myLikedLocations.filter{$0.address != location.address}
     }
 }
 
@@ -286,31 +213,25 @@ extension FavoritesViewController: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) { //clear searchBar text
-        isSearching = false
+        favoritesListVM.currentState = .notSearching
         searchBar.text = ""
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//
-//        searchBackgroundView.layer.opacity = 0.5
-//        searchBackgroundView.isHidden = false
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        isSearching = true
-        sortButton.isEnabled = false
-        searchStrings = myLikedLocations.filter({$0.title?.lowercased().prefix(searchText.count) ?? "" == searchText.lowercased()})
-        
+        favoritesListVM.currentState = .searching
+        sortButton.isEnabled = favoritesListVM.sortIsEnabled
+        favoritesListVM.filterLocationsForSearch(searchText: searchText)
         if searchBar.text == "" {
-            isSearching = false
-            sortButton.isEnabled = true
+            favoritesListVM.currentState = .notSearching
+            sortButton.isEnabled = favoritesListVM.sortIsEnabled
         }
         tableView.reloadData()
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-//        searchBackgroundView.layer.opacity = 1.0
-//        searchBackgroundView.isHidden = true
     }
 }
 

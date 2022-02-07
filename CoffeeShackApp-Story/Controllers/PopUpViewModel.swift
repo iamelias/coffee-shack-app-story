@@ -8,15 +8,11 @@
 import Foundation
 import UIKit
 
-
-
 class PopUpViewModel {
-    
     enum State {
         case open
         case closed
     }
-    
     let popUpView: UIView
     var currentState: State = .closed
     
@@ -26,41 +22,31 @@ class PopUpViewModel {
     var width: Bool {
         return currentState == .closed ? !self.popUpView.widthAnchor.constraint(equalToConstant: 375.0).isActive : self.popUpView.widthAnchor.constraint(equalToConstant: 375.0).isActive
     }
-        
     var leadingConstraint: CGFloat {
         return currentState == .closed ? 0:0
-        
     }
-    
     var shadowOpacity: Float {
         return 0.4
     }
-    
     var shadowOffset: CGSize {
         
         return CGSize.zero
     }
-    
     var shadowRadius: CGFloat {
         return 15.0
     }
-    
     var cornerRadius: Float {
         return 15
     }
-    
     var maskedCorners: CACornerMask {
         return [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
-    
     var translatesAutoresizingMaskIntoConstraints: Bool {
         return false
     }
-
     public init (popUpView: UIView) {
         self.popUpView = popUpView
     }
-    
 }
 
 
