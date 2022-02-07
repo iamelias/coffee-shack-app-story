@@ -92,7 +92,10 @@ class FavoritesViewController: UIViewController {
     
     func createAlert() {
         let alert = UIAlertController(title: "Sort by:", message: "Pick how you want to sort your favorites", preferredStyle: .actionSheet)
-        let firstAction = UIAlertAction(title: SortOptions.alphabetic.rawValue, style: .default, handler: {_ in
+        let firstAction = UIAlertAction(title: SortOptions.alphabetic.rawValue, style: .default, handler: {[weak self] _ in
+            guard let self = self else {
+                return
+            }
             self.favoritesListVM.sort(sortType: .alphabetic)
             self.tableView.reloadData()
             if self.favoritesListVM.currentState == .searching {
@@ -101,8 +104,10 @@ class FavoritesViewController: UIViewController {
                 self.tableView.reloadData()
             }
         })
-        let secondAction = UIAlertAction(title: SortOptions.oldestToNewest.rawValue, style: .default, handler: {_ in
-           // self.sort(sortType: .oldestToNewest)
+        let secondAction = UIAlertAction(title: SortOptions.oldestToNewest.rawValue, style: .default, handler: {[weak self] _ in
+            guard let self = self else {
+                return
+            }
             self.favoritesListVM.sort(sortType: .oldestToNewest)
             self.tableView.reloadData()
             if self.favoritesListVM.currentState == .searching {
@@ -111,7 +116,10 @@ class FavoritesViewController: UIViewController {
                 self.tableView.reloadData()
             }
         })
-        let thirdAction = UIAlertAction(title: SortOptions.newestToOldest.rawValue, style: .default, handler: {_ in
+        let thirdAction = UIAlertAction(title: SortOptions.newestToOldest.rawValue, style: .default, handler: {[weak self]_ in
+            guard let self = self else {
+                return
+            }
             //self.sort(sortType: .newestToOldest)
             self.favoritesListVM.sort(sortType: .newestToOldest)
             self.tableView.reloadData()

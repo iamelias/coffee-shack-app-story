@@ -94,7 +94,10 @@ class FavoritesViewCell: UITableViewCell {
                 NotificationCenter.default.post(name: self.removeNotification, object: currentLikedLocation, userInfo: ["location": currentLikedLocation])
             }
         })
-        let cancelAction = UIAlertAction(title: action2Title, style: .cancel, handler: {_ in
+        let cancelAction = UIAlertAction(title: action2Title, style: .cancel, handler: {[weak self] _ in
+            guard let self = self else {
+                return
+            }
             self.trashButton.setImage(UIImage(systemName: "trash"), for: .normal)
         })
         alert.addAction(cancelAction)
