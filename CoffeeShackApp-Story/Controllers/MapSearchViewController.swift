@@ -82,6 +82,8 @@ class MapSearchViewController: UIViewController {
     var addNotification = Notification.Name(rawValue: "add.location")
     var removeNotification = Notification.Name(rawValue: "remove.location")
     var removeLikedNotification = Notification.Name(rawValue: "remove.liked.location")
+    var leftConstraint: NSLayoutConstraint?
+   // var widthConstraint: NSLayoutConstraint?
     
     //View Models
     var locationsListVM: LocationViewModelList = LocationViewModelList()
@@ -102,6 +104,8 @@ class MapSearchViewController: UIViewController {
         searchBackgrViewConfig()
         createObservers()
         createViewGestures()
+        leftConstraint =  popUpView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0)
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -116,7 +120,7 @@ class MapSearchViewController: UIViewController {
             tabBarController?.viewControllers?[1].view.layoutIfNeeded() //preloading second
             getAllCoreLocations()
             firstOpen = false
-
+            leftConstraint?.isActive = true
         }
     }
     
@@ -126,14 +130,18 @@ class MapSearchViewController: UIViewController {
             searchButtonBottomConstraint.constant = 5
             myLocationButtonBottomConstraint.constant = 5
             popUpView.widthAnchor.constraint(equalToConstant: 375.0).isActive = true
+            leftConstraint?.isActive = false
         }
         else { //if changing to portrait
             searchAreaButton.translatesAutoresizingMaskIntoConstraints = false
             myLocationButton.translatesAutoresizingMaskIntoConstraints = false
             searchButtonBottomConstraint.constant = 50
             myLocationButtonBottomConstraint.constant = 20
+            popUpView.translatesAutoresizingMaskIntoConstraints = false
+            leftConstraint?.isActive = true
         }
-        view.layoutSubviews()
+//        view.layoutSubviews()
+        view.layoutIfNeeded()
     }
     
     deinit {
