@@ -13,6 +13,10 @@ When a location is favorited the user can see the added location in the second t
 **User permissions:**
 No login required
 
+ **Image/Icon Attritions:** <br />
+ <a href="https://www.flaticon.com/free-icons/beach" title="beach icons">Beach icons created by Freepik - Flaticon</a><br /> 
+ <a href="https://www.flaticon.com/free-icons/menu" title="menu icons">Menu icons created by Smashicons - Flaticon</a><br /> 
+
 **Tools used:**
 Core Data, UIKit, iPhone 11 Pro/ iPhone 12 simulator
 
